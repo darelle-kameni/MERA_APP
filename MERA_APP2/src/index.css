@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Source Serif 4', serif;
+
+    --background: 210 20% 98%;
+    --foreground: 205 89% 48%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 89% 24%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 63% 59%;
+    --primary: 210 40% 39%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 210 20% 94%;
+    --secondary-foreground: 177 45% 64%;
+    --muted: 210 15% 93%;
+    --muted-foreground: 183 8% 69%;
+    --accent: 180 92% 49%;
+    --accent-foreground: 210 40% 15%;
+    --destructive: 4 74% 57%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 15% 89%;
+    --input: 210 15% 89%;
+    --ring: 210 55% 23%;
+    --radius: 0.75rem;
+
+    --success: 145 63% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 30 80% 52%;
+    --warning-foreground: 0 0% 100%;
+    --critical: 4 74% 57%;
+    --critical-foreground: 0 0% 100%;
+    --info: 210 55% 50%;
+    --info-foreground: 0 0% 100%;
+
+    --bloc-a: 210 55% 23%;
+    --bloc-b: 4 74% 57%;
+    --bloc-c: 25 94% 46%;
+
+    --chart-1: 210 55% 50%;
+    --chart-2: 145 63% 42%;
+    --chart-3: 37 91% 55%;
+    --chart-4: 4 74% 57%;
+    --chart-5: 280 60% 55%;
+
+    --sidebar-background: 210 55% 15%;
+    --sidebar-foreground: 210 10% 85%;
+    --sidebar-primary: 102 96% 43%;
+    --sidebar-primary-foreground: 210 40% 10%;
+    --sidebar-accent: 210 45% 22%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 210 40% 25%;
+    --sidebar-ring: 25 83% 39%;
+  }
+
+  .dark {
+    --background: 210 30% 8%;
+    --foreground: 210 10% 92%;
+    --card: 210 30% 12%;
+    --card-foreground: 210 10% 92%;
+    --popover: 210 30% 12%;
+    --popover-foreground: 210 10% 92%;
+    --primary: 37 91% 55%;
+    --primary-foreground: 210 40% 10%;
+    --secondary: 210 25% 18%;
+    --secondary-foreground: 210 10% 85%;
+    --muted: 210 25% 16%;
+    --muted-foreground: 210 10% 55%;
+    --accent: 37 91% 55%;
+    --accent-foreground: 210 40% 10%;
+    --destructive: 4 74% 57%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 25% 20%;
+    --input: 210 25% 20%;
+    --ring: 37 91% 55%;
+
+    --success: 145 63% 42%;
+    --success-foreground: 0 0% 100%;
+    --warning: 30 80% 52%;
+    --warning-foreground: 0 0% 100%;
+    --critical: 4 74% 57%;
+    --critical-foreground: 0 0% 100%;
+    --info: 210 55% 50%;
+    --info-foreground: 0 0% 100%;
+
+    --chart-1: 210 55% 60%;
+    --chart-2: 145 63% 50%;
+    --chart-3: 37 91% 60%;
+    --chart-4: 4 74% 60%;
+    --chart-5: 280 60% 60%;
+
+    --sidebar-background: 210 35% 6%;
+    --sidebar-foreground: 210 10% 85%;
+    --sidebar-primary: 37 91% 55%;
+    --sidebar-primary-foreground: 210 40% 10%;
+    --sidebar-accent: 210 30% 14%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 210 30% 16%;
+    --sidebar-ring: 37 91% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Pulse animation for vital signs */
+@keyframes vital-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+.animate-vital-pulse {
+  animation: vital-pulse 2s ease-in-out infinite;
+}
