@@ -1,18 +1,31 @@
-import { useState } from "react";
-import { Settings as SettingsIcon, Globe, Bell, Shield, Building2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Settings as SettingsIcon, Globe, Building2, Cpu, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
+import { base44 } from "@/api/base44Client";
+import { useTranslation } from "@/lib/useTranslation";
 import { toast } from "sonner";
 
 export default function Settings() {
-  const [language, setLanguage] = useState("fr");
-  const [notifications, setNotifications] = useState(true);
-  const [pin, setPin] = useState("");
+  const { t } = useTranslation();
+  const [lang, setLang] = useState(localStorage.getItem("mera_lang") || "fr");
+  const [centers, setCenters] = useState([]);
+  const [centerId, setCenterId] = useState(localStorage.getItem("mera_center_id") || "");
+  const [meraUrl, setMeraUrl] = useState(localStorage.getItem("mera_backend_url") || "http://192.168.1.10:4000");
+  const [raspUrl, setRaspUrl] = useState(localStorage.getItem("mera_rasp_url") || "http://192.168.1.110:5000");
+
+  useEffect(() => {
+    base44.entities.HealthCenter.list().then(setCenters).catch(() => {});
+  }, []);
 
   const handleSave = () => {
+    localStorage.setItem("mera_lang", lang);
+    localStorage.setItem("mera_center_id", centerId);
+    localStorage.setItem("mera_backend_url", meraUrl);
+    localStorage.setItem("mera_rasp_url", raspUrl);
+    window.dispatchEvent(new Event("mera:langchange"));
     toast.success("Paramètres enregistrés");
   };
 
@@ -21,18 +34,17 @@ export default function Settings() {
       <div>
         <h1 className="text-2xl font-heading font-bold flex items-center gap-3">
           <SettingsIcon className="w-6 h-6 text-primary" />
-          Paramètres
+          {t("nav.settings", "Paramètres")}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">Configuration de l'application</p>
       </div>
 
-      {/* Language */}
       <div className="bg-card rounded-xl border border-border p-5 space-y-4">
         <div className="flex items-center gap-2 mb-2">
           <Globe className="w-5 h-5 text-primary" />
           <h3 className="font-heading font-semibold">Langue</h3>
         </div>
-        <Select value={language} onValueChange={setLanguage}>
+        <Select value={lang} onValueChange={(v) => { setLang(v); localStorage.setItem("mera_lang", v); window.dispatchEvent(new Event("mera:langchange")); }}>
           <SelectTrigger>
             <SelectValue />
           </SelectTrigger>
@@ -45,60 +57,42 @@ export default function Settings() {
         </Select>
       </div>
 
-      {/* Notifications */}
-      <div className="bg-card rounded-xl border border-border p-5 space-y-4">
-        <div className="flex items-center gap-2 mb-2">
-          <Bell className="w-5 h-5 text-primary" />
-          <h3 className="font-heading font-semibold">Notifications</h3>
-        </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium">Alertes critiques</p>
-            <p className="text-xs text-muted-foreground">Recevoir les alertes quand un cas critique est détecté</p>
-          </div>
-          <Switch checked={notifications} onCheckedChange={setNotifications} />
-        </div>
-      </div>
-
-      {/* Security */}
-      <div className="bg-card rounded-xl border border-border p-5 space-y-4">
-        <div className="flex items-center gap-2 mb-2">
-          <Shield className="w-5 h-5 text-primary" />
-          <h3 className="font-heading font-semibold">Sécurité</h3>
-        </div>
-        <div>
-          <Label>Code PIN rapide</Label>
-          <Input 
-            type="password" 
-            maxLength={4} 
-            placeholder="4 chiffres"
-            value={pin}
-            onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
-            className="mt-1.5 w-32"
-          />
-          <p className="text-xs text-muted-foreground mt-1">Accès rapide sans mot de passe complet</p>
-        </div>
-      </div>
-
-      {/* Center info */}
       <div className="bg-card rounded-xl border border-border p-5 space-y-4">
         <div className="flex items-center gap-2 mb-2">
           <Building2 className="w-5 h-5 text-primary" />
           <h3 className="font-heading font-semibold">Centre de santé</h3>
         </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <Label>Nom du centre</Label>
-            <Input placeholder="CSI Douala" className="mt-1.5" />
-          </div>
-          <div>
-            <Label>District</Label>
-            <Input placeholder="District sanitaire" className="mt-1.5" />
-          </div>
+        <Select value={centerId} onValueChange={setCenterId}>
+          <SelectTrigger>
+            <SelectValue placeholder="Sélectionner un centre" />
+          </SelectTrigger>
+          <SelectContent>
+            {centers.map((c) => (
+              <SelectItem key={c.id} value={c.id}>{c.name} — {c.region}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="bg-card rounded-xl border border-border p-5 space-y-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Cpu className="w-5 h-5 text-primary" />
+          <h3 className="font-heading font-semibold">Configuration réseau robot</h3>
+        </div>
+        <div>
+          <Label>URL du backend MERA</Label>
+          <Input value={meraUrl} onChange={(e) => setMeraUrl(e.target.value)} className="mt-1.5 font-mono" />
+          <p className="text-xs text-muted-foreground mt-1">Adresse du serveur</p>
+        </div>
+        <div>
+          <Label>URL Raspberry Pi (capture oculaire)</Label>
+          <Input value={raspUrl} onChange={(e) => setRaspUrl(e.target.value)} className="mt-1.5 font-mono" />
+          <p className="text-xs text-muted-foreground mt-1">Adresse de la Raspberry Pi</p>
         </div>
       </div>
 
-      <Button onClick={handleSave} className="w-full h-12">
+      <Button onClick={handleSave} className="w-full h-12 gap-2">
+        <Save className="w-4 h-4" />
         Enregistrer les paramètres
       </Button>
     </div>

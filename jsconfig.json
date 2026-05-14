@@ -21,7 +21,7 @@
   },
   "include": [
     "src/components/**/*.jsx",
-    "src/pages/**/*.jsx",
+    "src/lib/pages/**/*.jsx",
     "src/Layout.jsx"
   ],
   "exclude": [

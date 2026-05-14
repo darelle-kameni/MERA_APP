@@ -1,0 +1,284 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Identity & access ──────────────────────────────────────
+model User {
+  id               String   @id @default(cuid())
+  email            String?  @unique
+  id_card          String?  @unique
+  password_hash    String
+  full_name        String?
+  role             String   @default("encadreur") // admin | encadreur | medecin
+  status           String   @default("pending")   // pending | active | suspended
+  signature_url    String?
+  health_center_id String?
+  health_center    HealthCenter? @relation(fields: [health_center_id], references: [id])
+  created_date     DateTime @default(now())
+  updated_date     DateTime @updatedAt
+
+  // Reverse relations
+  diagnostic_sessions   DiagnosticSession[]
+  medical_reviews       MedicalReview[]
+  guarded_patients      Patient[]              @relation("guardian")
+  doctor_assignments    DoctorAssignment[]     @relation("doctor")
+  encadreur_assignments DoctorAssignment[]     @relation("encadreur")
+  registration_request  RegistrationRequest?   @relation("user_request")
+  approved_requests     RegistrationRequest[]  @relation("admin_approver")
+  notifications         Notification[]         @relation("recipient")
+}
+
+model RegistrationRequest {
+  id               String   @id @default(cuid())
+  email            String   @unique
+  password_hash    String
+  full_name        String?
+  role             String   // encadreur | medecin
+  status           String   @default("pending") // pending | approved | rejected
+  rejection_reason String?
+  signature_url    String?  // for medecin requests (mandatory before approval)
+  message          String?  // optional motivation note from applicant
+
+  user_id          String?  @unique
+  user             User?    @relation("user_request", fields: [user_id], references: [id])
+
+  approver_id      String?
+  approver         User?    @relation("admin_approver", fields: [approver_id], references: [id])
+  approved_at      DateTime?
+
+  created_date     DateTime @default(now())
+  updated_date     DateTime @updatedAt
+}
+
+model DoctorAssignment {
+  id           String   @id @default(cuid())
+  doctor_id    String
+  doctor       User     @relation("doctor", fields: [doctor_id], references: [id], onDelete: Cascade)
+  encadreur_id String
+  encadreur    User     @relation("encadreur", fields: [encadreur_id], references: [id], onDelete: Cascade)
+  created_date DateTime @default(now())
+
+  @@unique([doctor_id, encadreur_id])
+}
+
+model Notification {
+  id            String    @id @default(cuid())
+  recipient_id  String
+  recipient     User      @relation("recipient", fields: [recipient_id], references: [id], onDelete: Cascade)
+  kind          String    // registration_pending | child_created | diagnosis_published | urgent_case | assignment_created
+  title         String
+  body          String?
+  link          String?
+  payload       String?   // JSON serialized extras
+  read_at       DateTime?
+  created_date  DateTime  @default(now())
+
+  @@index([recipient_id, read_at])
+}
+
+// ─── Health entities ────────────────────────────────────────
+model HealthCenter {
+  id           String   @id @default(cuid())
+  name         String
+  region       String
+  district     String?
+  gps_lat      Float?
+  gps_lng      Float?
+  center_type  String?
+  created_date DateTime @default(now())
+  updated_date DateTime @updatedAt
+
+  users    User[]
+  patients Patient[]
+  devices  MeraDevice[]
+  sessions DiagnosticSession[]
+}
+
+model Patient {
+  id               String   @id @default(cuid())
+  card_id          String?  @unique
+  pin_hash         String?
+  full_name        String?
+  age              Int
+  sex              String
+  village          String?
+  phone            String?
+  health_center_id String?
+  health_center    HealthCenter? @relation(fields: [health_center_id], references: [id])
+  guardian_id      String?
+  guardian         User?    @relation("guardian", fields: [guardian_id], references: [id])
+  is_pediatric     Boolean  @default(false)
+  last_login       DateTime?
+  created_date     DateTime @default(now())
+  updated_date     DateTime @updatedAt
+
+  sessions DiagnosticSession[]
+}
+
+model MeraDevice {
+  id                  String   @id @default(cuid())
+  serial_number       String   @unique
+  health_center_id    String?
+  health_center       HealthCenter? @relation(fields: [health_center_id], references: [id])
+  health_center_name  String?
+  status              String   @default("hors_ligne")
+  battery_level       Float?
+  last_sync           DateTime?
+  firmware_version    String?
+  ip_address          String?
+  port                Int?
+  api_token           String?  @unique
+  created_date        DateTime @default(now())
+  updated_date        DateTime @updatedAt
+
+  sessions DiagnosticSession[]
+}
+
+model DiagnosticSession {
+  id                String   @id @default(cuid())
+  patient_id        String
+  patient           Patient  @relation(fields: [patient_id], references: [id], onDelete: Cascade)
+  agent_id          String?
+  agent             User?    @relation(fields: [agent_id], references: [id])
+  device_id         String?
+  device            MeraDevice? @relation(fields: [device_id], references: [id])
+  health_center_id  String?
+  health_center     HealthCenter? @relation(fields: [health_center_id], references: [id])
+  urgency_level     String
+  status            String
+  sync_status       String   @default("synced")
+  vocal_transcript  String?
+  patient_name      String?
+  patient_age       Int?
+  patient_sex       String?
+  recommendations      String?
+  eye_left_diagnosis   String?
+  eye_left_confidence  Float?
+  eye_right_diagnosis  String?
+  eye_right_confidence Float?
+  alerte               Boolean @default(false)
+  session_date         DateTime @default(now())
+  created_date      DateTime @default(now())
+  updated_date      DateTime @updatedAt
+
+  vital_signs            VitalSigns[]
+  eye_photos             EyePhoto[]
+  contagious_result      ContagiousEyeResult?
+  non_contagious_result  NonContagiousEyeResult?
+  systemic_predictions   SystemicPrediction[]
+  vocal_exchanges        VocalExchange[]
+  medical_reviews        MedicalReview[]
+}
+
+model VitalSigns {
+  id           String   @id @default(cuid())
+  session_id   String
+  session      DiagnosticSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  temperature  Float?
+  spo2         Float?
+  weight       Float?
+  heart_rate   Float?
+  bmi          Float?
+  timestamp    DateTime @default(now())
+  created_date DateTime @default(now())
+  updated_date DateTime @updatedAt
+}
+
+model EyePhoto {
+  id           String   @id @default(cuid())
+  session_id   String
+  session      DiagnosticSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  photo_url    String?
+  analyzed_by  String?
+  timestamp    DateTime @default(now())
+  created_date DateTime @default(now())
+  updated_date DateTime @updatedAt
+}
+
+model ContagiousEyeResult {
+  id                        String   @id @default(cuid())
+  session_id                String   @unique
+  session                   DiagnosticSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  conjunctivitis_bacterial  Float?
+  conjunctivitis_viral      Float?
+  trachoma                  Float?
+  blepharitis_infectious    Float?
+  contagion_alert           Boolean  @default(false)
+  created_date              DateTime @default(now())
+  updated_date              DateTime @updatedAt
+}
+
+model NonContagiousEyeResult {
+  id                   String   @id @default(cuid())
+  session_id           String   @unique
+  session              DiagnosticSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  cataract             Float?
+  pterygion            Float?
+  uveitis              Float?
+  jaundice             Float?
+  myopia               Float?
+  glaucoma             Float?
+  diabetic_retinopathy Float?
+  created_date         DateTime @default(now())
+  updated_date         DateTime @updatedAt
+}
+
+model SystemicPrediction {
+  id              String   @id @default(cuid())
+  session_id      String
+  session         DiagnosticSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  disease         String
+  probability     Float?
+  severity        String?
+  trigger_factors String?
+  created_date    DateTime @default(now())
+  updated_date    DateTime @updatedAt
+}
+
+model TraditionalTreatment {
+  id                String   @id @default(cuid())
+  disease           String
+  plant_name_fr     String
+  plant_name_local  String?
+  part_used         String?
+  preparation       String?
+  dosage_adult      String?
+  dosage_child      String?
+  precautions       String?
+  max_severity      String?
+  created_date      DateTime @default(now())
+  updated_date      DateTime @updatedAt
+}
+
+model VocalExchange {
+  id              String   @id @default(cuid())
+  session_id      String
+  session         DiagnosticSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  speaker         String
+  transcript_text String
+  timestamp       DateTime @default(now())
+  created_date    DateTime @default(now())
+  updated_date    DateTime @updatedAt
+}
+
+model MedicalReview {
+  id                String   @id @default(cuid())
+  session_id        String
+  session           DiagnosticSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+  doctor_id         String?
+  doctor            User?    @relation(fields: [doctor_id], references: [id])
+  doctor_name       String?
+  note              String?
+  validated_at      DateTime?
+  referral_needed   Boolean  @default(false)
+  referral_hospital String?
+  pdf_url           String?
+  status            String
+  created_date      DateTime @default(now())
+  updated_date      DateTime @updatedAt
+}

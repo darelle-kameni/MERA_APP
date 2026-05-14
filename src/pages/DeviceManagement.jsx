@@ -1,21 +1,36 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { Cpu, Battery, Wifi, WifiOff, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/lib/useTranslation";
 
 export default function DeviceManagement() {
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    async function load() {
-      const d = await base44.entities.MeraDevice.list();
-      setDevices(d);
-      setLoading(false);
-    }
-    load();
+  const isOnline = (device) => {
+    if (!device.last_sync) return false;
+    const elapsed = Date.now() - new Date(device.last_sync).getTime();
+    return elapsed < 60000;
+  };
+
+  const getDeviceStatus = (device) => {
+    if (!isOnline(device)) return { label: t("device.offline"), color: "bg-red-500/10 text-red-600 border-red-500/30", icon: WifiOff };
+    if (device.status === "maintenance") return { label: "Maintenance", color: "bg-yellow-500/10 text-yellow-600 border-yellow-500/30", icon: RefreshCw };
+    return { label: t("device.online"), color: "bg-green-500/10 text-green-600 border-green-500/30", icon: Wifi };
+  };
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    const d = await base44.entities.MeraDevice.list();
+    setDevices(d);
+    setLoading(false);
   }, []);
+
+  useEffect(() => { load(); }, [load]);
 
   if (loading) {
     return (
@@ -25,32 +40,31 @@ export default function DeviceManagement() {
     );
   }
 
-  const statusConfig = {
-    en_ligne: { label: "En ligne", color: "bg-green-500/10 text-green-600 border-green-500/30", icon: Wifi },
-    hors_ligne: { label: "Hors ligne", color: "bg-red-500/10 text-red-600 border-red-500/30", icon: WifiOff },
-    maintenance: { label: "Maintenance", color: "bg-yellow-500/10 text-yellow-600 border-yellow-500/30", icon: RefreshCw },
-  };
-
   return (
     <div className="max-w-4xl mx-auto space-y-4">
-      <div>
-        <h1 className="text-2xl font-heading font-bold flex items-center gap-3">
-          <Cpu className="w-6 h-6 text-primary" />
-          Appareils MERA
-        </h1>
-        <p className="text-sm text-muted-foreground mt-1">{devices.length} appareils enregistrés</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-heading font-bold flex items-center gap-3">
+            <Cpu className="w-6 h-6 text-primary" />
+            {t("device.title")}
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">{devices.length} {t("device.registered", "appareils enregistrés")}</p>
+        </div>
+        <Button variant="outline" size="sm" onClick={load} className="gap-1.5">
+          <RefreshCw className="w-3.5 h-3.5" /> Actualiser
+        </Button>
       </div>
 
       {devices.length === 0 && (
         <div className="text-center py-16 bg-card rounded-xl border border-border">
           <Cpu className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
-          <p className="text-sm text-muted-foreground">Aucun appareil enregistré</p>
+           <p className="text-sm text-muted-foreground">{t("device.noDevices")}</p>
         </div>
       )}
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {devices.map(device => {
-          const status = statusConfig[device.status] || statusConfig.hors_ligne;
+          const status = getDeviceStatus(device);
           const StatusIcon = status.icon;
           const batteryColor = device.battery_level > 60 ? "text-green-600" : device.battery_level > 20 ? "text-yellow-600" : "text-red-600";
 
@@ -73,7 +87,7 @@ export default function DeviceManagement() {
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-muted-foreground flex items-center gap-1.5">
                     <Battery className={cn("w-3.5 h-3.5", batteryColor)} />
-                    Batterie
+                    {t("device.battery")}
                   </span>
                   <span className={cn("font-medium", batteryColor)}>{device.battery_level || 0}%</span>
                 </div>
@@ -87,11 +101,11 @@ export default function DeviceManagement() {
                 </div>
 
                 <div className="flex items-center justify-between text-xs pt-1">
-                  <span className="text-muted-foreground">Firmware</span>
+                  <span className="text-muted-foreground">{t("device.firmware")}</span>
                   <span className="font-mono text-[10px]">{device.firmware_version || "—"}</span>
                 </div>
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-muted-foreground">Dernière sync</span>
+                  <span className="text-muted-foreground">{t("device.lastSync")}</span>
                   <span className="text-[10px]">
                     {device.last_sync ? new Date(device.last_sync).toLocaleString("fr-FR") : "Jamais"}
                   </span>

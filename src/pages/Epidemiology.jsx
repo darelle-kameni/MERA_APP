@@ -3,10 +3,12 @@ import { base44 } from "@/api/base44Client";
 import { BarChart3, TrendingUp } from "lucide-react";
 import EpidemiologyCharts from "../components/epidemiology/EpidemiologyCharts";
 import EpidemiologyMap from "../components/epidemiology/EpidemiologyMap";
+import { useTranslation } from "@/lib/useTranslation";
 
 export default function Epidemiology() {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function load() {

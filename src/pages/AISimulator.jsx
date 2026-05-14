@@ -1,18 +1,21 @@
 import { useState, useRef, useEffect } from "react";
-import { speak } from "../hooks/useSpeech";
+import { speak, listen } from "../hooks/useSpeech";
 import { base44 } from "@/api/base44Client";
-import { Bot, Send, Loader2, Globe } from "lucide-react";
+import { Bot, Send, Loader2, Globe, Mic, MicOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/useTranslation";
 
 export default function AISimulator() {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [language, setLanguage] = useState("fr");
   const [mode, setMode] = useState("adult");
+  const [listening, setListening] = useState(false);
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -81,15 +84,28 @@ Réponds en tant que MERA. Pose une question médicale de suivi ou donne un diag
     setLoading(false);
   };
 
+  const startListening = async () => {
+    setListening(true);
+    const langMap = { fr: "fr-FR", en: "en-US", ff: "fr-FR", ew: "fr-FR" };
+    try {
+      const transcript = await listen({ lang: langMap[language] || "fr-FR" });
+      if (transcript) setInput(transcript);
+    } catch {
+      // silence
+    } finally {
+      setListening(false);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto space-y-4">
       <div>
         <h1 className="text-2xl font-heading font-bold flex items-center gap-3">
           <Bot className="w-6 h-6 text-primary" />
-          Simulateur IA conversationnelle
+          {t("simulator.title")}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Simulez un dialogue MERA sans robot physique
+          {t("simulator.description")}
         </p>
       </div>
 
@@ -112,12 +128,12 @@ Réponds en tant que MERA. Pose une question médicale de suivi ou donne un diag
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="adult">Mode adulte</SelectItem>
-            <SelectItem value="child">Mode enfant</SelectItem>
+            <SelectItem value="adult">{t("simulator.adultMode")}</SelectItem>
+            <SelectItem value="child">{t("simulator.childMode")}</SelectItem>
           </SelectContent>
         </Select>
         <Button onClick={startSession} size="sm" className="h-9">
-          Nouvelle session
+          {t("simulator.newSession")}
         </Button>
       </div>
 
@@ -127,7 +143,7 @@ Réponds en tant que MERA. Pose une question médicale de suivi ou donne un diag
           {messages.length === 0 && (
             <div className="text-center py-16">
               <Bot className="w-16 h-16 mx-auto text-muted-foreground/20 mb-4" />
-              <p className="text-sm text-muted-foreground">Cliquez "Nouvelle session" pour commencer</p>
+              <p className="text-sm text-muted-foreground">{t("simulator.startPrompt").replace("%s", t("simulator.newSession"))}</p>
             </div>
           )}
           {messages.map(msg => (
@@ -150,20 +166,30 @@ Réponds en tant que MERA. Pose une question médicale de suivi ou donne un diag
           {loading && (
             <div className="flex items-center gap-2 px-3">
               <Loader2 className="w-4 h-4 animate-spin text-primary" />
-              <span className="text-xs text-muted-foreground">MERA analyse...</span>
+              <span className="text-xs text-muted-foreground">{t("simulator.analyzing")}</span>
             </div>
           )}
         </div>
 
         <div className="p-3 border-t border-border flex gap-2">
           <Input
-            placeholder="Décrivez vos symptômes..."
+            placeholder={t("simulator.placeholder")}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             disabled={messages.length === 0 || loading}
             className="h-10"
           />
+          <Button size="icon" onClick={startListening} disabled={loading || listening}
+            variant={listening ? "default" : "outline"}
+            className="h-10 w-10 flex-shrink-0 relative">
+            {listening ? (
+              <>
+                <MicOff className="w-4 h-4 text-destructive animate-pulse" />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-destructive rounded-full animate-ping" />
+              </>
+            ) : <Mic className="w-4 h-4" />}
+          </Button>
           <Button 
             size="icon" 
             onClick={sendMessage} 

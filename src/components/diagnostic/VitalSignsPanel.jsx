@@ -9,7 +9,7 @@ function VitalCard({ icon: Icon, label, value, unit, color, isAbnormal, history 
   return (
     <div className={cn(
       "bg-card rounded-xl border p-4 transition-all",
-      isAbnormal ? "border-red-500/40 shadow-red-500/5 shadow-lg" : "border-border"
+      isAbnormal ? "border-destructive/40 shadow-destructive/5 shadow-lg" : "border-border"
     )}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
@@ -19,7 +19,7 @@ function VitalCard({ icon: Icon, label, value, unit, color, isAbnormal, history 
           <span className="text-xs font-medium text-muted-foreground">{label}</span>
         </div>
         {isAbnormal && (
-          <span className="text-[10px] font-semibold text-red-600 bg-red-500/10 px-2 py-0.5 rounded-full animate-vital-pulse">
+          <span className="text-[10px] font-semibold text-destructive bg-destructive/10 px-2 py-0.5 rounded-full animate-vital-pulse">
             ALERTE
           </span>
         )}
@@ -31,14 +31,14 @@ function VitalCard({ icon: Icon, label, value, unit, color, isAbnormal, history 
         <div className="h-12 mt-2">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={history.slice(-10)}>
-              <Line 
-                type="monotone" 
-                dataKey="v" 
-                stroke={isAbnormal ? "#E74C3C" : "#1A3A5C"} 
-                strokeWidth={1.5} 
-                dot={false} 
+              <Line
+                type="monotone"
+                dataKey="v"
+                stroke={isAbnormal ? "#E74C3C" : "hsl(var(--primary))"}
+                strokeWidth={1.5}
+                dot={false}
               />
-              <Tooltip 
+              <Tooltip
                 contentStyle={{ fontSize: 10, padding: "2px 6px" }}
                 formatter={(v) => [`${v} ${unit}`, label]}
               />
@@ -50,7 +50,7 @@ function VitalCard({ icon: Icon, label, value, unit, color, isAbnormal, history 
   );
 }
 
-export default function VitalSignsPanel({ isChild = false, isSimulating = false }) {
+export default function VitalSignsPanel({ isChild = false, isSimulating = false, sessionData }) {
   const [current, setCurrent] = useState(null);
   const [tempHistory, setTempHistory] = useState([]);
   const [spo2History, setSpo2History] = useState([]);
@@ -60,8 +60,24 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false 
   const isFirstTick = useRef(true);
   const prevAlerts = useRef({ temp: false, spo2: false, hr: false });
 
+  // Use real session data when available
   useEffect(() => {
-    if (isSimulating) {
+    if (sessionData?.temperature != null) {
+      setCurrent({
+        temperature: sessionData.temperature,
+        spo2: sessionData.spo2,
+        heart_rate: sessionData.heart_rate,
+        weight: sessionData.weight,
+      });
+      setTempHistory([{ v: sessionData.temperature }]);
+      setSpo2History([{ v: sessionData.spo2 }]);
+      setHrHistory([{ v: sessionData.heart_rate }]);
+    }
+  }, [sessionData]);
+
+  // Simulation mode
+  useEffect(() => {
+    if (isSimulating && !sessionData) {
       isFirstTick.current = true;
       const tick = () => {
         const vitals = generateVitals(isChild);
@@ -71,13 +87,11 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false 
         const lowSpo2 = vitals.spo2 < 94;
         const abnormalHR = vitals.heart_rate > 120 || vitals.heart_rate < 55;
 
-        // Annonce vocale à la première mesure
         if (isFirstTick.current) {
           isFirstTick.current = false;
           speak(`Mesures enregistrées. Température : ${vitals.temperature} degrés. Saturation oxygène : ${vitals.spo2} pourcent. Fréquence cardiaque : ${vitals.heart_rate} battements par minute. Poids : ${vitals.weight} kilogrammes.`);
         }
 
-        // Alertes vocales sur détection d'anomalie (une seule fois par événement)
         if (highTemp && !prevAlerts.current.temp) {
           setTimeout(() => speak(`Alerte ! Température élevée détectée : ${vitals.temperature} degrés. Veuillez vérifier le patient.`), 4000);
         }
@@ -97,7 +111,7 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false 
       intervalRef.current = setInterval(tick, 2000);
       return () => clearInterval(intervalRef.current);
     }
-  }, [isSimulating, isChild]);
+  }, [isSimulating, isChild, sessionData]);
 
   if (!current) {
     return (
