@@ -22,8 +22,8 @@ function buildEyeSummary(eyeData) {
   const findings = [];
   const left = eyeData.eye_left;
   const right = eyeData.eye_right;
-  if (left && left.diagnosis && left.diagnosis !== "Sain") findings.push({ label: `OD: ${left.diagnosis}`, value: `${Math.round(left.confidence)}%`, severity: left.confidence > 80 ? "high" : "medium" });
-  if (right && right.diagnosis && right.diagnosis !== "Sain") findings.push({ label: `OG: ${right.diagnosis}`, value: `${Math.round(right.confidence)}%`, severity: right.confidence > 80 ? "high" : "medium" });
+  if (left && left.diagnosis && left.diagnosis !== "Sain") findings.push({ label: `OD: ${left.diagnosis}`, value: `${Math.round(left.confidence * 100)}%`, severity: left.confidence > 0.8 ? "high" : "medium" });
+  if (right && right.diagnosis && right.diagnosis !== "Sain") findings.push({ label: `OG: ${right.diagnosis}`, value: `${Math.round(right.confidence * 100)}%`, severity: right.confidence > 0.8 ? "high" : "medium" });
   if (eyeData.alerte) findings.push({ label: "Alerte ophtalmique", value: "Active", severity: "high" });
   return findings;
 }
@@ -43,8 +43,8 @@ function getAIAnalysis(vitals, eyeData, urgency) {
   if (eyeData) {
     const left = eyeData.eye_left;
     const right = eyeData.eye_right;
-    if (left) parts.push(`Œil gauche: ${left.diagnosis || "non évalué"} (confiance ${left.confidence || 0}%).`);
-    if (right) parts.push(`Œil droit: ${right.diagnosis || "non évalué"} (confiance ${right.confidence || 0}%).`);
+    if (left) parts.push(`Œil gauche: ${left.diagnosis || "non évalué"} (confiance ${((left.confidence || 0) * 100).toFixed(0)}%).`);
+    if (right) parts.push(`Œil droit: ${right.diagnosis || "non évalué"} (confiance ${((right.confidence || 0) * 100).toFixed(0)}%).`);
     if (eyeData.alerte) parts.push("Alerte contagion détectée.");
   }
   return `Analyse diagnostique pour le patient.

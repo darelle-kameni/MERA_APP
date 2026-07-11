@@ -202,6 +202,65 @@ router.post('/heartbeat', async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
+// ─── POST /robot/attendance : enregistre un badge RFID (présence) ─
+// L'ESP32 appelle cet endpoint à chaque badge pour enregistrer le pointage.
+router.post('/attendance', async (req, res, next) => {
+  try {
+    const { card_id, patient_id, patient_name, role } = req.body || {};
+    if (!card_id) return res.status(400).json({ success: false, message: 'card_id is required' });
+
+    // Chercher le patient si card_id fourni sans patient_id
+    let pid = patient_id;
+    let pname = patient_name;
+    let prole = role || 'patient';
+    if (!pid) {
+      const patient = await prisma.patient.findUnique({
+        where: { card_id },
+        select: { id: true, full_name: true },
+      });
+      if (patient) {
+        pid = patient.id;
+        pname = patient.full_name;
+      } else {
+        // Chercher dans User (staff)
+        const user = await prisma.user.findUnique({
+          where: { id_card: card_id },
+          select: { id: true, full_name: true, role: true },
+        });
+        if (user) {
+          pid = user.id;
+          pname = user.full_name;
+          prole = user.role;
+        }
+      }
+    }
+
+    const record = await prisma.attendance.create({
+      data: {
+        patient_id: pid,
+        card_id,
+        patient_name: pname || 'Inconnu',
+        role: prole,
+        device_id: req.device.id,
+        health_center_id: req.device.health_center_id,
+      },
+    });
+
+    // Update device heartbeat
+    await prisma.meraDevice.update({
+      where: { id: req.device.id },
+      data: { last_sync: new Date(), status: 'en_ligne' },
+    });
+
+    res.status(201).json({
+      success: true,
+      id: record.id,
+      badged_at: record.badged_at,
+      patient_name: record.patient_name,
+    });
+  } catch (e) { next(e); }
+});
+
 // ─── POST /robot/lookup : cherche un patient (card_id) OU un encadreur (id_card) par RFID ─
 // Retourne les infos pour affichage sur l'écran de l'ESP32.
 router.post('/lookup', async (req, res, next) => {

@@ -1,14 +1,20 @@
 export default {
   app: { title: "MERA", subtitle: "Medical Embedded Robotic Assistant" },
+
   nav: {
     dashboard: "Tableau de bord", newChild: "Nouvel enfant", session: "Session diagnostic",
-    children: "Dossiers enfants", review: "Revue médicale", devices: "Appareils MERA",
+    children: "Dossiers enfants", attendance: "Pointage", review: "Revue médicale", devices: "Appareils MERA",
     simulator: "Simulateur IA", settings: "Paramètres", admin: "Administration",
     requests: "Demandes", users: "Utilisateurs", assignments: "Associations",
   },
+
   topbar: {
-    robotOnline: "Robot connecté", robotOffline: "Robot hors ligne", online: "En ligne", offline: "Hors ligne",
+    robotOnline: "Robot connecté", robotOffline: "Robot hors ligne",
+    online: "En ligne", offline: "Hors ligne",
+    notifications: "Notifications", markAllRead: "Tout marquer comme lu",
+    logout: "Déconnexion", profile: "Profil",
   },
+
   dashboard: {
     title: "Tableau de bord", myChildren: "Mes enfants", sessions: "Sessions",
     criticalCases: "Cas critiques", pendingReview: "En attente de revue",
@@ -21,11 +27,14 @@ export default {
     admins: "Admins", encadreurs: "Encadreurs", medecins: "Médecins",
     robotsOnline: "Robots en ligne", children: "Enfants",
   },
+
   child: {
     register: "Enregistrer un enfant", newChild: "Nouveau patient",
-    edit: "Modifier l'enfant", delete: "Supprimer",
+    edit: "Modifier l'enfant", editDescription: "Mettre à jour les informations de l'enfant",
+    delete: "Supprimer",
     name: "Nom complet", age: "Âge", sex: "Sexe", cardId: "ID Carte RFID",
-    village: "Village", pin: "Code PIN (4 chiffres, optionnel)",
+    village: "Village",
+    pin: "Code PIN (4 chiffres, optionnel)", pinPlaceholder: "4 chiffres",
     boy: "Garçon", girl: "Fille", masculine: "Masculin", feminine: "Féminin",
     noSession: "Cliquez pour démarrer une session",
     registered: "enregistré avec succès", cardUsed: "Cet ID de carte est déjà utilisé",
@@ -39,44 +48,52 @@ export default {
     sessionsCount: "session(s)", noChildren: "Aucun enfant trouvé",
     startSession: "Cliquez pour démarrer une session",
   },
+
   diagnostic: {
     title: "Session de diagnostic", demo: "Session de démonstration",
     vitals: "Signes vitaux", eye: "Analyse oculaire", predictions: "Prédictions",
     treatments: "Traitements", dialogue: "Dialogue", history: "Historique",
-    noSession: "Aucune session trouvée", selectPatient: "Sélectionnez un patient pour voir ses sessions",
+    noSession: "Aucune session trouvée",
+    selectPatient: "Sélectionnez un patient pour voir ses sessions",
   },
+
   settings: {
     title: "Paramètres", description: "Configuration de l'application",
     language: "Langue", healthCenter: "Centre de santé", selectCenter: "Sélectionner un centre",
     robotConfig: "Configuration réseau robot", backendUrl: "URL du backend MERA",
-    raspUrl: "URL Raspberry Pi (capture oculaire)", save: "Enregistrer les paramètres",
-    saved: "Paramètres enregistrés",
+    raspUrl: "URL Raspberry Pi (capture oculaire)",
+    save: "Enregistrer les paramètres", saved: "Paramètres enregistrés",
   },
+
   admin: {
     requests: "Demandes d'inscription", users: "Utilisateurs",
     assignments: "Associations", createUser: "Créer un compte",
     approve: "Approuver", reject: "Rejeter", reason: "Raison du rejet (optionnel)",
-    filterPending: "En attente", filterApproved: "Approuvées", filterRejected: "Rejetées",
-    filterAll: "Toutes", noRequests: "Aucune demande",
+    filterPending: "En attente", filterApproved: "Approuvées",
+    filterRejected: "Rejetées", filterAll: "Toutes",
+    noRequests: "Aucune demande",
     signatureDigital: "Signature numérique", idCardRfid: "ID Carte RFID (optionnel)",
     idCardAuto: "Laisser vide pour générer automatiquement",
     accountCreated: "Compte créé", idCard: "ID Card", motivation: "Motivation",
   },
+
   device: {
     title: "Appareils MERA", serialNumber: "Numéro de série",
     status: "Statut", lastSync: "Dernière sync", battery: "Batterie",
-    online: "En ligne", offline: "Hors ligne", noDevices: "Aucun appareil trouvé", firmware: "Firmware",
+    online: "En ligne", offline: "Hors ligne",
+    noDevices: "Aucun appareil trouvé", firmware: "Firmware",
+    registered: "appareil(s) enregistré(s)",
   },
+
   simulator: {
     title: "Simulateur IA", placeholder: "Tapez votre message...",
-    send: "Envoyer", clear: "Effacer",
-    newSession: "Nouvelle session",
+    send: "Envoyer", clear: "Effacer", newSession: "Nouvelle session",
     description: "Simulez un dialogue MERA sans robot physique",
     startPrompt: "Cliquez %s pour commencer",
     analyzing: "MERA analyse...",
-    adultMode: "Mode adulte",
-    childMode: "Mode enfant",
+    adultMode: "Mode adulte", childMode: "Mode enfant",
   },
+
   login: {
     staff: "Connexion personnel", patient: "Espace enfant",
     email: "Email", password: "Mot de passe", identifier: "Email ou ID Card",
@@ -90,12 +107,7 @@ export default {
     staffPrompt: "Vous êtes un membre du personnel médical ?",
     staffLogin: "Se connecter avec un compte professionnel",
   },
-  common: {
-    save: "Enregistrer", cancel: "Annuler", search: "Rechercher",
-    loading: "Chargement...", close: "Fermer", confirm: "Confirmer",
-    yes: "Oui", no: "Non", error: "Erreur", success: "Succès",
-    contact: "Contact administration", notFound: "Page non trouvée", anonymous: "Patient anonyme",
-  },
+
   register: {
     title: "Demande d'accès MERA",
     subtitle: "Votre compte sera activé après validation par un administrateur",
@@ -119,8 +131,23 @@ export default {
     minChars: "Au moins 6 caractères",
     hasAccount: "Déjà un compte ?",
   },
+
   patient: {
     greeting: "Bonjour %s",
+    medicalHistory: "Voici votre historique médical",
+    questionPrompt: "Une question médicale ?",
+    chatWithAssistant: "Discutez avec l'assistant MERA",
+    chat: "Discuter",
+    myConsultations: "Mes consultations",
+    noConsultations: "Aucune consultation enregistrée",
+    consultationsHere: "Vos prochaines consultations apparaîtront ici",
+    consultationDate: "Consultation du",
+    myInfo: "Mes informations",
+    editInfo: "Vous pouvez modifier votre village et votre numéro de téléphone",
+    readonlyInfo: "Informations non modifiables",
+    editableInfo: "Informations modifiables",
+    phone: "Téléphone",
+    contactStaff: "Pour corriger ces informations, contactez le personnel médical.",
     show: "Afficher",
     hide: "Masquer",
     keepIdSafe: "Conservez cet ID et votre PIN en lieu sûr.",
@@ -128,7 +155,18 @@ export default {
     disableVoice: "Désactiver la voix",
     enableVoice: "Activer la voix",
     chatDisclaimer: "Cet assistant fournit des informations générales. Pour tout symptôme inquiétant, consultez un professionnel de santé.",
+    space: "Espace enfant",
+    myFolder: "Mon dossier",
+    discussWithMera: "Discuter avec MERA",
+    sessionDetails: "Détails de la session",
+    backToDashboard: "Retour au tableau de bord",
+    downloadReport: "Télécharger le compte-rendu",
+    noResults: "Aucun résultat disponible",
+    summary: "Résumé",
+    aiAnalysis: "Analyse IA",
+    doctorAdvice: "Avis médical",
   },
+
   medical: {
     pendingCases: "cas en attente de validation",
     allReviewed: "Tous les cas ont été revus",
@@ -137,5 +175,84 @@ export default {
     clinicalNote: "Note clinique du médecin...",
     validateDiagnosis: "Valider diagnostic",
     referHospital: "Référer hôpital",
+  },
+
+  urgency: {
+    critique: "Critique", eleve: "Élevé", modere: "Modéré", normal: "Normal",
+    global: "Niveau d'urgence global",
+    distribution: "Répartition urgences",
+    noData: "Aucune donnée",
+    critiqueMsg: "Référence médicale urgente requise immédiatement",
+    eleveMsg: "Prise en charge médicale nécessaire rapidement",
+    modereMsg: "Surveillance recommandée, traitement possible sur place",
+    normalMsg: "Pas d'urgence détectée, suivi standard",
+  },
+
+  vitals: {
+    temperature: "Température", spo2: "SpO2", heartRate: "Fréq. cardiaque", weight: "Poids",
+    alert: "ALERTE",
+    waitingRobot: "En attente des signes vitaux du robot...",
+    activateSimulation: "Activez la simulation pour générer des données",
+  },
+
+  eye: {
+    title: "Analyse oculaire",
+    left: "Œil gauche", right: "Œil droit",
+    confidence: "Confiance",
+    waiting: "En attente des résultats de l'analyse oculaire...",
+    anomalyDetected: "Anomalie détectée — une consultation ophtalmologique est recommandée",
+    healthy: "Sain",
+    diseases: {
+      conjunctivitis_bacterial: "Conjonctivite bactérienne",
+      conjunctivitis_viral: "Conjonctivite virale",
+      trachoma: "Trachome",
+      blepharitis_infectious: "Blépharite infectieuse",
+      cataract: "Cataracte",
+      pterygion: "Ptérygion",
+      uveitis: "Uvéite",
+      jaundice: "Jaunisse oculaire",
+      myopia: "Myopie",
+      glaucoma: "Glaucome",
+      diabetic_retinopathy: "Rétinopathie diabétique",
+      conjunctivite: "Conjonctivite",
+    },
+  },
+
+  notif: {
+    empty: "Aucune notification",
+    loading: "Chargement...",
+    title: "Notifications",
+    allUpToDate: "Tout est à jour",
+    markAllRead: "Tout marquer comme lu",
+    moments: "à l'instant",
+    minutesAgo: "il y a %s min",
+    hoursAgo: "il y a %s h",
+    daysAgo: "il y a %s j",
+  },
+
+  common: {
+    save: "Enregistrer", cancel: "Annuler", search: "Rechercher",
+    loading: "Chargement...", close: "Fermer", confirm: "Confirmer",
+    yes: "Oui", no: "Non", error: "Erreur", success: "Succès",
+    contact: "Contact administration", notFound: "Page non trouvée",
+    anonymous: "Patient anonyme",
+    back: "Retour", next: "Suivant", retry: "Réessayer",
+    years: "ans",
+    loadingError: "Erreur de chargement",
+    loadFailed: "Impossible de charger les données",
+    noData: "Aucune donnée",
+    logout: "Déconnexion",
+    na: "N/A",
+    delete: "Supprimer",
+    edit: "Modifier",
+    create: "Créer",
+    add: "Ajouter",
+    submit: "Envoyer",
+  },
+
+  error: {
+    title: "Une erreur est survenue",
+    message: "L'application a rencontré un problème inattendu.",
+    retry: "Réessayer", reload: "Recharger",
   },
 };

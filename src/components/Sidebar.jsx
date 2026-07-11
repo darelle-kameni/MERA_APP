@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard, UserPlus, Stethoscope, FolderOpen,
   ClipboardCheck, Cpu, Settings, X, Bot,
-  Shield, Inbox, Users as UsersIcon, Link2,
+  Shield, Inbox, Users as UsersIcon, Link2, CalendarClock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -15,6 +15,7 @@ const baseNavItems = [
   { path: "/patients/new",     icon: UserPlus,        labelKey: "nav.newChild", roles: ["encadreur"], end: true },
   { path: "/diagnostic",       icon: Stethoscope,     labelKey: "nav.session", roles: ["encadreur"] },
   { path: "/patients",         icon: FolderOpen,      labelKey: "nav.children", roles: ["encadreur", "medecin"], end: true },
+  { path: "/attendance",       icon: CalendarClock,   labelKey: "nav.attendance", roles: ["encadreur", "admin", "medecin"], end: true },
   { path: "/reviews",          icon: ClipboardCheck,  labelKey: "nav.review", roles: ["medecin"], end: true },
   { path: "/devices",          icon: Cpu,             labelKey: "nav.devices", roles: ["admin"], end: true },
   { path: "/simulator",        icon: Bot,             labelKey: "nav.simulator", roles: ["encadreur", "medecin"] },

@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -245,14 +246,34 @@ model TraditionalTreatment {
   disease           String
   plant_name_fr     String
   plant_name_local  String?
+  synonyms_locaux   String?  // JSON: {"fulfulde":"...", "ewe":"...", "bamiléké":"..."}
   part_used         String?
   preparation       String?
   dosage_adult      String?
   dosage_child      String?
   precautions       String?
+  contre_indications String?
   max_severity      String?
+  evidence_level    String   @default("traditionnel_rapporté") // OMS | clinique | traditionnel_avéré | traditionnel_rapporté
+  source            String?  // Référence bibliographique complète
   created_date      DateTime @default(now())
   updated_date      DateTime @updatedAt
+
+  indications TreatmentIndication[]
+}
+
+// Lie les maladies prédites par le LLM (SystemicPrediction.disease) aux traitements
+// traditionnels (TraditionalTreatment.disease) pour un matching automatique.
+model TreatmentIndication {
+  id                  String   @id @default(cuid())
+  prediction_disease  String   // Nom exact ou pattern dans SystemicPrediction.disease
+  treatment_id        String
+  treatment           TraditionalTreatment @relation(fields: [treatment_id], references: [id], onDelete: Cascade)
+  match_type          String   @default("exact") // exact | contains
+  created_date        DateTime @default(now())
+
+  @@unique([prediction_disease, treatment_id])
+  @@index([prediction_disease])
 }
 
 model VocalExchange {
@@ -281,4 +302,21 @@ model MedicalReview {
   status            String
   created_date      DateTime @default(now())
   updated_date      DateTime @updatedAt
+}
+
+model Attendance {
+  id               String    @id @default(cuid())
+  patient_id       String?
+  card_id          String
+  patient_name     String?
+  role             String    @default("patient")
+  device_id        String?
+  health_center_id String?
+  badged_at        DateTime  @default(now())
+  created_date     DateTime  @default(now())
+
+  @@index([card_id])
+  @@index([patient_id])
+  @@index([badged_at])
+  @@index([health_center_id])
 }

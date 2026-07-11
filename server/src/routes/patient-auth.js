@@ -65,9 +65,16 @@ router.post('/register', requireStaff, async (req, res, next) => {
       guardian_id = g.id;
     }
 
-    const { card_id, ...rest } = data;
+    const { card_id, health_center_id, ...rest } = data;
     const patient = await prisma.patient.create({
-      data: { ...rest, card_id, pin_hash, guardian_id, is_pediatric: data.age < 15 },
+      data: {
+        ...rest,
+        card_id,
+        pin_hash,
+        guardian_id,
+        is_pediatric: data.age < 15,
+        health_center_id: health_center_id || null,
+      },
     });
 
     // Per workflow doc: notify admins of every child created.

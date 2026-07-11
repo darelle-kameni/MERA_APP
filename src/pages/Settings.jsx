@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Settings as SettingsIcon, Globe, Building2, Cpu, Save } from "lucide-react";
+import { Settings as SettingsIcon, Globe, Building2, Cpu, Wifi, Eye, EyeOff, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,6 +15,9 @@ export default function Settings() {
   const [centerId, setCenterId] = useState(localStorage.getItem("mera_center_id") || "");
   const [meraUrl, setMeraUrl] = useState(localStorage.getItem("mera_backend_url") || "http://192.168.1.10:4000");
   const [raspUrl, setRaspUrl] = useState(localStorage.getItem("mera_rasp_url") || "http://192.168.1.110:5000");
+  const [wifiSsid, setWifiSsid] = useState(localStorage.getItem("mera_wifi_ssid") || "");
+  const [wifiPass, setWifiPass] = useState(localStorage.getItem("mera_wifi_password") || "");
+  const [showWifiPass, setShowWifiPass] = useState(false);
 
   useEffect(() => {
     base44.entities.HealthCenter.list().then(setCenters).catch(() => {});
@@ -25,6 +28,8 @@ export default function Settings() {
     localStorage.setItem("mera_center_id", centerId);
     localStorage.setItem("mera_backend_url", meraUrl);
     localStorage.setItem("mera_rasp_url", raspUrl);
+    localStorage.setItem("mera_wifi_ssid", wifiSsid);
+    localStorage.setItem("mera_wifi_password", wifiPass);
     window.dispatchEvent(new Event("mera:langchange"));
     toast.success("Paramètres enregistrés");
   };
@@ -72,6 +77,31 @@ export default function Settings() {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="bg-card rounded-xl border border-border p-5 space-y-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Wifi className="w-5 h-5 text-primary" />
+          <h3 className="font-heading font-semibold">WiFi — QR Code patients</h3>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Ces identifiants seront utilisés pour générer le QR code WiFi à donner aux patients.
+        </p>
+        <div>
+          <Label>Nom du réseau (SSID)</Label>
+          <Input value={wifiSsid} onChange={(e) => setWifiSsid(e.target.value)} className="mt-1.5 font-mono" placeholder="MERA" />
+        </div>
+        <div>
+          <Label>Mot de passe</Label>
+          <div className="relative mt-1.5">
+            <Input type={showWifiPass ? "text" : "password"} value={wifiPass}
+              onChange={(e) => setWifiPass(e.target.value)} className="font-mono pr-10" placeholder="Mot de passe WiFi" />
+            <button type="button" onClick={() => setShowWifiPass(!showWifiPass)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+              {showWifiPass ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="bg-card rounded-xl border border-border p-5 space-y-4">

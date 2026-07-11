@@ -5,20 +5,22 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { usePatientAuth } from '@/lib/PatientAuthContext';
+import { useTranslation } from '@/lib/useTranslation';
 
 const initials = (s) => (s || '')
   .split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]?.toUpperCase()).join('') || '?';
 
-const navItems = [
-  { to: '/patient', icon: FolderOpen, label: 'Mon dossier', end: true },
-  { to: '/patient/profile', icon: User, label: 'Mes informations' },
-  { to: '/patient/chat', icon: MessageCircle, label: 'Discuter avec MERA' },
-];
-
 export default function PatientLayout() {
+  const { t } = useTranslation();
   const { patient, logout } = usePatientAuth();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+
+  const navItems = [
+    { to: '/patient', icon: FolderOpen, label: t('patient.myFolder'), end: true },
+    { to: '/patient/profile', icon: User, label: t('patient.myInfo') },
+    { to: '/patient/chat', icon: MessageCircle, label: t('patient.discussWithMera') },
+  ];
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
@@ -30,7 +32,7 @@ export default function PatientLayout() {
             </div>
             <div className="leading-tight">
               <p className="font-heading font-bold text-sm">MERA</p>
-              <p className="text-[10px] text-muted-foreground">Espace enfant</p>
+              <p className="text-[10px] text-muted-foreground">{t('patient.space')}</p>
             </div>
           </Link>
 
@@ -54,7 +56,7 @@ export default function PatientLayout() {
                 </AvatarFallback>
               </Avatar>
               <Button variant="ghost" size="sm" onClick={logout} className="gap-1.5 text-muted-foreground">
-                <LogOut className="w-3.5 h-3.5" /> Déconnexion
+                <LogOut className="w-3.5 h-3.5" /> {t('common.logout')}
               </Button>
             </div>
             <button onClick={() => setOpen((v) => !v)} className="md:hidden p-2 hover:bg-muted rounded-lg">
@@ -77,7 +79,7 @@ export default function PatientLayout() {
               ))}
               <button onClick={() => { setOpen(false); logout(); }}
                 className="px-3 py-2 rounded-lg text-sm font-medium text-destructive hover:bg-destructive/10 flex items-center gap-2">
-                <LogOut className="w-4 h-4" /> Déconnexion
+                <LogOut className="w-4 h-4" /> {t('common.logout')}
               </button>
             </nav>
           </div>

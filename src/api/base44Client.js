@@ -81,6 +81,7 @@ const ENTITY_NAMES = [
   'TraditionalTreatment',
   'VocalExchange',
   'MedicalReview',
+  'Attendance',
 ];
 
 const entities = Object.fromEntries(ENTITY_NAMES.map((n) => [n, makeEntity(n)]));
@@ -159,6 +160,11 @@ const notifications = {
   markAllRead: () => request('/me/notifications/read-all', { method: 'POST' }),
 };
 
+// Lookup traditional treatments by disease keywords.
+const treatments = {
+  search: (diseases) => request('/treatments/search', { method: 'POST', body: { diseases } }),
+};
+
 // Admin-only operations (only callable by admin users).
 const admin = {
   listRequests: (status = 'pending') => request('/admin/registration-requests', { query: { status } }),
@@ -175,5 +181,5 @@ const admin = {
   deleteAssignment: (id) => request(`/admin/assignments/${encodeURIComponent(id)}`, { method: 'DELETE' }),
 };
 
-export const base44 = { entities, auth, patient, admin, devices, notifications, integrations: { Core } };
+export const base44 = { entities, auth, patient, admin, devices, notifications, treatments, integrations: { Core } };
 export default base44;

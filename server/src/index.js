@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { readFileSync, existsSync } from 'node:fs';
 import authRouter from './routes/auth.js';
 import patientAuthRouter from './routes/patient-auth.js';
 import patientDataRouter from './routes/patient-data.js';
@@ -16,10 +17,13 @@ import voiceRouter from './routes/voice.js';
 import adminRouter, { publicRequestRouter } from './routes/admin.js';
 import notificationsRouter from './routes/notifications.js';
 import robotRouter from './routes/robot.js';
+import treatmentsRouter from './routes/treatments.js';
 import devicesRouter from './routes/devices.js';
+import attendanceRouter from './routes/attendance.js';
 import { notFound, errorHandler } from './middleware/error.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT_DIR = path.resolve(__dirname, '..');
 
 const app = express();
 
@@ -49,6 +53,19 @@ app.use('/upload', uploadRouter);
 app.use('/llm', llmRouter);
 app.use('/llm', llmPredictRouter);  // monte /llm/predict-diagnosis
 app.use('/llm', voiceRouter);        // monte /llm/transcribe et /llm/speak
+app.use('/treatments', treatmentsRouter);
+app.use('/attendance', attendanceRouter);
+
+const DIST_DIR = path.resolve(ROOT_DIR, '..', 'dist');
+if (existsSync(DIST_DIR)) {
+  app.use(express.static(DIST_DIR));
+  const indexHtml = readFileSync(path.resolve(DIST_DIR, 'index.html'), 'utf-8');
+  app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+      res.set('Content-Type', 'text/html').send(indexHtml);
+    }
+  });
+}
 
 app.use(notFound);
 app.use(errorHandler);

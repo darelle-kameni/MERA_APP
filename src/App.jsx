@@ -18,6 +18,7 @@ const PatientRecords = lazy(() => import('./pages/PatientRecords'));
 const MedicalReview = lazy(() => import('./pages/MedicalReview'));
 const DeviceManagement = lazy(() => import('./pages/DeviceManagement'));
 const AISimulator = lazy(() => import('./pages/AISimulator'));
+const Attendance = lazy(() => import('./pages/Attendance'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -97,6 +98,7 @@ const StaffApp = () => (
           <Route path="/reviews" element={<MedicalReview />} />
           <Route path="/devices" element={<DeviceManagement />} />
           <Route path="/simulator" element={<AISimulator />} />
+          <Route path="/attendance" element={<Attendance />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/admin/requests" element={<RequireAdmin><AdminRequests /></RequireAdmin>} />
           <Route path="/admin/users" element={<RequireAdmin><AdminUsers /></RequireAdmin>} />

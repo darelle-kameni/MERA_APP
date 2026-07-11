@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { useTranslation } from "@/lib/useTranslation";
@@ -6,14 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { UserPlus, CreditCard, Baby, CheckCircle2 } from "lucide-react";
+import { UserPlus, CreditCard, Baby, Wifi } from "lucide-react";
 import { toast } from "sonner";
+import WiFiQrModal from "@/components/WiFiQrModal";
 
 export default function PatientRegistration() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
+  const [wifiQrOpen, setWifiQrOpen] = useState(false);
+  const [centers, setCenters] = useState([]);
   const [form, setForm] = useState({
     full_name: "",
     age: "",
@@ -22,6 +24,10 @@ export default function PatientRegistration() {
     village: "",
     health_center_id: "",
   });
+
+  useEffect(() => {
+    base44.entities.HealthCenter.list().then(setCenters).catch(() => {});
+  }, []);
 
   const isPediatric = form.age && parseInt(form.age) < 15;
 
@@ -135,14 +141,15 @@ export default function PatientRegistration() {
 
         <div>
           <Label>{t("child.healthCenter", "Centre de santé")}</Label>
-          <Select value={form.health_center_id} onValueChange={(v) => setForm({ ...form, health_center_id: v })}>
+          <Select value={form.health_center_id} onValueChange={(v) => setForm({ ...form, health_center_id: v })}
+            disabled={centers.length === 0}>
             <SelectTrigger className="mt-1.5">
-              <SelectValue placeholder={t("child.selectCenter", "Sélectionner un centre")} />
+              <SelectValue placeholder={centers.length === 0 ? "Aucun centre disponible" : t("child.selectCenter", "Sélectionner un centre")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="douala">CSI Douala</SelectItem>
-              <SelectItem value="bafoussam">HD Bafoussam</SelectItem>
-              <SelectItem value="maroua">CSI Maroua</SelectItem>
+              {centers.map((c) => (
+                <SelectItem key={c.id} value={c.id}>{c.name}{c.region ? ` — ${c.region}` : ''}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -158,7 +165,12 @@ export default function PatientRegistration() {
               </>
             )}
           </Button>
+          <Button type="button" variant="outline" className="h-12 w-12 flex-shrink-0" title="QR Code WiFi"
+            onClick={() => setWifiQrOpen(true)}>
+            <Wifi className="w-5 h-5" />
+          </Button>
         </div>
+        <WiFiQrModal open={wifiQrOpen} onOpenChange={setWifiQrOpen} />
 
         <p className="text-[10px] text-muted-foreground text-center">
           L'ID de carte RFID servira d'identifiant pour le patient

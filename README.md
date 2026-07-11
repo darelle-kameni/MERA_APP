@@ -1,4 +1,4 @@
-# MERA — Application de diagnostic ophtalmologique
+git# MERA — Application de diagnostic ophtalmologique
 
 Application full-stack pour le dépistage et diagnostic en centre de santé. Frontend React + backend Express/Prisma/SQLite. Plus aucune dépendance Base44.
 
