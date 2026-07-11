@@ -36,25 +36,25 @@ app.use(cors({
 app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
 
-app.get('/health', (req, res) => res.json({ ok: true, env: process.env.NODE_ENV || 'development' }));
+app.get('/api/health', (req, res) => res.json({ ok: true, env: process.env.NODE_ENV || 'development' }));
 
-app.use('/uploads', express.static(UPLOAD_DIR));
+app.use('/api/uploads', express.static(UPLOAD_DIR));
 
-app.use('/auth', authRouter);
-app.use('/auth', publicRequestRouter);  // POST /auth/request-registration
-app.use('/auth/patient', patientAuthRouter);
-app.use('/patient', patientDataRouter);
-app.use('/admin', adminRouter);
-app.use('/me/notifications', notificationsRouter);
-app.use('/robot', robotRouter);
-app.use('/devices', devicesRouter);
-app.use('/entities', entitiesRouter);
-app.use('/upload', uploadRouter);
-app.use('/llm', llmRouter);
-app.use('/llm', llmPredictRouter);  // monte /llm/predict-diagnosis
-app.use('/llm', voiceRouter);        // monte /llm/transcribe et /llm/speak
-app.use('/treatments', treatmentsRouter);
-app.use('/attendance', attendanceRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/auth', publicRequestRouter);  // POST /api/auth/request-registration
+app.use('/api/auth/patient', patientAuthRouter);
+app.use('/api/patient', patientDataRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/me/notifications', notificationsRouter);
+app.use('/api/robot', robotRouter);
+app.use('/api/devices', devicesRouter);
+app.use('/api/entities', entitiesRouter);
+app.use('/api/upload', uploadRouter);
+app.use('/api/llm', llmRouter);
+app.use('/api/llm', llmPredictRouter);  // monte /api/llm/predict-diagnosis
+app.use('/api/llm', voiceRouter);        // monte /api/llm/transcribe et /api/llm/speak
+app.use('/api/treatments', treatmentsRouter);
+app.use('/api/attendance', attendanceRouter);
 
 const DIST_DIR = path.resolve(ROOT_DIR, '..', 'dist');
 if (existsSync(DIST_DIR)) {
@@ -65,6 +65,8 @@ if (existsSync(DIST_DIR)) {
       res.set('Content-Type', 'text/html').send(indexHtml);
     }
   });
+} else {
+  console.warn('⚠ dist/ directory not found at', DIST_DIR, '— frontend will not be served');
 }
 
 app.use(notFound);
