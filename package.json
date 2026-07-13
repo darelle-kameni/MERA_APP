@@ -1,0 +1,19 @@
+{
+  "name": "mera-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MERA - Medical Evaluation Robotic Assistant",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build && cd ../backend && npm install && npx prisma generate",
+    "start": "cd backend && node src/index.js",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "prisma:generate": "cd backend && npx prisma generate",
+    "prisma:migrate": "cd backend && npx prisma migrate dev",
+    "prisma:seed": "cd backend && npm run seed",
+    "lint": "cd frontend && npm run lint"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
