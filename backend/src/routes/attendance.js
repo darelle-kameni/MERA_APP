@@ -125,7 +125,7 @@ router.get('/export', async (req, res, next) => {
     for (const r of items) {
       const p = patientMap[r.card_id];
       const d = new Date(r.badged_at);
-      const time = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+      const time = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Africa/Douala' });
       sheet.addRow([
         time,
         r.patient_name || 'Inconnu',
