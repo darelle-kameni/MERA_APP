@@ -384,14 +384,12 @@ const main = async () => {
     full_name: 'Dr. Démo', role: 'medecin',
   });
 
-  // Associer le médecin démo à l'encadreur démo
   await prisma.doctorAssignment.upsert({
     where: { doctor_id_encadreur_id: { doctor_id: medecin.id, encadreur_id: encadreur.id } },
     update: {},
     create: { doctor_id: medecin.id, encadreur_id: encadreur.id },
   });
 
-  // Centre de santé démo
   const center = await prisma.healthCenter.upsert({
     where: { id: 'demo-center' },
     update: {},
@@ -406,11 +404,10 @@ const main = async () => {
     },
   });
 
-  // Device démo : ESP32 simulé, token généré une seule fois (réutilisé si déjà présent)
   const generateDeviceToken = () => 'dev_' + Array.from({ length: 32 }, () =>
     'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz0123456789'[Math.floor(Math.random() * 56)]).join('');
   const existingDevice = await prisma.meraDevice.findUnique({ where: { serial_number: 'MERA-DEMO-001' } });
-  const demoDevice = await prisma.meraDevice.upsert({
+  await prisma.meraDevice.upsert({
     where: { serial_number: 'MERA-DEMO-001' },
     update: {
       api_token: existingDevice?.api_token || generateDeviceToken(),
@@ -424,38 +421,60 @@ const main = async () => {
       status: 'hors_ligne',
       battery_level: 87,
       firmware_version: '1.2.0',
-      last_sync: null,  // null jusqu'au premier heartbeat
+      last_sync: null,
       api_token: generateDeviceToken(),
-      ip_address: '192.168.1.42',  // exemple — à éditer via Configurer
+      ip_address: '192.168.1.42',
       port: 80,
     },
   });
 
-  // Traitements traditionnels (via raw SQL car le client Prisma généré est antérieur
-  // aux colonnes evidence_level, source, synonyms_locaux, contre_indications)
   for (const t of treatments) {
-    const rows = await prisma.$queryRawUnsafe(
-      `SELECT id FROM TraditionalTreatment WHERE disease = ? AND plant_name_fr = ?`,
-      t.disease, t.plant_name_fr
-    );
-    if (rows.length > 0) {
-      await prisma.$executeRawUnsafe(
-        `UPDATE TraditionalTreatment SET plant_name_local = ?, synonyms_locaux = ?, part_used = ?, preparation = ?, dosage_adult = ?, dosage_child = ?, precautions = ?, contre_indications = ?, max_severity = ?, evidence_level = ?, source = ?, updated_date = datetime('now') WHERE id = ?`,
-        t.plant_name_local || null, t.synonyms_locaux || null, t.part_used || null, t.preparation || null, t.dosage_adult || null, t.dosage_child || null, t.precautions || null, t.contre_indications || null, t.max_severity || null, t.evidence_level || 'traditionnel_rapporté', t.source || null, rows[0].id
-      );
+    const existing = await prisma.traditionalTreatment.findFirst({
+      where: { disease: t.disease, plant_name_fr: t.plant_name_fr },
+    });
+    if (existing) {
+      await prisma.traditionalTreatment.update({
+        where: { id: existing.id },
+        data: {
+          plant_name_local: t.plant_name_local || null,
+          synonyms_locaux: t.synonyms_locaux || null,
+          part_used: t.part_used || null,
+          preparation: t.preparation || null,
+          dosage_adult: t.dosage_adult || null,
+          dosage_child: t.dosage_child || null,
+          precautions: t.precautions || null,
+          contre_indications: t.contre_indications || null,
+          max_severity: t.max_severity || null,
+          evidence_level: t.evidence_level || 'traditionnel_rapporté',
+          source: t.source || null,
+        },
+      });
     } else {
       const id = t.disease.replace(/[^a-z0-9]/gi, '_').slice(0, 30) + '_' + crypto.randomBytes(8).toString('hex');
-      await prisma.$executeRawUnsafe(
-        `INSERT INTO TraditionalTreatment (id, disease, plant_name_fr, plant_name_local, synonyms_locaux, part_used, preparation, dosage_adult, dosage_child, precautions, contre_indications, max_severity, evidence_level, source, created_date, updated_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`,
-        id, t.disease, t.plant_name_fr, t.plant_name_local || null, t.synonyms_locaux || null, t.part_used || null, t.preparation || null, t.dosage_adult || null, t.dosage_child || null, t.precautions || null, t.contre_indications || null, t.max_severity || null, t.evidence_level || 'traditionnel_rapporté', t.source || null
-      );
+      await prisma.traditionalTreatment.create({
+        data: {
+          id,
+          disease: t.disease,
+          plant_name_fr: t.plant_name_fr,
+          plant_name_local: t.plant_name_local || null,
+          synonyms_locaux: t.synonyms_locaux || null,
+          part_used: t.part_used || null,
+          preparation: t.preparation || null,
+          dosage_adult: t.dosage_adult || null,
+          dosage_child: t.dosage_child || null,
+          precautions: t.precautions || null,
+          contre_indications: t.contre_indications || null,
+          max_severity: t.max_severity || null,
+          evidence_level: t.evidence_level || 'traditionnel_rapporté',
+          source: t.source || null,
+        },
+      });
     }
   }
 
-  // Liens TreatmentIndication (prediction_disease → treatment_id)
-  const allTreatments = await prisma.$queryRawUnsafe(
-    `SELECT id, disease FROM TraditionalTreatment`
-  );
+  const allTreatments = await prisma.traditionalTreatment.findMany({
+    select: { id: true, disease: true },
+  });
   const diseaseToIds = {};
   for (const t of allTreatments) {
     if (!diseaseToIds[t.disease]) diseaseToIds[t.disease] = [];
@@ -463,17 +482,17 @@ const main = async () => {
   }
   for (const [disease, ids] of Object.entries(diseaseToIds)) {
     for (const treatment_id of ids) {
-      await prisma.$executeRawUnsafe(
-        `INSERT OR IGNORE INTO TreatmentIndication (id, prediction_disease, treatment_id, match_type) VALUES (?, ?, ?, 'exact')`,
-        `${disease}_${treatment_id}`, disease, treatment_id
-      );
+      await prisma.treatmentIndication.upsert({
+        where: { prediction_disease_treatment_id: { prediction_disease: disease, treatment_id } },
+        update: {},
+        create: { prediction_disease: disease, treatment_id, match_type: 'exact' },
+      });
     }
   }
 
-  // Démo : un enfant pour l'encadreur (PIN connu = 1234), un enfant orphelin
   const childCardId = 'RFID-DEMO-001';
   const childPinHash = await bcrypt.hash('1234', 10);
-  const child = await prisma.patient.upsert({
+  await prisma.patient.upsert({
     where: { card_id: childCardId },
     update: { guardian_id: encadreur.id },
     create: {
@@ -502,12 +521,10 @@ const main = async () => {
 
   console.log('\nSeed terminé.');
   console.log('');
-  console.log(`Admin    : admin@mera.app    / admin1234     (ID: ${admin.id_card})`);
-  console.log(`Encadreur: demo@mera.app     / demo1234      (ID: ${encadreur.id_card})`);
-  console.log(`Médecin  : medecin@mera.app  / medecin1234   (ID: ${medecin.id_card})`);
-  console.log(`Enfant   : RFID=${childCardId}     PIN=1234         (tuteur: encadreur démo)`);
-  console.log(`Appareil : MERA-DEMO-001   token=${demoDevice.api_token}`);
-  console.log(`           IP=${demoDevice.ip_address}:${demoDevice.port}  (à reconfigurer depuis Appareils MERA)`);
+  console.log(`Admin    : admin@mera.app    / admin1234`);
+  console.log(`Encadreur: demo@mera.app     / demo1234`);
+  console.log(`Médecin  : medecin@mera.app  / medecin1234`);
+  console.log(`Enfant   : RFID=${childCardId}     PIN=1234`);
   console.log('\n');
 };
 

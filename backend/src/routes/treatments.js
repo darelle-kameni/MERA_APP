@@ -17,14 +17,13 @@ router.post('/search', async (req, res, next) => {
   try {
     const { diseases } = searchSchema.parse(req.body);
 
-    // Requête raw SQL car le client Prisma généré est antérieur aux colonnes
-    // evidence_level, source, synonyms_locaux, contre_indications
-    const conditions = diseases.map(() => `disease LIKE ?`).join(' OR ');
-    const params = diseases.map((d) => `%${d}%`);
-    const treatments = await prisma.$queryRawUnsafe(
-      `SELECT * FROM TraditionalTreatment WHERE ${conditions} ORDER BY disease ASC`,
-      ...params
-    );
+    const orFilters = diseases.map((d) => ({
+      disease: { contains: d, mode: 'insensitive' },
+    }));
+    const treatments = await prisma.traditionalTreatment.findMany({
+      where: { OR: orFilters },
+      orderBy: { disease: 'asc' },
+    });
 
     res.json({ treatments, matched: diseases });
   } catch (e) {
