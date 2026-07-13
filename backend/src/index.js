@@ -56,7 +56,7 @@ app.use('/api/llm', voiceRouter);        // monte /api/llm/transcribe et /api/ll
 app.use('/api/treatments', treatmentsRouter);
 app.use('/api/attendance', attendanceRouter);
 
-const DIST_DIR = path.resolve(ROOT_DIR, '..', 'dist');
+const DIST_DIR = path.resolve(ROOT_DIR, '..', 'frontend', 'dist');
 if (existsSync(DIST_DIR)) {
   app.use(express.static(DIST_DIR));
   const indexHtml = readFileSync(path.resolve(DIST_DIR, 'index.html'), 'utf-8');
