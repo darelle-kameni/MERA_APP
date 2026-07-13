@@ -61,12 +61,12 @@ char WIFI_PASS[64] = "695DD4FB";
 // === URLs DES APIs - UTILISATION DE L'API ARDUINO DÉDIÉE ===
 // URLs MERA backend (anciennes API PHP supprimées)
 // ⭐⭐ NOUVELLE API MERA v2.0 - HEARTBEAT ⭐⭐
-const String API_MERA_BASE = "http://192.168.1.139:4000";  // Backend MERA - À CONFIGURER
-const String API_MERA_HEARTBEAT = API_MERA_BASE + "/robot/heartbeat";
-const String API_MERA_TOKEN = "dev_uNPrjFjuHAafSdQhFEMszTkUMukd85GS";  // Token ESP32 - À obtenir depuis l'admin
-const String API_MERA_MEASUREMENTS = API_MERA_BASE + "/robot/measurements";
-const String API_MERA_LOOKUP = API_MERA_BASE + "/robot/lookup";
-const String API_MERA_ATTENDANCE = API_MERA_BASE + "/robot/attendance";
+const String API_MERA_BASE = "https://mera-app.onrender.com";  // Backend MERA Render (production)
+const String API_MERA_HEARTBEAT = API_MERA_BASE + "/api/robot/heartbeat";
+const String API_MERA_TOKEN = "REMPLACER_PAR_LE_TOKEN_DU_DEVICE";  // Token ESP32 - À obtenir depuis l'admin
+const String API_MERA_MEASUREMENTS = API_MERA_BASE + "/api/robot/measurements";
+const String API_MERA_LOOKUP = API_MERA_BASE + "/api/robot/lookup";
+const String API_MERA_ATTENDANCE = API_MERA_BASE + "/api/robot/attendance";
 // ⭐⭐ PC LOCAL - IP À MODIFIER
 const char* PC_AUDIO_IP = "192.168.1.110";  // ⚠️ À CHANGER : IP de votre PC sur le réseau
 const int PC_AUDIO_PORT = 5000;

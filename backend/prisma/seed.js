@@ -407,7 +407,7 @@ const main = async () => {
   const generateDeviceToken = () => 'dev_' + Array.from({ length: 32 }, () =>
     'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz0123456789'[Math.floor(Math.random() * 56)]).join('');
   const existingDevice = await prisma.meraDevice.findUnique({ where: { serial_number: 'MERA-DEMO-001' } });
-  await prisma.meraDevice.upsert({
+  const demoDevice = await prisma.meraDevice.upsert({
     where: { serial_number: 'MERA-DEMO-001' },
     update: {
       api_token: existingDevice?.api_token || generateDeviceToken(),
@@ -525,6 +525,7 @@ const main = async () => {
   console.log(`Encadreur: demo@mera.app     / demo1234`);
   console.log(`Médecin  : medecin@mera.app  / medecin1234`);
   console.log(`Enfant   : RFID=${childCardId}     PIN=1234`);
+  console.log(`Device   : MERA-DEMO-001    token=${demoDevice.api_token}`);
   console.log('\n');
 };
 
