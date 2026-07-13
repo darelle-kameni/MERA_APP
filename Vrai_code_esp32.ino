@@ -63,7 +63,7 @@ char WIFI_PASS[64] = "695DD4FB";
 // ⭐⭐ NOUVELLE API MERA v2.0 - HEARTBEAT ⭐⭐
 const String API_MERA_BASE = "https://mera-app.onrender.com";  // Backend MERA Render (production)
 const String API_MERA_HEARTBEAT = API_MERA_BASE + "/api/robot/heartbeat";
-const String API_MERA_TOKEN = "REMPLACER_PAR_LE_TOKEN_DU_DEVICE";  // Token ESP32 - À obtenir depuis l'admin
+const String API_MERA_TOKEN = "dev_XBKAZNXtx4fu6AD4zp5PPReHvrShzd8B";  // Token ESP32 - obtenu depuis Render
 const String API_MERA_MEASUREMENTS = API_MERA_BASE + "/api/robot/measurements";
 const String API_MERA_LOOKUP = API_MERA_BASE + "/api/robot/lookup";
 const String API_MERA_ATTENDANCE = API_MERA_BASE + "/api/robot/attendance";
