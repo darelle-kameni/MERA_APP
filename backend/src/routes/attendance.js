@@ -10,6 +10,33 @@ import ExcelJS from 'exceljs';
 const router = Router();
 router.use(requireStaff);
 
+// Fuseau horaire Cameroun : UTC+1
+const TZ_OFFSET_H = 1;
+const TZ_OFFSET_MS = TZ_OFFSET_H * 60 * 60 * 1000;
+
+function cameroonNow() { return new Date(Date.now() + TZ_OFFSET_MS); }
+
+function cameroonDateStr(d = cameroonNow()) {
+  return d.toISOString().slice(0, 10);
+}
+
+// Retourne { start, end } en UTC pour une journée donnée en heure camerounaise
+function cameroonDayRange(dateStr) {
+  const start = new Date(dateStr + 'T00:00:00.000Z');
+  start.setTime(start.getTime() - TZ_OFFSET_MS);
+  const end = new Date(dateStr + 'T23:59:59.999Z');
+  end.setTime(end.getTime() - TZ_OFFSET_MS);
+  return { start, end };
+}
+
+// Formate un timestamp UTC en heure camerounaise HH:MM
+function formatCameroonTime(utcDate) {
+  const d = new Date(utcDate.getTime() + TZ_OFFSET_MS);
+  const h = String(d.getUTCHours()).padStart(2, '0');
+  const m = String(d.getUTCMinutes()).padStart(2, '0');
+  return `${h}:${m}`;
+}
+
 // ─── GET /attendance : liste chronologique ─
 // Query params : ?date=2026-07-05&patient_id=xxx&card_id=xxx&limit=50&offset=0
 router.get('/', async (req, res, next) => {
@@ -18,8 +45,7 @@ router.get('/', async (req, res, next) => {
     const where = {};
 
     if (date) {
-      const start = new Date(date + 'T00:00:00.000Z');
-      const end = new Date(date + 'T23:59:59.999Z');
+      const { start, end } = cameroonDayRange(date);
       where.badged_at = { gte: start, lte: end };
     }
     if (patient_id) where.patient_id = patient_id;
@@ -39,10 +65,8 @@ router.get('/', async (req, res, next) => {
 // ─── GET /attendance/today : stats du jour ─
 router.get('/today', async (req, res, next) => {
   try {
-    const start = new Date();
-    start.setHours(0, 0, 0, 0);
-    const end = new Date();
-    end.setHours(23, 59, 59, 999);
+    const today = cameroonDateStr();
+    const { start, end } = cameroonDayRange(today);
 
     const rows = await prisma.attendance.findMany({
       where: { badged_at: { gte: start, lte: end } },
@@ -62,7 +86,7 @@ router.get('/today', async (req, res, next) => {
       total: rows.length,
       unique_patients: unique.size,
       patients: Array.from(unique.values()),
-      date: start.toISOString().slice(0, 10),
+      date: today,
     });
   } catch (e) { next(e); }
 });
@@ -71,9 +95,8 @@ router.get('/today', async (req, res, next) => {
 router.get('/export', async (req, res, next) => {
   try {
     const { date } = req.query;
-    const dateStr = date || new Date().toISOString().slice(0, 10);
-    const start = new Date(dateStr + 'T00:00:00.000Z');
-    const end = new Date(dateStr + 'T23:59:59.999Z');
+    const dateStr = date || cameroonDateStr();
+    const { start, end } = cameroonDayRange(dateStr);
 
     const items = await prisma.attendance.findMany({
       where: { badged_at: { gte: start, lte: end } },
@@ -124,8 +147,7 @@ router.get('/export', async (req, res, next) => {
     // Données
     for (const r of items) {
       const p = patientMap[r.card_id];
-      const d = new Date(r.badged_at);
-      const time = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', timeZone: 'Africa/Douala' });
+      const time = formatCameroonTime(r.badged_at);
       sheet.addRow([
         time,
         r.patient_name || 'Inconnu',
