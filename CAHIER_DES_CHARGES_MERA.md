@@ -402,16 +402,18 @@ MoSCoW : **Doit** (MUST) / **Devrait** (SHOULD) / **Pouvait** (COULD). Chaque ex
 
 ## 13. Critères généraux de recette (checklist finale)
 
-- [ ] Serveurs locaux : backend :4000 et frontend :5173 répondants, proxifié (`/api`).
-- [ ] Login 3 comptes seed OK (admin/encadreur/médecin) + mauvais mot de passe en 401.
-- [ ] Pharmacopée : 5 cas §5.3 passés, notamment 0 appel pour un patient sain.
-- [ ] Contre-indications pédiatriques/grossesse/allergie apparaissent en zone destructive.
-- [ ] Robot : heartbeat 30 s → on-line ; `POST /robot/measurements` crée une session complète.
-- [ ] Pointage du jour + export Excel.
-- [ ] Revue médecin : validation + PDF.
-- [ ] Espace patient QR+PIN : historique + PDF session.
+- [x] Serveurs locaux : backend :4000 et frontend :5173 répondants, proxifié (`/api`). *(✅ 07/10/2026 : front 200, backend 200, proxy `/api/health` → 200)*
+- [x] Login 3 comptes seed OK (admin/encadreur/médecin) + mauvais mot de passe en 401. *(✅ 07/10/2026 : 3×200 avec bons rôles, mdp faux → 401)*
+- [ ] Pharmacopée : 5 cas §5.3 passés, notamment 0 appel pour un patient sain. *(_Partiel 07/10/2026 — API : R-A 0 appel (code), R-B `tachycardie`→2 approved, R-D `bradycardie`→0 (repli IA), R-F provider KO → fallback mock 200, `predict-diagnosis` → 200/3 prédictions ; restent rendus UI R-C/R-E à confirmer en navigateur)_
+- [ ] Contre-indications pédiatriques/grossesse/allergie apparaissent en zone destructive. *(données OK côté API : 165/165 `approved` avec `contre_indications` ; rendu UI à vérifier)*
+- [x] Robot : heartbeat 30 s → on-line ; `POST /robot/measurements` crée une session complète. *(✅ 07/10/2026 : heartbeat → 200, measurements → 201, session créée, `urgency_level=NORMAL` sur 36.8/98/72)*
+- [x] Pointage du jour + export Excel. *(✅ 07/10/2026 : `/attendance/today` → 200, `/attendance/export` → 200, mime `spreadsheetml.sheet`, 6,7 Ko)*
+- [ ] Revue médecin : validation + PDF. *(non testé — UI)*
+- [ ] Espace patient QR+PIN : historique + PDF session. *(_Partiel 07/10/2026 — API : login PIN `1234` → 200, PIN faux → 401, `GET /patient/sessions` → 200 (1 session créée par le robot visible) ; restent QR + PDF UI)_
 - [x] Linter/build sans nouvelle erreur sur les modules modifiés. *(ESLint 0 erreur, typecheck OK, build OK le 07/10/2026)*
 - [x] Aucune clé ni secret dans les fichiers suivis. *(`.env*` ignorés, `git ls-files` ne contient que `.env.example`)*
+
+**Recette automatisée le 07/10/2026** (backend local sqlite `dev.db` re-seedé, aucun impact Neon) — 6/10 cases cochées, 2 partielles (API ✔ / UI), 2 UI restantes.
 
 ---
 
