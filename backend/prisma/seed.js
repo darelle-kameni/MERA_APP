@@ -20,8 +20,13 @@ const generateIdCard = (role) => {
 
 // Load treatments from expanded dataset (JSON)
 const datasetPath = join(__dirname, '..', '..', 'datasets', 'traditional_treatments.json');
-const dataset = JSON.parse(readFileSync(datasetPath, 'utf-8'));
-const treatments = dataset.treatments.map((t) => ({
+let dataset = null;
+try {
+  dataset = JSON.parse(readFileSync(datasetPath, 'utf-8'));
+} catch (e) {
+  console.warn(`⚠ Dataset JSON introuvable/illisible (${e.message}) — bascule sur les traitements intégrés`);
+}
+const treatments = (dataset?.treatments ?? []).map((t) => ({
   disease: t.disease,
   plant_name_fr: t.plant.scientific_name,
   plant_name_local: t.plant.local_name,
