@@ -14,7 +14,7 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-  Users, Shield, Stethoscope, UserCog, Search, MoreVertical, UserPlus, Copy, Check,
+  Users, Shield, Stethoscope, UserCog, Search, MoreVertical, UserPlus, Copy,
   PauseCircle, PlayCircle, Key, Trash2, Pencil, Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';

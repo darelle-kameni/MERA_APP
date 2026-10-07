@@ -3,8 +3,6 @@ import { base44 } from "@/api/base44Client";
 import { ClipboardCheck, Clock, CheckCircle, AlertTriangle, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import UrgencyBadge from "../components/shared/UrgencyBadge";
 import { toast } from "sonner";
 import { useTranslation } from "@/lib/useTranslation";

@@ -7,6 +7,7 @@ export default {
     children: "Defter ɓiɓɓe", review: "Ƴeewndo cafrirde", devices: "Kuutorɗe MERA",
     simulator: "Simulater IA", settings: "Toneeji", admin: "Njuɓɓudi",
     requests: "Ñaagooje", users: "Huutortooɓe", assignments: "Jokkondire",
+    epidemiology: "Epidemiologie",
   },
 
   topbar: {

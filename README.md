@@ -1,27 +1,34 @@
-git# MERA — Application de diagnostic ophtalmologique
+# MERA — Application de diagnostic ophtalmologique
 
-Application full-stack pour le dépistage et diagnostic en centre de santé. Frontend React + backend Express/Prisma/SQLite. Plus aucune dépendance Base44.
+Application full-stack pour le dépistage et diagnostic en centre de santé. Frontend React (Vite) + backend Express/Prisma (SQLite en dev, PostgreSQL en prod). Plus aucune dépendance Base44.
 
 ## Architecture
 
 ```
 MERA_APP/
-├── src/                    # Frontend React (Vite)
-│   ├── api/base44Client.js # Client local (mime l'ex-API Base44 → backend Express)
-│   ├── pages/              # 11 pages (incluant Login/Register)
-│   ├── components/         # Layout, diagnostic, dashboard, epidemiology, ui (shadcn)
-│   └── lib/                # AuthContext, query-client, utils
-├── server/                 # Backend Node.js
+├── frontend/                # Frontend React (Vite)
 │   ├── src/
-│   │   ├── index.js        # Entrée Express
-│   │   ├── routes/         # auth, entities (CRUD générique), upload, llm
-│   │   ├── middleware/     # auth JWT, gestion d'erreurs
-│   │   └── lib/            # prisma, jwt
+│   │   ├── api/base44Client.js   # Client local (mime l'ancienne API → backend Express)
+│   │   ├── pages/                # Pages staff + admin + patient (Login/Register inclus)
+│   │   ├── components/           # Layout, diagnostic, dashboard, epidemiology, ui (shadcn)
+│   │   ├── lib/                  # AuthContext, useTranslation, lang/, thresholds.js
+│   │   └── App.jsx               # Routage staff/admin/patient
+│   └── vite.config.js            # Proxy /api → :4000 en dev
+├── backend/                  # Backend Node.js
+│   ├── src/
+│   │   ├── index.js              # Entrée Express
+│   │   ├── routes/               # auth, entities, robot, treatments, admin, llm, …
+│   │   ├── middleware/           # auth JWT, device token, erreurs
+│   │   └── lib/                  # prisma, jwt, llm, scope, thresholds, notifications
 │   ├── prisma/
-│   │   ├── schema.prisma   # 12 entités + User
-│   │   └── seed.js         # Données de démo
-│   └── uploads/            # Photos (servies via /uploads)
-└── Entities/               # Schémas JSON historiques (Base44, conservés en doc)
+│   │   ├── schema.prisma         # Schéma PostgreSQL (prod, Neon)
+│   │   ├── schema.local.prisma   # Variante SQLite (dev local)
+│   │   ├── migrations/           # Migrations PostgreSQL
+│   │   └── seed.js               # Données de démo + pharmacopée
+│   └── uploads/                  # Photos (servies via /uploads)
+├── datasets/                 # Pharmacopée (traditional_treatments.json/.csv) + scripts
+├── Entities/                 # Schémas JSON historiques (Base44, conservés en doc)
+└── Vrai_code_esp32.ino        # Firmware robot (voir aussi variantes .ino)
 ```
 
 ## Démarrage rapide
@@ -29,26 +36,41 @@ MERA_APP/
 ### 1. Backend
 
 ```bash
-cd server
+cd backend
 cp .env.example .env
-# Éditer .env : ajouter ANTHROPIC_API_KEY si vous voulez le simulateur IA
+# Éditer .env : DATABASE_URL, JWT_SECRET, et GROQ_API_KEY si vous voulez l'IA
 npm install
-npx prisma migrate dev
-npm run seed     # Crée un user démo + données de référence
-npm run dev      # http://localhost:4000
+npx prisma generate --schema prisma/schema.local.prisma   # client SQLite pour le dev local
+npx prisma db push --schema prisma/schema.local.prisma
+node prisma/seed.js       # Crée un user démo + données de référence
+npm run dev               # http://localhost:4000
 ```
 
-**User de démo** créé par `npm run seed` : `demo@mera.app` / `demo1234`
+**User de démo** créé par le seed : `demo@mera.app` / `demo1234`
+
+> ⚠️ Un seul client Prisma compilé à la fois (postgres OU sqlite). Bascule :
+> `npx prisma generate` (postgres) ou `npx prisma generate --schema prisma/schema.local.prisma` (sqlite).
 
 ### 2. Frontend
 
 ```bash
-# À la racine du projet
+cd frontend
 npm install
 npm run dev      # http://localhost:5173
 ```
 
 Le frontend proxifie automatiquement `/api/*` vers `http://localhost:4000`.
+
+### 3. Vérifications
+
+```bash
+npm run lint        # ESLint frontend (doit être à 0 erreur)
+cd frontend && npm run typecheck
+npm run build       # build frontend + prisma generate + db push
+```
+
+Les seuils cliniques (FC, T°, SpO2) ont une source de vérité unique :
+`backend/src/lib/thresholds.js` et `frontend/src/lib/thresholds.js` (garder alignés).
 
 ## Variables d'environnement
 
@@ -56,12 +78,15 @@ Le frontend proxifie automatiquement `/api/*` vers `http://localhost:4000`.
 - `VITE_API_URL` — Préfixe API (défaut `/api`, proxifié par Vite)
 - `VITE_API_TARGET` — Cible du proxy en dev (défaut `http://localhost:4000`)
 
-### Backend (`server/.env`)
-- `DATABASE_URL` — Connexion SQLite (défaut `file:./dev.db`)
-- `PORT` — Port HTTP (défaut `4000`)
+### Backend (`backend/.env`)
+- `DATABASE_URL` — Connexion base (`file:./dev.db` en local, PostgreSQL en prod)
+- `PORT` — Port HTTP (défaut 4000)
 - `JWT_SECRET` — **À changer en production**
 - `CORS_ORIGIN` — Origin autorisée (défaut `http://localhost:5173`)
 - `UPLOAD_DIR` — Dossier de stockage des fichiers (défaut `./uploads`)
+
+> Tous les fichiers `.env*` sont ignorés par git (`.env`, `.env.prod`, `.env.bak`, …) ;
+> seul `.env.example` est suivi. **Ne jamais committer de secret.**
 
 #### Providers IA (multi-provider avec auto-fallback)
 
@@ -92,8 +117,11 @@ POST  /entities/:Entity           — Création
 PATCH /entities/:Entity/:id       — Mise à jour
 DELETE /entities/:Entity/:id      — Suppression
 
+POST  /robot/measurements         — Mesures ESP32 (Bearer token appareil)
+POST  /robot/heartbeat             — Supervision robot (30 s)
 POST  /upload                     — Upload image (multipart/form-data, champ `file`)
-POST  /llm/invoke                 — Invocation Claude (body: {prompt, system?, max_tokens?})
+POST  /llm/invoke                 — Invocation IA (body: {prompt, system?, max_tokens?})
+POST  /llm/predict-diagnosis      — Prédiction système à partir d'une session
 
 GET   /uploads/:filename          — Fichier statique
 GET   /health                     — Healthcheck
@@ -101,8 +129,10 @@ GET   /health                     — Healthcheck
 
 Entités disponibles : `Patient`, `HealthCenter`, `MeraDevice`, `DiagnosticSession`, `VitalSigns`, `EyePhoto`, `ContagiousEyeResult`, `NonContagiousEyeResult`, `SystemicPrediction`, `TraditionalTreatment`, `VocalExchange`, `MedicalReview`.
 
+Écriture pharmacopée : **uniquement** via `/admin/pharmacopee` (la route générique `/entities/TraditionalTreatment` renvoie 403).
+
 ## Production
 
-- Migrer SQLite → PostgreSQL : changer `provider = "postgresql"` dans `prisma/schema.prisma` et `DATABASE_URL`, puis `npx prisma migrate deploy`.
+- Base : PostgreSQL managé (Neon), `sslmode=require` ; migrations : `npx prisma migrate deploy`.
 - Servir le frontend buildé (`npm run build`) derrière un reverse proxy (nginx) qui route `/api` vers le backend Node.
 - Régler `NODE_ENV=production`, un `JWT_SECRET` fort, `CORS_ORIGIN` sur le domaine réel, et activer les cookies `secure`.

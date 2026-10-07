@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MERA v3 — Visualiseur 3D</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0e1a; overflow: hidden; font-family: 'Segoe UI', sans-serif; color: #fff; }
+  canvas { display: block; }
+  #info {
+    position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    background: rgba(10,14,26,0.85); backdrop-filter: blur(12px);
+    padding: 12px 28px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08);
+    text-align: center; pointer-events: none; user-select: none;
+  }
+  #info h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+  #info h1 span { color: #22d3ee; }
+  #info p { font-size: 12px; opacity: 0.5; margin-top: 2px; }
+  #controls {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; align-items: center;
+  }
+  #controls button {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    color: #fff; padding: 8px 18px; border-radius: 10px;
+    cursor: pointer; font-size: 13px; transition: all 0.2s;
+    backdrop-filter: blur(8px);
+  }
+  #controls button:hover { background: rgba(34,211,238,0.15); border-color: rgba(34,211,238,0.3); }
+  #controls button.active { background: rgba(34,211,238,0.2); border-color: #22d3ee; }
+  #legend {
+    position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+    background: rgba(10,14,26,0.8); backdrop-filter: blur(12px);
+    padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);
+    font-size: 12px; line-height: 2;
+  }
+  #legend .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+  #status {
+    position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+    font-size: 12px; opacity: 0.3;
+  }
+  @media (max-width: 640px) {
+    #legend { display: none; }
+    #info { font-size: 14px; padding: 8px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="info">
+  <h1>MERA <span>v3</span> — Medical Evaluation Robotic Assistant</h1>
+  <p>Cliquez-glissez pour tourner · Molette pour zoomer</p>
+</div>
+
+<div id="controls">
+  <button id="btnAuto" class="active">Auto-rotation</button>
+  <button id="btnExplode">Éclaté</button>
+  <button id="btnReset">Vue d'ensemble</button>
+</div>
+
+<div id="legend">
+  <div><span class="dot" style="background:#f0f4f8"></span> Boîtier PETG/ASA blanc</div>
+  <div><span class="dot" style="background:#22d3ee"></span> Accents cyan</div>
+  <div><span class="dot" style="background:#fbbf24"></span> Éléments interactifs</div>
+  <div><span class="dot" style="background:#ef4444"></span> Capteurs / sécurité</div>
+  <div><span class="dot" style="background:#a78bfa"></span> Électronique & batterie</div>
+</div>
+
+<div id="status">⚡ Optimisé · Autonomie 12h · LiFePO₄ 720Wh · PETG/ASA</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.171.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.171.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+// ── Scene setup ──
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0e1a);
+scene.fog = new THREE.Fog(0x0a0e1a, 12, 20);
+
+const camera = new THREE.PerspectiveCamera(30, window.innerWidth / window.innerHeight, 0.1, 50);
+camera.position.set(4, 2.5, 5);
+camera.lookAt(0, 0.8, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+document.body.prepend(renderer.domElement);
+
+const labelRenderer = new CSS2DRenderer();
+labelRenderer.setSize(window.innerWidth, window.innerHeight);
+labelRenderer.domElement.style.position = 'absolute';
+labelRenderer.domElement.style.top = '0';
+labelRenderer.domElement.style.pointerEvents = 'none';
+document.body.prepend(labelRenderer.domElement);
+
+// ── Controls ──
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 0.85, 0);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 1.5;
+controls.maxDistance = 12;
+controls.maxPolarAngle = Math.PI / 2.05;
+controls.update();
+
+// ── Lights ──
+const ambient = new THREE.AmbientLight(0x404060, 0.5);
+scene.add(ambient);
+
+const keyLight = new THREE.DirectionalLight(0xffeedd, 2.5);
+keyLight.position.set(5, 8, 6);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.width = 2048;
+keyLight.shadow.mapSize.height = 2048;
+scene.add(keyLight);
+
+const fillLight = new THREE.DirectionalLight(0x4488ff, 0.6);
+fillLight.position.set(-4, 3, -5);
+scene.add(fillLight);
+
+const rimLight = new THREE.DirectionalLight(0x22d3ee, 0.8);
+rimLight.position.set(0, -1, 6);
+scene.add(rimLight);
+
+const topLight = new THREE.DirectionalLight(0xffffff, 0.4);
+topLight.position.set(0, 6, 0);
+scene.add(topLight);
+
+// Ground
+const groundGeo = new THREE.PlaneGeometry(20, 20);
+const groundMat = new THREE.MeshStandardMaterial({
+  color: 0x0d1225,
+  roughness: 0.9,
+  metalness: 0.0,
+});
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.rotation.x = -Math.PI / 2;
+ground.position.y = -0.005;
+ground.receiveShadow = true;
+scene.add(ground);
+
+const grid = new THREE.GridHelper(6, 20, 0x22d3ee, 0x22d3ee);
+grid.material.opacity = 0.08;
+grid.material.transparent = true;
+grid.position.y = 0;
+scene.add(grid);
+
+// ── Materials ──
+const matWhite = new THREE.MeshStandardMaterial({
+  color: 0xf0f4f8, roughness: 0.35, metalness: 0.05,
+});
+const matCyan = new THREE.MeshStandardMaterial({
+  color: 0x22d3ee, roughness: 0.15, metalness: 0.6,
+});
+const matCyanDark = new THREE.MeshStandardMaterial({
+  color: 0x0891b2, roughness: 0.2, metalness: 0.5,
+});
+const matDark = new THREE.MeshStandardMaterial({
+  color: 0x1e293b, roughness: 0.5, metalness: 0.2,
+});
+const matScreen = new THREE.MeshStandardMaterial({
+  color: 0x0ea5e9, roughness: 0.1, metalness: 0.1, emissive: 0x0ea5e9, emissiveIntensity: 0.3,
+});
+const matScreenOff = new THREE.MeshStandardMaterial({
+  color: 0x0f172a, roughness: 0.3, metalness: 0.4,
+});
+const matYellow = new THREE.MeshStandardMaterial({
+  color: 0xfbbf24, roughness: 0.3, metalness: 0.3, emissive: 0xfbbf24, emissiveIntensity: 0.1,
+});
+const matRed = new THREE.MeshStandardMaterial({
+  color: 0xef4444, roughness: 0.3, metalness: 0.1,
+});
+const matGreen = new THREE.MeshStandardMaterial({
+  color: 0x22c55e, roughness: 0.3, metalness: 0.1,
+});
+const matPurple = new THREE.MeshStandardMaterial({
+  color: 0xa78bfa, roughness: 0.3, metalness: 0.3, emissive: 0xa78bfa, emissiveIntensity: 0.1,
+});
+const matBlue = new THREE.MeshStandardMaterial({
+  color: 0x3b82f6, roughness: 0.3, metalness: 0.2,
+});
+const matSilver = new THREE.MeshStandardMaterial({
+  color: 0x94a3b8, roughness: 0.2, metalness: 0.8,
+});
+const matGlass = new THREE.MeshStandardMaterial({
+  color: 0x88bbff, roughness: 0.0, metalness: 0.0, transparent: true, opacity: 0.15,
+});
+const matBlack = new THREE.MeshStandardMaterial({
+  color: 0x111111, roughness: 0.8, metalness: 0.1,
+});
+const matWheel = new THREE.MeshStandardMaterial({
+  color: 0x1a1a2e, roughness: 0.9, metalness: 0.0,
+});
+const matGrey = new THREE.MeshStandardMaterial({
+  color: 0x64748b, roughness: 0.6, metalness: 0.2,
+});
+
+// ── Helper functions ──
+function box(w, h, d, mat, pos, rx=0, ry=0, rz=0) {
+  const g = new THREE.BoxGeometry(w, h, d);
+  const m = new THREE.Mesh(g, mat);
+  m.position.set(pos[0], pos[1], pos[2]);
+  m.rotation.set(rx, ry, rz);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  scene.add(m);
+  return m;
+}
+function roundBox(w, h, d, r, mat, pos, rx=0, ry=0, rz=0) {
+  const s = 16;
+  const shape = new THREE.Shape();
+  shape.moveTo(-w/2+r, -h/2+r);
+  shape.quadraticCurveTo(-w/2, -h/2, -w/2+r, -h/2);
+  shape.lineTo(w/2-r, -h/2);
+  shape.quadraticCurveTo(w/2, -h/2, w/2, -h/2+r);
+  shape.lineTo(w/2, h/2-r);
+  shape.quadraticCurveTo(w/2, h/2, w/2-r, h/2);
+  shape.lineTo(-w/2+r, h/2);
+  shape.quadraticCurveTo(-w/2, h/2, -w/2, h/2-r);
+  shape.closePath();
+  const extrudeSettings = { steps: 1, depth: d, bevelEnabled: false };
+  const g = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+  g.translate(0, 0, -d/2);
+  const m = new THREE.Mesh(g, mat);
+  m.position.set(pos[0], pos[1], pos[2]);
+  m.rotation.set(rx, ry, rz);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  scene.add(m);
+  return m;
+}
+function cyl(rt, rb, h, seg, mat, pos, rx=0, ry=0, rz=0) {
+  const g = new THREE.CylinderGeometry(rt, rb, h, seg);
+  const m = new THREE.Mesh(g, mat);
+  m.position.set(pos[0], pos[1], pos[2]);
+  m.rotation.set(rx, ry, rz);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  scene.add(m);
+  return m;
+}
+function sph(r, seg, mat, pos) {
+  const g = new THREE.SphereGeometry(r, seg, seg);
+  const m = new THREE.Mesh(g, mat);
+  m.position.set(pos[0], pos[1], pos[2]);
+  m.castShadow = true;
+  m.receiveShadow = true;
+  scene.add(m);
+  return m;
+}
+function makeLabel(text, pos, color='#22d3ee', fontSize='11px') {
+  const div = document.createElement('div');
+  div.textContent = text;
+  div.style.color = color;
+  div.style.fontSize = fontSize;
+  div.style.fontWeight = '500';
+  div.style.fontFamily = 'Segoe UI, sans-serif';
+  div.style.textShadow = '0 0 12px rgba(0,0,0,0.8)';
+  div.style.background = 'rgba(10,14,26,0.6)';
+  div.style.padding = '2px 10px';
+  div.style.borderRadius = '6px';
+  div.style.border = '1px solid rgba(34,211,238,0.15)';
+  div.style.backdropFilter = 'blur(4px)';
+  div.style.pointerEvents = 'none';
+  const label = new CSS2DObject(div);
+  label.position.set(pos[0], pos[1], pos[2]);
+  scene.add(label);
+  return label;
+}
+
+// ── Robot group (for explode animation) ──
+const robotGroup = new THREE.Group();
+scene.add(robotGroup);
+
+// Store parts for explode animation
+const parts = [];
+
+// ═══════════════════════════════════════════
+//  1. BASE (battery, motors, electronics)
+// ═══════════════════════════════════════════
+const baseW = 0.70, baseD = 0.70, baseH = 0.30;
+const base = roundBox(baseW, baseH, baseD, 0.04, matWhite, [0, baseH/2, 0]);
+parts.push({ mesh: base, offset: [0, 0, 0] });
+
+// Base accent strip (cyan)
+const baseAccent = box(baseW+0.01, 0.025, baseD+0.01, matCyan, [0, 0.015, 0]);
+parts.push({ mesh: baseAccent, offset: [0, 0, 0] });
+
+// Base top accent
+box(baseW-0.06, 0.02, baseD-0.06, matCyanDark, [0, baseH-0.01, 0]);
+
+// Battery pack visual (bottom)
+const batteryBox = box(0.30, 0.12, 0.40, matPurple, [0, 0.06, 0]);
+parts.push({ mesh: batteryBox, offset: [0, -0.1, 0] });
+
+// Cooling vents on base (sides)
+for (let side of [-1, 1]) {
+  for (let i = 0; i < 6; i++) {
+    const vy = 0.10 + i * 0.035;
+    box(0.005, 0.02, 0.20, matDark, [side * baseW/2, vy, 0]);
+    box(0.20, 0.02, 0.005, matDark, [0, vy, side * baseD/2]);
+  }
+}
+
+// ── Mecanum wheels ──
+const wheelPositions = [
+  [-baseW/2 + 0.08, 0.08, -baseD/2 + 0.08],
+  [ baseW/2 - 0.08, 0.08, -baseD/2 + 0.08],
+  [-baseW/2 + 0.08, 0.08,  baseD/2 - 0.08],
+  [ baseW/2 - 0.08, 0.08,  baseD/2 - 0.08],
+];
+
+const wheels = [];
+wheelPositions.forEach((pos, i) => {
+  const wheelGroup = new THREE.Group();
+  
+  // Main wheel body
+  const w = cyl(0.10, 0.10, 0.06, 24, matWheel, [0, 0, 0]);
+  w.rotation.x = Math.PI / 2;
+  wheelGroup.add(w);
+  
+  // Rollers (Mecanum pattern - 45° rollers)
+  const rollerMat = new THREE.MeshStandardMaterial({ color: 0x2a2a3e, roughness: 0.7 });
+  for (let j = 0; j < 12; j++) {
+    const angle = (j / 12) * Math.PI * 2;
+    const r = cyl(0.015, 0.015, 0.07, 8, rollerMat, [
+      0.085 * Math.cos(angle),
+      0.085 * Math.sin(angle),
+      0
+    ]);
+    r.rotation.z = Math.PI / 4;
+    wheelGroup.add(r);
+  }
+  
+  // Hub
+  const hub = cyl(0.025, 0.025, 0.062, 16, matSilver, [0, 0, 0]);
+  hub.rotation.x = Math.PI / 2;
+  wheelGroup.add(hub);
+  
+  wheelGroup.position.set(pos[0], pos[1], pos[2]);
+  scene.add(wheelGroup);
+  parts.push({ mesh: wheelGroup, offset: [0, -0.15, 0] });
+  wheels.push(wheelGroup);
+});
+
+// Wheel supports (suspension mounts)
+wheelPositions.forEach(pos => {
+  const mount = box(0.04, 0.04, 0.04, matDark, [pos[0], pos[1]+0.04, pos[2]]);
+  parts.push({ mesh: mount, offset: [0, -0.1, 0] });
+});
+
+// ═══════════════════════════════════════════
+//  2. MAIN BODY / TORSO
+// ═══════════════════════════════════════════
+const bodyW = 0.55, bodyD = 0.50, bodyH = 0.95;
+const bodyY = baseH + bodyH/2;
+const body = roundBox(bodyW, bodyH, bodyD, 0.06, matWhite, [0, bodyY, 0]);
+parts.push({ mesh: body, offset: [0, 0, 0] });
+
+// Cyan accent strip on body sides
+for (let side of [-1, 1]) {
+  box(0.015, bodyH-0.10, bodyD-0.06, matCyan, [side * bodyW/2, bodyY, 0]);
+  box(bodyW-0.06, bodyH-0.10, 0.015, matCyan, [0, bodyY, side * bodyD/2]);
+}
+
+// Ventilation grilles (front/back)
+for (let z of [-1, 1]) {
+  for (let i = 0; i < 8; i++) {
+    const vy = bodyY - bodyH/2 + 0.08 + i * 0.08;
+    box(bodyW-0.12, 0.008, 0.005, matDark, [0, vy, z * bodyD/2 + 0.005]);
+  }
+}
+
+// ═══════════════════════════════════════════
+//  3. UV STERILIZATION COMPARTMENT (front)
+// ═══════════════════════════════════════════
+const uvW = 0.25, uvH = 0.12, uvD = 0.10;
+const uvY = bodyY - bodyH/2 + uvH/2 + 0.05;
+const uvDoor = roundBox(uvW, uvH, uvD, 0.02, matCyan, [0, uvY, bodyD/2 + uvD/2]);
+parts.push({ mesh: uvDoor, offset: [0, 0, 0.15] });
+
+// UV indicator LED
+const uvLed = sph(0.012, 12, matRed, [0, uvY, bodyD/2 + uvD + 0.005]);
+parts.push({ mesh: uvLed, offset: [0, 0, 0.15] });
+
+// UV compartment frame
+box(uvW+0.03, uvH+0.03, 0.01, matDark, [0, uvY, bodyD/2]);
+parts.push({ mesh: uvDoor, offset: [0, 0, 0.1] });
+
+// ═══════════════════════════════════════════
+//  4. CHEST AREA — 5" secondary screen
+// ═══════════════════════════════════════════
+const scr2W = 0.13, scr2H = 0.08;
+const scr2Y = bodyY + 0.12;
+// Screen bezel
+box(scr2W+0.02, scr2H+0.015, 0.01, matDark, [0, scr2Y, bodyD/2+0.005]);
+// Screen
+box(scr2W, scr2H, 0.008, matScreen, [0, scr2Y, bodyD/2+0.011]);
+parts.push({ mesh: new THREE.Mesh(new THREE.BoxGeometry(scr2W, scr2H, 0.008), matScreen), parent: null });
+
+// Smile LED matrix (8×8) below secondary screen
+const smileY = scr2Y - scr2H/2 - 0.04;
+const smileMat = new THREE.MeshStandardMaterial({ color: 0x22d3ee, emissive: 0x22d3ee, emissiveIntensity: 0.8 });
+for (let row = 0; row < 8; row++) {
+  for (let col = 0; col < 8; col++) {
+    // Smile pattern
+    const dx = (col - 3.5) * 0.009;
+    const dy = (row - 3.5) * 0.009;
+    const dist = Math.sqrt((col-3.5)**2 + (row-3.5)**2);
+    // Simple smile: eyes at row 2, smile curve at row 5-6
+    let on = false;
+    if ((row === 2 || row === 3) && (col === 2 || col === 5)) on = true; // eyes
+    if (row === 5 && col >= 2 && col <= 5) on = true; // mouth top
+    if (row === 6 && col >= 3 && col <= 4) on = true; // mouth bottom
+    if (on) {
+      box(0.008, 0.008, 0.005, smileMat, [dx, smileY + dy, bodyD/2+0.011]);
+    }
+  }
+}
+
+// ═══════════════════════════════════════════
+//  5. SENSOR ARRAY (MAX32664, MLX90632)
+// ═══════════════════════════════════════════
+const sensorY = bodyY + 0.35;
+// Pulse oximeter sensor
+const sensor1 = cyl(0.025, 0.025, 0.015, 16, matRed, [0.10, sensorY, bodyD/2+0.012]);
+// IR temperature sensor
+const sensor2 = cyl(0.015, 0.015, 0.012, 16, matYellow, [-0.10, sensorY, bodyD/2+0.012]);
+// Sensor label ring
+sph(0.028, 12, matGlass, [0.10, sensorY, bodyD/2+0.008]);
+sph(0.018, 12, matGlass, [-0.10, sensorY, bodyD/2+0.008]);
+
+// Blood pressure cuff storage
+const bpW = 0.12, bpH = 0.06, bpD = 0.08;
+box(bpW, bpH, bpD, matBlue, [0, bodyY - 0.15, bodyD/2 + bpD/2]);
+parts.push({ mesh: new THREE.Mesh(new THREE.BoxGeometry(bpW, bpH, bpD), matBlue), parent: null });
+
+// ═══════════════════════════════════════════
+//  6. HEAD
+// ═══════════════════════════════════════════
+const headW = 0.45, headD = 0.35, headH = 0.25;
+const headY = bodyY + bodyH/2 + headH/2;
+const head = roundBox(headW, headH, headD, 0.05, matWhite, [0, headY, 0]);
+parts.push({ mesh: head, offset: [0, 0.12, 0] });
+
+// Head accent (cyan strip at base of head)
+box(headW+0.01, 0.02, headD+0.01, matCyan, [0, headY - headH/2 + 0.01, 0]);
+
+// ── Main screen (10" orientable) ──
+const screenW = 0.25, screenH = 0.18;
+const screenGroup = new THREE.Group();
+
+// Bezel
+const bezel = box(screenW+0.03, screenH+0.025, 0.015, matDark, [0, 0, 0.005]);
+screenGroup.add(bezel);
+
+// Screen glass
+const screenMat = new THREE.MeshStandardMaterial({
+  color: 0x0ea5e9, roughness: 0.05, metalness: 0.0,
+  emissive: 0x0ea5e9, emissiveIntensity: 0.4,
+});
+const scr = box(screenW, screenH, 0.008, screenMat, [0, 0, 0.015]);
+screenGroup.add(scr);
+
+// Screen content simulation (simple UI lines)
+const uiMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: 0.2 });
+for (let i = 0; i < 4; i++) {
+  box(screenW-0.04, 0.003, 0.001, uiMat, [0, 0.05 - i*0.035, 0.02]);
+}
+
+// Screen mount/tilt mechanism
+const mountArm = box(0.03, 0.04, 0.03, matSilver, [0, -screenH/2-0.025, -0.01]);
+screenGroup.add(mountArm);
+
+screenGroup.position.set(0, headY + 0.02, headD/2 + 0.015);
+screenGroup.rotation.x = -0.15;
+scene.add(screenGroup);
+parts.push({ mesh: screenGroup, offset: [0, 0.12, 0.08] });
+
+// ── RGB LED ring around screen ──
+const ringMat = new THREE.MeshStandardMaterial({ color: 0x22d3ee, emissive: 0x22d3ee, emissiveIntensity: 0.5 });
+const ringGeo = new THREE.TorusGeometry(screenW/2 + 0.02, 0.008, 8, 32);
+const ring = new THREE.Mesh(ringGeo, ringMat);
+ring.position.set(0, headY + 0.02, headD/2 + 0.025);
+ring.rotation.x = -0.15;
+scene.add(ring);
+parts.push({ mesh: ring, offset: [0, 0.12, 0.08] });
+
+// ── Camera module (2-axis pan/tilt) ──
+const camGroup = new THREE.Group();
+// Camera base
+const camBase = cyl(0.035, 0.04, 0.015, 16, matDark, [0, 0, 0]);
+camGroup.add(camBase);
+// Camera body
+const camBody = box(0.025, 0.025, 0.03, matBlack, [0, 0.015, 0.015]);
+camGroup.add(camBody);
+// Lens
+const lens = cyl(0.012, 0.012, 0.008, 16, matCyan, [0, 0.015, 0.035]);
+camGroup.add(lens);
+// IR LED
+const irLed = sph(0.005, 8, matRed, [0.015, 0.015, 0.03]);
+camGroup.add(irLed);
+
+camGroup.position.set(0, headY + 0.04, headD/2 + 0.01);
+scene.add(camGroup);
+parts.push({ mesh: camGroup, offset: [0, 0.15, 0.05] });
+
+// ── LiDAR (top, rotating) ──
+const lidarGroup = new THREE.Group();
+// LiDAR base
+const lidarBase = cyl(0.04, 0.05, 0.015, 16, matDark, [0, 0, 0]);
+lidarGroup.add(lidarBase);
+// LiDAR drum
+const lidarDrum = cyl(0.03, 0.03, 0.04, 16, matSilver, [0, 0.025, 0]);
+lidarGroup.add(lidarDrum);
+// LiDAR sensor window
+const lidarWin = box(0.005, 0.03, 0.03, matBlack, [0.032, 0.025, 0]);
+lidarGroup.add(lidarWin);
+
+lidarGroup.position.set(0, headY + headH/2 + 0.05, 0.02);
+scene.add(lidarGroup);
+parts.push({ mesh: lidarGroup, offset: [0, 0.2, 0] });
+
+// ── Top dome / Solar panel mount ──
+const dome = sph(0.12, 24, matWhite, [0, headY + headH/2 + 0.08, 0]);
+dome.scale.y = 0.3;
+parts.push({ mesh: dome, offset: [0, 0.15, 0] });
+
+// ── Solar panel (50W deployable, shown folded) ──
+const panelGroup = new THREE.Group();
+// Panel surface (folded configuration)
+const panelMat = new THREE.MeshStandardMaterial({
+  color: 0x1a2332, roughness: 0.6, metalness: 0.1,
+});
+const panelBorder = new THREE.MeshStandardMaterial({
+  color: 0x94a3b8, roughness: 0.3, metalness: 0.7,
+});
+
+// Solar cells grid
+const pW = 0.32, pH = 0.02, pD = 0.28;
+const panel = box(pW, pH, pD, panelMat, [0, 0, 0]);
+panelGroup.add(panel);
+
+// Solar cell grid lines
+const cellMat = new THREE.MeshStandardMaterial({ color: 0x2a3a5a, roughness: 0.5 });
+for (let i = 0; i < 6; i++) {
+  box(0.005, 0.001, pD-0.02, cellMat, [-pW/2 + 0.05 + i*0.05, pH/2+0.001, 0]);
+  box(pW-0.02, 0.001, 0.005, cellMat, [0, pH/2+0.001, -pD/2 + 0.05 + i*0.04]);
+}
+
+// Fold hinges
+for (let side of [-1, 1]) {
+  cyl(0.008, 0.008, 0.03, 8, matSilver, [side * pW/2, 0, 0]);
+}
+
+panelGroup.position.set(0, headY + headH/2 + 0.14, 0);
+scene.add(panelGroup);
+parts.push({ mesh: panelGroup, offset: [0, 0.25, 0] });
+
+// ═══════════════════════════════════════════
+//  7. LABELS
+// ═══════════════════════════════════════════
+makeLabel('📷 Caméra 2 axes', [0, headY + 0.06, headD/2 + 0.10], '#22d3ee');
+makeLabel('📡 LiDAR 360°', [0.18, headY + headH/2 + 0.08, 0.02], '#22d3ee');
+makeLabel('🔆 Panneau solaire 50W', [0, headY + headH/2 + 0.22, 0.25], '#fbbf24');
+makeLabel('🖥️ Écran 10" orientable', [0.35, headY + 0.04, headD/2 + 0.02], '#22d3ee');
+makeLabel('🖥️ Écran 5" enfant', [0.35, scr2Y, bodyD/2 + 0.03], '#22d3ee');
+makeLabel('😊 Matrice LED sourire', [0.35, smileY, bodyD/2 + 0.03], '#fbbf24');
+makeLabel('❤️ Capteurs vitaux', [0.25, sensorY, bodyD/2 + 0.05], '#ef4444');
+makeLabel('🧴 Stérilisation UV-C', [0, uvY, bodyD/2 + 0.12], '#ef4444');
+makeLabel('🔋 LiFePO₄ 720Wh', [0.40, 0.10, 0], '#a78bfa');
+makeLabel('⚙️ Roues Mecanum 200mm', [0.55, 0.08, 0.55], '#94a3b8');
+
+// ═══════════════════════════════════════════
+//  8. FLOATING PARTICLES (ambiance)
+// ═══════════════════════════════════════════
+const particleCount = 200;
+const particleGeo = new THREE.BufferGeometry();
+const positions = new Float32Array(particleCount * 3);
+for (let i = 0; i < particleCount * 3; i++) {
+  positions[i] = (Math.random() - 0.5) * 12;
+  positions[i] += 1.5;
+}
+particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+const particleMat = new THREE.PointsMaterial({
+  color: 0x22d3ee,
+  size: 0.008,
+  transparent: true,
+  opacity: 0.4,
+  blending: THREE.AdditiveBlending,
+});
+const particles = new THREE.Points(particleGeo, particleMat);
+scene.add(particles);
+
+// ── Explode / collapse state ──
+let exploded = false;
+const originalPositions = new Map();
+
+parts.forEach(p => {
+  if (p.mesh && p.mesh.position) {
+    originalPositions.set(p.mesh, {
+      x: p.mesh.position.x,
+      y: p.mesh.position.y,
+      z: p.mesh.position.z
+    });
+  }
+});
+
+function toggleExplode() {
+  exploded = !exploded;
+  const btn = document.getElementById('btnExplode');
+  btn.textContent = exploded ? 'Assemblé' : 'Éclaté';
+  btn.classList.toggle('active');
+  
+  parts.forEach(p => {
+    if (!p.mesh || !p.mesh.position) return;
+    const orig = originalPositions.get(p.mesh);
+    if (!orig) return;
+    
+    if (exploded && p.offset) {
+      p.mesh.position.x = orig.x + p.offset[0];
+      p.mesh.position.y = orig.y + p.offset[1];
+      p.mesh.position.z = orig.z + p.offset[2];
+    } else {
+      p.mesh.position.x = orig.x;
+      p.mesh.position.y = orig.y;
+      p.mesh.position.z = orig.z;
+    }
+  });
+  
+  // Redo labels for camera (they don't move)
+}
+
+// ── Auto-rotation ──
+let autoRotate = true;
+
+document.getElementById('btnAuto').addEventListener('click', () => {
+  autoRotate = !autoRotate;
+  document.getElementById('btnAuto').classList.toggle('active');
+  document.getElementById('btnAuto').textContent = autoRotate ? 'Auto-rotation' : 'Manuel';
+});
+
+document.getElementById('btnExplode').addEventListener('click', toggleExplode);
+
+document.getElementById('btnReset').addEventListener('click', () => {
+  camera.position.set(4, 2.5, 5);
+  controls.target.set(0, 0.85, 0);
+  controls.update();
+  if (exploded) toggleExplode();
+});
+
+// ── Animation loop ──
+let time = 0;
+
+function animate() {
+  requestAnimationFrame(animate);
+  time += 0.01;
+  
+  // Rotate LiDAR
+  lidarGroup.rotation.y += 0.02;
+  
+  // Slight screen tilt oscillation
+  screenGroup.rotation.x = -0.15 + Math.sin(time * 0.5) * 0.03;
+  
+  // Camera pan/tilt animation
+  camGroup.rotation.y = Math.sin(time * 0.3) * 0.2;
+  camGroup.rotation.x = Math.sin(time * 0.2) * 0.1;
+  
+  // Particles drift
+  const pos = particles.geometry.attributes.position.array;
+  for (let i = 0; i < particleCount; i++) {
+    pos[i*3+1] += Math.sin(time + i) * 0.0001;
+    pos[i*3] += Math.cos(time * 0.5 + i * 0.1) * 0.00005;
+  }
+  particles.geometry.attributes.position.needsUpdate = true;
+  
+  // Ring pulse
+  ringMat.emissiveIntensity = 0.3 + Math.sin(time * 2) * 0.2;
+  
+  // Screen pulse
+  screenMat.emissiveIntensity = 0.3 + Math.sin(time * 1.5) * 0.15;
+  
+  // Wheels subtle rotation when auto-rotating
+  if (autoRotate) {
+    wheels.forEach((w, i) => {
+      w.children.forEach(child => {
+        if (child.geometry && child.geometry.type === 'CylinderGeometry') {
+          child.rotation.x += 0.01;
+        }
+      });
+    });
+  }
+  
+  if (autoRotate) {
+    const radius = 3.5;
+    const speed = 0.003;
+    // Don't move camera, rotate target slightly
+    // Actually just use OrbitControls autoRotate
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 1.2;
+  } else {
+    controls.autoRotate = false;
+  }
+  
+  controls.update();
+  renderer.render(scene, camera);
+  labelRenderer.render(scene, camera);
+}
+
+animate();
+
+// ── Resize ──
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  labelRenderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ── Screenshot ──
+window.addEventListener('keydown', (e) => {
+  if (e.key === 's' || e.key === 'S') {
+    renderer.render(scene, camera);
+    const link = document.createElement('a');
+    link.download = 'mera_v3_screenshot.png';
+    link.href = renderer.domElement.toDataURL('image/png');
+    link.click();
+  }
+});
+
+console.log('🚀 MERA v3 viewer loaded');
+console.log('📸 Press S to screenshot');
+</script>
+</body>
+</html>

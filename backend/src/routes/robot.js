@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { prisma } from '../lib/prisma.js';
 import { requireDevice } from '../middleware/device.js';
 import { notifyUrgentCase } from '../lib/notifications.js';
+import { THRESHOLDS } from '../lib/thresholds.js';
 
 const router = Router();
 router.use(requireDevice);
@@ -57,14 +58,14 @@ const measurementsSchema = z.object({
 });
 
 const computeUrgency = ({ temperature, spo2, heart_rate, contagious, non_contagious, alerte }) => {
-  if (temperature != null && temperature > 40) return 'CRITIQUE';
-  if (spo2 != null && spo2 < 90) return 'CRITIQUE';
-  if (heart_rate != null && heart_rate > 120) return 'CRITIQUE';
+  if (temperature != null && temperature > THRESHOLDS.TEMP_CRITICAL) return 'CRITIQUE';
+  if (spo2 != null && spo2 < THRESHOLDS.SPO2_CRITICAL) return 'CRITIQUE';
+  if (heart_rate != null && heart_rate > THRESHOLDS.HR_CRITICAL) return 'CRITIQUE';
   if (alerte || contagious?.contagion_alert) return 'ELEVE';
-  if (temperature != null && temperature >= 38) return 'ELEVE';
-  if (spo2 != null && spo2 < 95) return 'ELEVE';
-  if (contagious && Object.values(contagious).some((v) => typeof v === 'number' && v > 50)) return 'MODERE';
-  if (non_contagious && Object.values(non_contagious).some((v) => typeof v === 'number' && v > 50)) return 'MODERE';
+  if (temperature != null && temperature >= THRESHOLDS.TEMP_HIGH) return 'ELEVE';
+  if (spo2 != null && spo2 < THRESHOLDS.SPO2_HIGH) return 'ELEVE';
+  if (contagious && Object.values(contagious).some((v) => typeof v === 'number' && v > THRESHOLDS.CONTESTED_SCORE)) return 'MODERE';
+  if (non_contagious && Object.values(non_contagious).some((v) => typeof v === 'number' && v > THRESHOLDS.CONTESTED_SCORE)) return 'MODERE';
   return 'NORMAL';
 };
 

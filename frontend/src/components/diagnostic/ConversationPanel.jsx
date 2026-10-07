@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { speak, stopSpeaking, startRecording, stopRecordingAndTranscribe, cancelRecording, isSpeechSupported } from "../../hooks/useSpeech";
+import { speak, startRecording, stopRecordingAndTranscribe, cancelRecording, isSpeechSupported } from "../../hooks/useSpeech";
 import { base44 } from "@/api/base44Client";
 import { Bot, User, Mic, MicOff, Send, Loader2, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";

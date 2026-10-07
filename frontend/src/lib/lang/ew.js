@@ -7,6 +7,7 @@ export default {
     children: "Minéngá mwán", review: "Mbóá yagá", devices: "Mpambán MERA",
     simulator: "Simulateur IA", settings: "Paramètres", admin: "Mbóámvé",
     requests: "Bibia", users: "Bótá", assignments: "Mbók",
+    epidemiology: "Épidémiologie",
   },
 
   topbar: {

@@ -6,11 +6,13 @@ backend/node_modules/
 # Build output
 frontend/dist/
 
-# Environment files
-.env
-.env.local
-.env.production
+# Environment files (tous les variantes : .env, .env.prod, .env.bak, ...)
+.env*
 !.env.example
+
+# Editor history / locks
+.history/
+.~lock.*
 
 # Logs
 logs
@@ -32,6 +34,7 @@ coverage
 .cache
 .eslintcache
 .npm
+__pycache__/
 
 # OS files
 .DS_Store

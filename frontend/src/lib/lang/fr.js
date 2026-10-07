@@ -6,6 +6,7 @@ export default {
     children: "Dossiers enfants", attendance: "Pointage", review: "Revue médicale", devices: "Appareils MERA",
     simulator: "Simulateur IA", settings: "Paramètres", admin: "Administration",
     requests: "Demandes", users: "Utilisateurs", assignments: "Associations",
+    epidemiology: "Épidémiologie",
   },
 
   topbar: {

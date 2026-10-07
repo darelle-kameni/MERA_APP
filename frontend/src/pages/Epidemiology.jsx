@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { BarChart3, TrendingUp } from "lucide-react";
+import { BarChart3 } from "lucide-react";
 import EpidemiologyCharts from "../components/epidemiology/EpidemiologyCharts";
 import EpidemiologyMap from "../components/epidemiology/EpidemiologyMap";
 import { useTranslation } from "@/lib/useTranslation";

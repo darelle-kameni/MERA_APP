@@ -5,6 +5,7 @@ import { Thermometer, Heart, Wind, Weight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { generateVitals } from "../../lib/simulatorData";
 import { useTranslation } from "@/lib/useTranslation";
+import { THRESHOLDS } from "@/lib/thresholds";
 
 function VitalCard({ icon: Icon, label, value, unit, color, isAbnormal, history = [], alertText }) {
   return (
@@ -77,7 +78,7 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false,
         setCurrent(vitals);
         const highTemp = vitals.temperature > 38.5;
         const lowSpo2 = vitals.spo2 < 94;
-        const abnormalHR = vitals.heart_rate > 120 || vitals.heart_rate < 55;
+        const abnormalHR = vitals.heart_rate > THRESHOLDS.HR_CRITICAL || vitals.heart_rate < THRESHOLDS.HR_LOW;
 
         if (isFirstTick.current) {
           isFirstTick.current = false;
@@ -116,7 +117,7 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false,
   const alertTxt = t("vitals.alert");
   const isHighTemp = current.temperature > 38.5;
   const isLowSpo2 = current.spo2 < 94;
-  const isAbnormalHR = current.heart_rate > 120 || current.heart_rate < 55;
+  const isAbnormalHR = current.heart_rate > THRESHOLDS.HR_CRITICAL || current.heart_rate < THRESHOLDS.HR_LOW;
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

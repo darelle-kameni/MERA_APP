@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard, UserPlus, Stethoscope, FolderOpen,
   ClipboardCheck, Cpu, Settings, X, Bot,
-  Shield, Inbox, Users as UsersIcon, Link2, CalendarClock,
+  Shield, Inbox, Users as UsersIcon, Link2, CalendarClock, Leaf, BarChart3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -19,12 +19,14 @@ const baseNavItems = [
   { path: "/reviews",          icon: ClipboardCheck,  labelKey: "nav.review", roles: ["medecin"], end: true },
   { path: "/devices",          icon: Cpu,             labelKey: "nav.devices", roles: ["admin"], end: true },
   { path: "/simulator",        icon: Bot,             labelKey: "nav.simulator", roles: ["encadreur", "medecin"] },
+  { path: "/epidemiology",     icon: BarChart3,       labelKey: "nav.epidemiology", roles: ["admin", "medecin"], end: true },
 ];
 
 const adminItems = [
   { path: "/admin/requests",    icon: Inbox,     label: "Demandes",     end: true },
   { path: "/admin/users",       icon: UsersIcon, label: "Utilisateurs", end: true },
   { path: "/admin/assignments", icon: Link2,     label: "Associations", end: true },
+  { path: "/admin/pharmacopee", icon: Leaf,      label: "Pharmacopée",   end: true },
 ];
 
 const settingsItem = { path: "/settings", icon: Settings, label: "Paramètres", end: true };

@@ -6,6 +6,7 @@ export default {
     children: "Children Records", review: "Medical Review", devices: "MERA Devices",
     simulator: "AI Simulator", settings: "Settings", admin: "Administration",
     requests: "Requests", users: "Users", assignments: "Assignments",
+    epidemiology: "Epidemiology",
   },
 
   topbar: {

@@ -11,6 +11,7 @@ import { requireStaff } from '../middleware/auth.js';
 import { buildScope, canModifyExisting } from '../lib/scope.js';
 import { llmInvokeJSON } from '../lib/llm.js';
 import { notifyUrgentCase } from '../lib/notifications.js';
+import { THRESHOLDS } from '../lib/thresholds.js';
 
 const router = Router();
 router.use(requireStaff);
@@ -55,8 +56,8 @@ Tu réponds STRICTEMENT en JSON valide selon ce schéma :
 }
 
 Critères d'urgence (à appliquer rigoureusement) :
-- CRITIQUE : T° > 40°C OU SpO2 < 90% OU FC > 130 OU signes de détresse vitale
-- ELEVE : T° 38.5-40°C OU SpO2 90-94% OU contagion alerte = oui OU déshydratation sévère
+- CRITIQUE : T° > ${THRESHOLDS.TEMP_CRITICAL}°C OU SpO2 < ${THRESHOLDS.SPO2_CRITICAL}% OU FC > ${THRESHOLDS.HR_CRITICAL} OU signes de détresse vitale
+- ELEVE : T° ${THRESHOLDS.TEMP_HIGH}-${THRESHOLDS.TEMP_CRITICAL}°C OU SpO2 ${THRESHOLDS.SPO2_CRITICAL}-${THRESHOLDS.SPO2_HIGH - 1}% OU contagion alerte = oui OU déshydratation sévère
 - MODERE : symptômes présents non vitaux, à surveiller
 - NORMAL : pas d'anomalie significative
 

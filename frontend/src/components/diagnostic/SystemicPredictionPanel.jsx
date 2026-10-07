@@ -3,6 +3,7 @@ import { Activity, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { base44 } from "@/api/base44Client";
 import { useTranslation } from "@/lib/useTranslation";
+import { THRESHOLDS } from "@/lib/thresholds";
 
 function buildVitalsSummary(vitals) {
   if (!vitals) return [];
@@ -11,9 +12,9 @@ function buildVitalsSummary(vitals) {
   else if (vitals.temperature > 37.5) findings.push({ label: "Température élevée", value: `${vitals.temperature}°C`, severity: "medium" });
   if (vitals.spo2 < 94) findings.push({ label: "Désaturation", value: `${vitals.spo2}%`, severity: "high" });
   else if (vitals.spo2 < 96) findings.push({ label: "SpO2 limite", value: `${vitals.spo2}%`, severity: "medium" });
-  if (vitals.heart_rate > 120) findings.push({ label: "Tachycardie", value: `${vitals.heart_rate} bpm`, severity: "high" });
-  else if (vitals.heart_rate < 55) findings.push({ label: "Bradycardie", value: `${vitals.heart_rate} bpm`, severity: "high" });
-  else if (vitals.heart_rate > 100) findings.push({ label: "Pouls élevé", value: `${vitals.heart_rate} bpm`, severity: "medium" });
+  if (vitals.heart_rate > THRESHOLDS.HR_CRITICAL) findings.push({ label: "Tachycardie", value: `${vitals.heart_rate} bpm`, severity: "high" });
+  else if (vitals.heart_rate < THRESHOLDS.HR_LOW) findings.push({ label: "Bradycardie", value: `${vitals.heart_rate} bpm`, severity: "high" });
+  else if (vitals.heart_rate > THRESHOLDS.HR_MEDIUM) findings.push({ label: "Pouls élevé", value: `${vitals.heart_rate} bpm`, severity: "medium" });
   return findings;
 }
 
