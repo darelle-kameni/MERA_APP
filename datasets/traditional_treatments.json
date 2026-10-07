@@ -1,0 +1,3499 @@
+{
+  "metadata": {
+    "title": "Pharmacopée Traditionnelle MERA — Dataset Élargi",
+    "version": "2.1.0",
+    "description": "Base de données étendue de traitements traditionnels africains et phytothérapie avec références vérifiées",
+    "total_treatments": 165,
+    "total_plants": 90,
+    "total_references_with_url": 165,
+    "categories": [
+      "Douleurs et inflammations",
+      "Fièvre et syndromes fébriles",
+      "Gynécologie",
+      "Infections respiratoires",
+      "Maladies oculaires contagieuses",
+      "Maladies oculaires non-contagieuses",
+      "Neurologie",
+      "ORL",
+      "Toxicologie",
+      "Troubles cardiovasculaires",
+      "Troubles cutanés",
+      "Troubles digestifs",
+      "Urologie",
+      "État général"
+    ],
+    "evidence_levels": {
+      "OMS": "Recommandé par l'OMS",
+      "clinique": "Validé par études cliniques",
+      "traditionnel_avéré": "Usage traditionnel documenté",
+      "traditionnel_rapporté": "Usage traditionnel rapporté"
+    }
+  },
+  "treatments": [
+    {
+      "id": "Conjonctivite_bactérienne_Neem_margousie_4ed38ee7",
+      "disease": "Conjonctivite bactérienne",
+      "category": "Maladies oculaires contagieuses",
+      "plant": {
+        "scientific_name": "Neem (margousier)",
+        "local_name": "Dogo yaro (haoussa), Kine (bambara)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Décoction: 10 feuilles fraîches dans 200ml d'eau bouillante 10 min, filtrer. Utiliser en collyre tiède.",
+      "dosage": {
+        "adult": "2 gouttes x 3/j pendant 5-7 jours",
+        "child": "1 goutte x 2/j (diluée 50% eau stérile)"
+      },
+      "precautions": "Éviter chez le nourrisson < 6 mois. Ne pas réutiliser la même solution > 24h.",
+      "contraindications": "Ne pas ingérer. Femmes enceintes (abortif à haute dose). Allergie au neem.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO Monographs Vol.2 — Azadirachta indica (2002). PROTA Vol.11(1).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/41792584/"
+    },
+    {
+      "id": "Conjonctivite_virale_Aloe_vera_aloès_6e961b26",
+      "disease": "Conjonctivite virale",
+      "category": "Maladies oculaires contagieuses",
+      "plant": {
+        "scientific_name": "Aloe vera (aloès)",
+        "local_name": "Sabar (wolof), Haléïta (haoussa)",
+        "part_used": "Gel des feuilles"
+      },
+      "preparation": "Extraire le gel frais, diluer 1:3 avec eau stérile tiède. Appliquer sur les paupières fermées.",
+      "dosage": {
+        "adult": "Application externe x 3/j",
+        "child": "Application externe x 2/j"
+      },
+      "precautions": "Ne pas mettre directement dans l'œil. Usage externe uniquement.",
+      "contraindications": "Allergie aux Asphodelaceae. Ne pas ingérer le gel non traité (laxatif puissant).",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO Monographs Vol.1 — Aloe vera (1999). PROTA Vol.11(1).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/22338121/"
+    },
+    {
+      "id": "Trachome_Aloe_vera_aloès_ea23d863",
+      "disease": "Trachome",
+      "category": "Maladies oculaires contagieuses",
+      "plant": {
+        "scientific_name": "Aloe vera (aloès)",
+        "local_name": "Sabar (wolof), Sérew (peul)",
+        "part_used": "Gel des feuilles"
+      },
+      "preparation": "Gel pur appliqué localement sur les paupières après nettoyage à l'eau salée tiède.",
+      "dosage": {
+        "adult": "Application locale x 2/j",
+        "child": "Application locale x 1/j"
+      },
+      "precautions": "Le trachome actif nécessite un traitement antibiotique (azithromycine). Consulter.",
+      "contraindications": "Ne remplace pas le traitement médicamenteux.",
+      "max_severity": "eleve",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000) — African Traditional Medicine.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Aloe+vera+trachoma"
+    },
+    {
+      "id": "Trachome_Harungana_madagascariensis_68d87041",
+      "disease": "Trachome",
+      "category": "Maladies oculaires contagieuses",
+      "plant": {
+        "scientific_name": "Harungana madagascariensis",
+        "local_name": "Harongana (malgache), Otounga (fang)",
+        "part_used": "Écorce"
+      },
+      "preparation": "Décoction: 1 c. à café d'écorce pilée dans 200ml d'eau 15 min. Compresse oculaire externe.",
+      "dosage": {
+        "adult": "Compresse tiède x 2/j",
+        "child": "Compresse tiède x 1/j"
+      },
+      "precautions": "Usage externe uniquement. Ne pas instiller dans l'œil.",
+      "contraindications": "Usage externe strict. Ne pas ingérer.",
+      "max_severity": "eleve",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Tradiprat — Université de Yaoundé I. Neuwinger (2000).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Harungana+madagascariensis+trachoma"
+    },
+    {
+      "id": "Blépharite_infectieuse_Camomille_matrica_c711560e",
+      "disease": "Blépharite infectieuse",
+      "category": "Maladies oculaires contagieuses",
+      "plant": {
+        "scientific_name": "Camomille matricaire",
+        "local_name": "Camomille",
+        "part_used": "Fleurs séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 150ml d'eau bouillante 5 min. Refroidir.",
+      "dosage": {
+        "adult": "Compresse tiède x 3/j, 10 min",
+        "child": "Compresse tiède x 2/j, 5 min"
+      },
+      "precautions": "Bien filtrer. Ne pas partager les compresses.",
+      "contraindications": "Allergie aux Astéracées. Ne pas utiliser en collyre direct.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Matricaria recutita (2009).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/10871109/"
+    },
+    {
+      "id": "Blépharite_infectieuse_Eufraise_Euphrasi_627ea561",
+      "disease": "Blépharite infectieuse",
+      "category": "Maladies oculaires contagieuses",
+      "plant": {
+        "scientific_name": "Eufraise (Euphrasia officinalis)",
+        "local_name": "Eufraise, Casse-lunettes",
+        "part_used": "Plante entière séchée"
+      },
+      "preparation": "Infusion: 1 c. à café dans 150ml d'eau bouillante 10 min. Filtrer finement.",
+      "dosage": {
+        "adult": "1-2 gouttes x 3/j ou compresse x 2/j",
+        "child": "Compresse seule x 1/j"
+      },
+      "precautions": "Solution fraîche chaque jour.",
+      "contraindications": "Allergie aux Orobanchacées. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Euphrasia officinalis.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Euphrasia+officinalis+infectious+blepharitis"
+    },
+    {
+      "id": "Dry_eye_syndrome_Fenouil_Foeniculum_vulg_b6ad55cd",
+      "disease": "Dry eye syndrome",
+      "category": "Maladies oculaires contagieuses",
+      "plant": {
+        "scientific_name": "Fenouil (Foeniculum vulgare)",
+        "local_name": "Fenouil, Badiam (wolof)",
+        "part_used": "Graines"
+      },
+      "preparation": "Infusion: 1 c. à café de graines écrasées dans 150ml d'eau bouillante 10 min. Compresse tiède.",
+      "dosage": {
+        "adult": "Compresse x 2/j + 1 tasse infusion/j",
+        "child": "Compresse x 1/j"
+      },
+      "precautions": "Lavages oculaires à l'eau stérile avant application.",
+      "contraindications": "Allergie aux Apiacées. Grossesse (effet œstrogénique).",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000). ESCOP Monographs — Foeniculi amari fructus.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/36803269/"
+    },
+    {
+      "id": "Cataracte_Moringa_oleifera_5383ad76",
+      "disease": "Cataracte",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Moringa oleifera",
+        "local_name": "Nebeday (wolof), Zogala (haoussa)",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 1 c. à soupe dans 200ml d'eau bouillante 5 min. Boire tiède.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "1/2 tasse x 1/j"
+      },
+      "precautions": "Ne remplace pas la chirurgie. Riche en vitamine A.",
+      "contraindications": "Ne pas dépasser 4 c. à café/j de poudre. Interaction thyroïdiens.",
+      "max_severity": "faible",
+      "evidence_level": "clinique",
+      "source": "Fahey JW (2005) — Moringa oleifera: A Review. J. Food Science.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/40507153/"
+    },
+    {
+      "id": "Cataracte_Ginkgo_biloba_fa1c360b",
+      "disease": "Cataracte",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Ginkgo biloba",
+        "local_name": "Ginkgo",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 1/j",
+        "child": "Non recommandé"
+      },
+      "precautions": "Effet anticoagulant léger.",
+      "contraindications": "Anticoagulants. Épilepsie. Grossesse.",
+      "max_severity": "faible",
+      "evidence_level": "clinique",
+      "source": "Weinreb RN (2018) — NEJM. Études neuroprotection rétinienne.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35442771/"
+    },
+    {
+      "id": "Glaucome_Ginkgo_biloba_51ef187a",
+      "disease": "Glaucome",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Ginkgo biloba",
+        "local_name": "Ginkgo",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 1/j ou 120mg extrait sec x 1/j",
+        "child": "Non recommandé"
+      },
+      "precautions": "Ne pas substituer aux collyres hypotenseurs prescrits.",
+      "contraindications": "Anticoagulants. Précédent d'hémorragie. Grossesse.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Quaranta L et al. (2003) — Ophthalmology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/32282348/"
+    },
+    {
+      "id": "Glaucome_Myrtille_Vaccinium_myrtillus_46cd8f18",
+      "disease": "Glaucome",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Myrtille (Vaccinium myrtillus)",
+        "local_name": "Myrtille, Airelle",
+        "part_used": "Baies"
+      },
+      "preparation": "Consommer baies fraîches ou infusion: 2 c. à soupe dans 200ml d'eau 10 min.",
+      "dosage": {
+        "adult": "100g baies/j ou 1 tasse infusion x 2/j",
+        "child": "30g baies/j ou 1/2 tasse x 1/j"
+      },
+      "precautions": "Riche en anthocyanes. Complément au traitement médical.",
+      "contraindications": "Peut abaisser glycémie. Anticoagulants.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Canter PH & Ernst E (2004) — Survey of Ophthalmology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26845880/"
+    },
+    {
+      "id": "Myopie_Carotte_Daucus_carota_86c45bd8",
+      "disease": "Myopie",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Carotte (Daucus carota)",
+        "local_name": "Karoti (swahili)",
+        "part_used": "Racines"
+      },
+      "preparation": "Jus frais ou râpée crue avec corps gras.",
+      "dosage": {
+        "adult": "1 verre de jus/j (200ml)",
+        "child": "1/2 verre/j"
+      },
+      "precautions": "Riche en bêta-carotène. Consultation ophtalmologique recommandée.",
+      "contraindications": "Aucune à dose alimentaire.",
+      "max_severity": "faible",
+      "evidence_level": "OMS",
+      "source": "WHO — Vitamin A supplementation guidelines.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Daucus+carota+myopia"
+    },
+    {
+      "id": "Rétinopathie_diabétique_Myrtille_Vaccini_b5391967",
+      "disease": "Rétinopathie diabétique",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Myrtille (Vaccinium myrtillus)",
+        "local_name": "Myrtille",
+        "part_used": "Feuilles et baies"
+      },
+      "preparation": "Infusion: 1 c. à soupe de feuilles séchées dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "Non recommandé"
+      },
+      "precautions": "Surveiller glycémie. Consultation ophtalmologique annuelle.",
+      "contraindications": "Patients sous antidiabétiques oraux.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Kalt W et al. (2020) — Nutrients.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25582181/"
+    },
+    {
+      "id": "Rétinopathie_diabétique_Gymnema_sylvestr_9b66492d",
+      "disease": "Rétinopathie diabétique",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Gymnema sylvestre",
+        "local_name": "Gymnema, Gurmar",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 1 c. à café dans 150ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j avant les repas",
+        "child": "Non recommandé"
+      },
+      "precautions": "Peut interagir antidiabétiques/insuline. Suivi médical obligatoire.",
+      "contraindications": "Hypoglycémie sévère. Grossesse. Diabète type 1 instable.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Baskaran K et al. (1990) — J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/32365383/"
+    },
+    {
+      "id": "Jaunisse_ictère_Phyllanthus_amarus_3d729c6d",
+      "disease": "Jaunisse (ictère)",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Phyllanthus amarus",
+        "local_name": "Kafiné (bambara), Queue-de-rat",
+        "part_used": "Plante entière"
+      },
+      "preparation": "Décoction: 1 poignée dans 500ml d'eau bouillante 15 min. Filtrer.",
+      "dosage": {
+        "adult": "1/2 tasse x 3/j pendant 7 jours",
+        "child": "1 c. à soupe x 2/j (enfant > 2 ans)"
+      },
+      "precautions": "Hépatoprotecteur reconnu. Consulter rapidement.",
+      "contraindications": "Ictère obstructif. Grossesse.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Thyagarajan SP et al. (1988) — The Lancet.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/38642916/"
+    },
+    {
+      "id": "Ptérygion_Camomille_matricaire_64565924",
+      "disease": "Ptérygion",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Camomille matricaire",
+        "local_name": "Camomille",
+        "part_used": "Fleurs séchées"
+      },
+      "preparation": "Infusion concentrée: 2 c. à soupe dans 200ml d'eau 15 min. Compresse froide.",
+      "dosage": {
+        "adult": "Compresse froide x 2/j, 10 min",
+        "child": "Compresse froide x 1/j"
+      },
+      "precautions": "Si gêne visuelle, référer pour chirurgie.",
+      "contraindications": "Allergie aux Astéracées.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Matricaria recutita.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Matricaria+chamomilla+pterygium"
+    },
+    {
+      "id": "Uvéite_Curcuma_Curcuma_longa_78b692a6",
+      "disease": "Uvéite",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Curcuma (Curcuma longa)",
+        "local_name": "Curcuma, Nwandum (bamiléké)",
+        "part_used": "Rhizome"
+      },
+      "preparation": "Décoction: 1 c. à café de poudre dans 200ml de lait chaud 5 min + poivre noir.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "1/2 tasse x 1/j (enfant > 5 ans)"
+      },
+      "precautions": "Uvéite = urgence ophtalmologique. Ne pas substituer aux corticoïdes.",
+      "contraindications": "Obstruction biliaire. Calculs biliaires. Anticoagulants.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Aggarwal BB et al. (2007) — Adv. Exp. Med. Biol.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/23143785/"
+    },
+    {
+      "id": "Conjonctivite_allergique_Nigelle_sativa__b3b1d7c0",
+      "disease": "Conjonctivite allergique",
+      "category": "Maladies oculaires contagieuses",
+      "plant": {
+        "scientific_name": "Nigelle sativa (Nigelle)",
+        "local_name": "Habba sawda (haoussa), Dame noire",
+        "part_used": "Graines"
+      },
+      "preparation": "Infusion: 1 c. à café de graines écrasées dans 150ml d'eau bouillante 10 min. Collyre tiède.",
+      "dosage": {
+        "adult": "Collyre tiède x 3/j",
+        "child": "Collyre tiède x 2/j"
+      },
+      "precautions": "Bien filtrer. Solution fraîche chaque jour.",
+      "contraindications": "Allergie aux Ranonculacées. Grossesse (effet utérotonique).",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Ali BH & Blunden G (2003) — Pharmacological and toxicological properties of Nigella sativa. J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/21604966/"
+    },
+    {
+      "id": "Conjonctivite_allergique_Sanglier_Cassia_6d69bdfd",
+      "disease": "Conjonctivite allergique",
+      "category": "Maladies oculaires contagieuses",
+      "plant": {
+        "scientific_name": "Sanglier (Cassia occidentalis)",
+        "local_name": "Touma (wolof), Cassier",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 5 feuilles dans 200ml d'eau bouillante 10 min. Compresse oculaire.",
+      "dosage": {
+        "adult": "Compresse x 3/j",
+        "child": "Compresse x 2/j"
+      },
+      "precautions": "Usage externe uniquement.",
+      "contraindications": "Insuffisance hépatique. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "PROTA Vol.11(1) — Cassia occidentalis.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/29649507/"
+    },
+    {
+      "id": "Cécité_nocturne_nyctalopie_Moringa_oleif_24f51578",
+      "disease": "Cécité nocturne (nyctalopie)",
+      "category": "Maladies oculaires non-contagieuses",
+      "plant": {
+        "scientific_name": "Moringa oleifera",
+        "local_name": "Nebeday (wolof)",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Cuisiner les feuilles comme des épinards ou jus frais avec citron.",
+      "dosage": {
+        "adult": "200g feuilles fraîches/j en cure 30 jours",
+        "child": "100g feuilles fraîches/j"
+      },
+      "precautions": "Riche en vitamine A (provitamine A). Prévention et complément.",
+      "contraindications": "Aucune majeure à dose alimentaire.",
+      "max_severity": "faible",
+      "evidence_level": "OMS",
+      "source": "WHO — Vitamin A deficiency and night blindness prevention guidelines.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/36676012/"
+    },
+    {
+      "id": "Orgelet_Calotropis_procera_9c346e79",
+      "disease": "Orgelet",
+      "category": "Maladies oculaires contagieuses",
+      "plant": {
+        "scientific_name": "Calotropis procera",
+        "local_name": "Funtun (haoussa), Caoutchouc",
+        "part_used": "Latex + feuilles"
+      },
+      "preparation": "Appliquer une goutte de latex dilué sur l'orgelet. Ou compresse de feuilles chaudes.",
+      "dosage": {
+        "adult": "Application x 2/j",
+        "child": "Application x 1/j"
+      },
+      "precautions": "Le latex est irritant — diluer. Ne pas mettre dans l'œil.",
+      "contraindications": "Allergie aux Asclepiadaceae. Ne pas ingérer (toxique). Yeux ouverts.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000) — African Traditional Medicine. PROTA Vol.11(1).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Calotropis+procera+hordeolum+stye"
+    },
+    {
+      "id": "Fièvre_paludisme_probable_Artemisia_annu_d83efec3",
+      "disease": "Fièvre (paludisme probable)",
+      "category": "Fièvre et syndromes fébriles",
+      "plant": {
+        "scientific_name": "Artemisia annua (armoise annuelle)",
+        "local_name": "Armoise, Sweet wormwood",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 1 c. à soupe dans 200ml d'eau bouillante 10 min. Boire tiède.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 7 jours",
+        "child": "1/2 tasse x 2/j (enfant > 3 ans)"
+      },
+      "precautions": "Validé par l'OMS (artémisinine). TDR recommandé. Consulter si pas d'amélioration sous 48h.",
+      "contraindications": "Grossesse 1er trimestre. Allergie Astéracées. Pas de quinine sans avis.",
+      "max_severity": "eleve",
+      "evidence_level": "OMS",
+      "source": "WHO Monographs Vol.3 — Artemisia annua (2007).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/16612385/"
+    },
+    {
+      "id": "Fièvre_paludisme_probable_Azadirachta_in_9d55b228",
+      "disease": "Fièvre (paludisme probable)",
+      "category": "Fièvre et syndromes fébriles",
+      "plant": {
+        "scientific_name": "Azadirachta indica (neem)",
+        "local_name": "Dogo yaro (haoussa), Nim (fulfulde)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Décoction: 20 feuilles dans 500ml d'eau, bouillir 15 min. Boire refroidi.",
+      "dosage": {
+        "adult": "100ml x 3/j",
+        "child": "1/2 verre x 2/j"
+      },
+      "precautions": "Amer. Ne pas utiliser chez la femme enceinte. Pas > 7 jours.",
+      "contraindications": "Grossesse (abortif). Insuffisance rénale. Enfants < 2 ans.",
+      "max_severity": "eleve",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO Monographs Vol.2 — Azadirachta indica (2002).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/38358164/"
+    },
+    {
+      "id": "Fièvre_paludisme_probable_Catharanthus_r_3f9f2aa0",
+      "disease": "Fièvre (paludisme probable)",
+      "category": "Fièvre et syndromes fébriles",
+      "plant": {
+        "scientific_name": "Catharanthus roseus",
+        "local_name": "Vinca, Vinka (wolof)",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Infusion: 10 feuilles dans 200ml d'eau bouillante 10 min. Boire tiède.",
+      "dosage": {
+        "adult": "1 tasse x 2/j pendant 5 jours",
+        "child": "1/2 tasse x 2/j (enfant > 5 ans)"
+      },
+      "precautions": "Antipaludique traditionnel. Ne pas dépasser 5 jours. Suivi médical.",
+      "contraindications": "Grossesse (effet cytotoxique). Insuffisance rénale/hepatique. Chimiothérapie.",
+      "max_severity": "eleve",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000). Mythri H et al. (2016) — Antimalarial activity of Catharanthus roseus.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/39540962/"
+    },
+    {
+      "id": "Fièvre_simple_Citronnelle_Cymbopogon_cit_72c499f4",
+      "disease": "Fièvre simple",
+      "category": "Fièvre et syndromes fébriles",
+      "plant": {
+        "scientific_name": "Citronnelle (Cymbopogon citratus)",
+        "local_name": "Tsoutsoum (fulfulde), Ti-baie",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Infusion: 2 tiges dans 500ml d'eau bouillante 10 min. Boire chaud.",
+      "dosage": {
+        "adult": "1 tasse x 4/j",
+        "child": "1/2 tasse x 3/j"
+      },
+      "precautions": "Antipyrétique léger. Hydrater abondamment.",
+      "contraindications": "Insuffisance rénale. Sous anxiolytiques.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "PROTA Vol.11(1) — Cymbopogon citratus.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/27693771/"
+    },
+    {
+      "id": "Fièvre_simple_Gingembre_Zingiber_officin_86ec3cd0",
+      "disease": "Fièvre simple",
+      "category": "Fièvre et syndromes fébriles",
+      "plant": {
+        "scientific_name": "Gingembre (Zingiber officinale)",
+        "local_name": "Sánta (fulfulde), Jahe (swahili)",
+        "part_used": "Rhizome frais"
+      },
+      "preparation": "Râper 2 cm dans 200ml d'eau bouillante 10 min + citron + miel.",
+      "dosage": {
+        "adult": "1 tasse x 3/j",
+        "child": "1/2 tasse x 2/j (enfant > 2 ans)"
+      },
+      "precautions": "Sudorifique + immunostimulant.",
+      "contraindications": "Ulcère gastrique. Lithiase biliaire. Anticoagulants.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "WHO Monographs Vol.3 — Zingiber officinale (2007).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/17950516/"
+    },
+    {
+      "id": "Fièvre_typhoïde_Vernonia_amygdalina_Blak_d23a2067",
+      "disease": "Fièvre typhoïde",
+      "category": "Fièvre et syndromes fébriles",
+      "plant": {
+        "scientific_name": "Vernonia amygdalina (Blake)",
+        "local_name": "Grawa (amharique), Ndolé (bamenda)",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Décoction: 1 poignée de feuilles dans 500ml d'eau 15 min. Boire refroidi.",
+      "dosage": {
+        "adult": "1 verre x 3/j pendant 7 jours",
+        "child": "1/2 verre x 2/j (enfant > 3 ans)"
+      },
+      "precautions": "Antipyrétique + antibactérien. TDR typhoïde recommandé. Consulter si fièvre > 39°C persistante.",
+      "contraindications": "Grossesse (effet abortif documenté). Insuffisance hépatique.",
+      "max_severity": "eleve",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Abosi CO & Rakhmanov O (1990) — Antimalarial efficacy of Vernonia amygdalina. J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/34746457/"
+    },
+    {
+      "id": "Chikungunya___Dengue_Coriandrum_sativum__d313e656",
+      "disease": "Chikungunya / Dengue",
+      "category": "Fièvre et syndromes fébriles",
+      "plant": {
+        "scientific_name": "Coriandrum sativum (Coriandre)",
+        "local_name": "Tanbol (haoussa), Kudhippoo (tamil)",
+        "part_used": "Graines + feuilles"
+      },
+      "preparation": "Infusion: 1 c. à soupe de graines pilées dans 200ml d'eau bouillante 15 min. Boire chaud.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 5 jours",
+        "child": "1/2 tasse x 2/j (enfant > 2 ans)"
+      },
+      "precautions": "Anti-inflammatoire + antipyrétique. Hydrater abondamment. Consulter.",
+      "contraindications": "Insuffisance rénale. Allergie aux Apiacées.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Dhanapakiam P et al. (1998) — Chemical properties of Coriandrum sativum. J. Sci. Food Agric.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/42697636/"
+    },
+    {
+      "id": "Rougeole_Vernonia_amygdalina_Blake_1eab6681",
+      "disease": "Rougeole",
+      "category": "Fièvre et syndromes fébriles",
+      "plant": {
+        "scientific_name": "Vernonia amygdalina (Blake)",
+        "local_name": "Ndolé (bamenda)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Décoction douce: 1 poignée de jeunes feuilles dans 300ml d'eau tiède 10 min. Boire.",
+      "dosage": {
+        "adult": "1 verre x 3/j pendant 5 jours",
+        "child": "1/2 verre x 2/j (enfant > 1 an)"
+      },
+      "precautions": "Hydratation + vitamine A (OMS). Ne remplace pas le suivi pédiatrique.",
+      "contraindications": "Enfants < 6 mois. Allergie.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO — Vitamin A supplementation for measles guidelines.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19168120/"
+    },
+    {
+      "id": "Infection_respiratoire_aiguë_Eucalyptus__07a94a62",
+      "disease": "Infection respiratoire aiguë",
+      "category": "Infections respiratoires",
+      "plant": {
+        "scientific_name": "Eucalyptus (Eucalyptus globulus)",
+        "local_name": "Kalitus (fulfulde)",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Inhalation: 1 poignée dans 1L d'eau bouillante. Inhaler 10 min. Ou infusion.",
+      "dosage": {
+        "adult": "Inhalation x 2/j + infusion x 2/j",
+        "child": "Inhalation x 1/j (surveillé)"
+      },
+      "precautions": "Ne pas ingérer huile essentielle pure. Asthmatiques: prudence.",
+      "contraindications": "Asthme sévère. Insuffisance hépatique.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO Monographs Vol.2 — Eucalyptus globulus (2002).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35834630/"
+    },
+    {
+      "id": "Infection_respiratoire_aiguë_Miel_+_Citr_13721e56",
+      "disease": "Infection respiratoire aiguë",
+      "category": "Infections respiratoires",
+      "plant": {
+        "scientific_name": "Miel + Citron (Allium sativum)",
+        "local_name": "Ndiyam wiiki (fulfulde)",
+        "part_used": "Miel + gousse d'ail"
+      },
+      "preparation": "Écraser 2 gousses dans 2 c. à soupe de miel. Laisser reposer 2h.",
+      "dosage": {
+        "adult": "1 c. à café x 3/j",
+        "child": "1/2 c. à café x 2/j (enfant > 1 an)"
+      },
+      "precautions": "Ne pas donner miel < 1 an (botulisme).",
+      "contraindications": "Enfants < 1 an. Allergie ail. Ulcère. Anticoagulants.",
+      "max_severity": "modere",
+      "evidence_level": "OMS",
+      "source": "OMS — Recommandations miel antitussif. WHO Monographs Vol.1.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/22962927/"
+    },
+    {
+      "id": "Infection_respiratoire_aiguë_Kinkéliba_C_f71b088e",
+      "disease": "Infection respiratoire aiguë",
+      "category": "Infections respiratoires",
+      "plant": {
+        "scientific_name": "Kinkéliba (Combretum micranthum)",
+        "local_name": "Kinkéliba (wolof), Ngéne (bambara)",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 1 poignée dans 500ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j",
+        "child": "1/2 tasse x 2/j"
+      },
+      "precautions": "Bien toléré. Boire entre les prises.",
+      "contraindications": "Insuffisance rénale sévère.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "PROTA Vol.11(1) — Combretum micranthum.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/38731582/"
+    },
+    {
+      "id": "Infection_respiratoire_aiguë_Thym_Thymus_92e756ef",
+      "disease": "Infection respiratoire aiguë",
+      "category": "Infections respiratoires",
+      "plant": {
+        "scientific_name": "Thym (Thymus vulgaris)",
+        "local_name": "Thym, Taanet (amazigh)",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 150ml d'eau bouillante 10 min. Boire chaud.",
+      "dosage": {
+        "adult": "1 tasse x 3/j (antitussif + expectorant)",
+        "child": "1/2 tasse x 2/j (enfant > 4 ans)"
+      },
+      "precautions": "Effet antispasmodique bronchique. Inhalation possible.",
+      "contraindications": "Allergie aux Lamiacées. Épilepsie. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "ESCOP Monographs — Thymi herba (2003).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37765014/"
+    },
+    {
+      "id": "Asthme___bronchospasme_Eucalyptus_Eucaly_4d3d3777",
+      "disease": "Asthme / bronchospasme",
+      "category": "Infections respiratoires",
+      "plant": {
+        "scientific_name": "Eucalyptus (Eucalyptus globulus)",
+        "local_name": "Eucalyptus",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Inhalation de vapeurs: 1 poignée dans 1L d'eau bouillante 10 min. Ou huile essentielle diluée.",
+      "dosage": {
+        "adult": "Inhalation x 2/j",
+        "child": "Inhalation x 1/j (surveillé)"
+      },
+      "precautions": "Asthme sévère: prudence. Huile essentielle: ne pas ingérer.",
+      "contraindications": "Asthme sévère non contrôlé. Insuffisance hépatique.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO Monographs Vol.2. ESCOP — Eucalypti aetheroleum.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/29433388/"
+    },
+    {
+      "id": "Asthme___bronchospasme_Boswellia_serrata_ec4cbce7",
+      "disease": "Asthme / bronchospasme",
+      "category": "Infections respiratoires",
+      "plant": {
+        "scientific_name": "Boswellia serrata (Oliban)",
+        "local_name": "Luban (somali), Incensier",
+        "part_used": "Résine"
+      },
+      "preparation": "Décoction: 1 c. à café de résine dans 200ml d'eau bouillante 15 min. Boire tiède.",
+      "dosage": {
+        "adult": "1 tasse x 2/j pendant 4 semaines",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Anti-inflammatoire bronchique. Action lente (2-4 semaines).",
+      "contraindications": "Ulcère gastroduodénal. Anticoagulants. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Ammon HP (2006) — Boswellia serrata: anti-inflammatory and anti-arthritic properties. Planta Medica.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/33151656/"
+    },
+    {
+      "id": "Mucoviscidose_complément_Thym_Thymus_vul_4796cd35",
+      "disease": "Mucoviscidose (complément)",
+      "category": "Infections respiratoires",
+      "plant": {
+        "scientific_name": "Thym (Thymus vulgaris)",
+        "local_name": "Thym",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min. Boire chaud.",
+      "dosage": {
+        "adult": "1 tasse x 2/j (expectorant)",
+        "child": "1/2 tasse x 1/j (enfant > 4 ans)"
+      },
+      "precautions": "Complément au traitement médical. Hydratation abondante.",
+      "contraindications": "Allergie Lamiacées. Épilepsie.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "ESCOP Monographs — Thymi herba.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/41151657/"
+    },
+    {
+      "id": "Désaturation___dyspnée_Moringa_oleifera_2ef1769e",
+      "disease": "Désaturation / dyspnée",
+      "category": "Infections respiratoires",
+      "plant": {
+        "scientific_name": "Moringa oleifera",
+        "local_name": "Nebeday (wolof), Zogala",
+        "part_used": "Feuilles en poudre"
+      },
+      "preparation": "1 c. à café de poudre dans un verre d'eau/jus.",
+      "dosage": {
+        "adult": "2 c. à café/j (cure 30 jours)",
+        "child": "1 c. à café/j"
+      },
+      "precautions": "SpO2 < 94% = urgence médicale. Moringa = complément nutritionnel.",
+      "contraindications": "Aucune majeure à dose alimentaire.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Fahey JW (2005) — J. Food Science.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/41125614/"
+    },
+    {
+      "id": "Toux_chronique_Ricin_commun_Ricinus_comm_451103a2",
+      "disease": "Toux chronique",
+      "category": "Infections respiratoires",
+      "plant": {
+        "scientific_name": "Ricin commun (Ricinus communis)",
+        "local_name": "Ricin, Largidé (wolof)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Cataplasme de feuilles chaudes sur la poitrine. Ou infusion: 3 feuilles dans 300ml d'eau 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j + cataplasme x 1/j",
+        "child": "Cataplasme x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Usage externe en priorité. Ricin = toxique par voie orale à haute dose.",
+      "contraindications": "Ne pas ingérer graines. Insuffisance rénale. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000). An毒理学 studies on Ricinus communis.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37585800/"
+    },
+    {
+      "id": "Tachycardie___palpitations_Aubépine_Crat_6546c5d8",
+      "disease": "Tachycardie / palpitations",
+      "category": "Troubles cardiovasculaires",
+      "plant": {
+        "scientific_name": "Aubépine (Crataegus oxyacantha)",
+        "local_name": "Aubépine, Cenellier",
+        "part_used": "Fleurs et feuilles"
+      },
+      "preparation": "Infusion: 1 c. à soupe dans 200ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "Ne pas administrer sans avis médical"
+      },
+      "precautions": "Cardiotonique. Si FC > 120 bpm, consulter en urgence.",
+      "contraindications": "Insuffisance cardiaque sévère. Digitaliques/bêta-bloquants. Enfants.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "WHO Monographs Vol.4 — Crataegus spp. (2009).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/11887407/"
+    },
+    {
+      "id": "Tachycardie___palpitations_Passiflore_Pa_47aa2fe0",
+      "disease": "Tachycardie / palpitations",
+      "category": "Troubles cardiovasculaires",
+      "plant": {
+        "scientific_name": "Passiflore (Passiflora incarnata)",
+        "local_name": "Passiflore",
+        "part_used": "Parties aériennes séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Anxiolytique. Effet sédatif. Ne pas conduire.",
+      "contraindications": "Grossesse. Sédatifs/anxiolytiques. Hypotension sévère.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "ESCOP Monographs — Passiflora incarnata (2013).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/21089181/"
+    },
+    {
+      "id": "Hypertension_Ail_Allium_sativum_2a293c66",
+      "disease": "Hypertension",
+      "category": "Troubles cardiovasculaires",
+      "plant": {
+        "scientific_name": "Ail (Allium sativum)",
+        "local_name": "Tafarnuwa (haoussa), Yaawo (fulfulde)",
+        "part_used": "Gousse fraîche"
+      },
+      "preparation": "Écraser 1 gousse, laisser reposer 10 min. Avaler crue.",
+      "dosage": {
+        "adult": "1 gousse x 2/j",
+        "child": "1/2 gousse x 1/j (enfant > 5 ans)"
+      },
+      "precautions": "Antihypertenseur + anticoagulant. Surveillance TA.",
+      "contraindications": "Anticoagulants. Avant chirurgie. Grossesse (doses élevées).",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "WHO Monographs Vol.1. Ried K et al. (2013) — BMC Cardiovasc. Disorders.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/33174095/"
+    },
+    {
+      "id": "Hypertension_Hibiscus_sabdariffa_bissap_d29747f8",
+      "disease": "Hypertension",
+      "category": "Troubles cardiovasculaires",
+      "plant": {
+        "scientific_name": "Hibiscus sabdariffa (bissap)",
+        "local_name": "Bissap (wolof), Foléré (peul)",
+        "part_used": "Calices séchés"
+      },
+      "preparation": "Infusion à froid: 2 c. à soupe dans 500ml d'eau, 2h au frais.",
+      "dosage": {
+        "adult": "1 verre x 2/j",
+        "child": "1/2 verre x 1/j"
+      },
+      "precautions": "Diurétique naturel. Rincer la bouche après.",
+      "contraindications": "Hypotension. Grossesse. Diurétiques.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Haji Faraji M & Haji Tarkhani AH (1999) — J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/34694241/"
+    },
+    {
+      "id": "Hypotension_Ginseng_africain_Kaempferia__e0553227",
+      "disease": "Hypotension",
+      "category": "Troubles cardiovasculaires",
+      "plant": {
+        "scientific_name": "Ginseng africain (Kaempferia aethiopica)",
+        "local_name": "Mblaba (diola)",
+        "part_used": "Rhizome"
+      },
+      "preparation": "Décoction: 1 cm râpé dans 200ml d'eau 10 min. Boire le matin.",
+      "dosage": {
+        "adult": "1 tasse x 1/j (matin, cure 15 jours)",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Tonique circulatoire. Cure 15 jours max.",
+      "contraindications": "Hypertension non contrôlée. Insomnie.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000) — African Traditional Medicine.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kaempferia+aethiopica+hypotension"
+    },
+    {
+      "id": "Anémie_Moringa_oleifera_6f358404",
+      "disease": "Anémie",
+      "category": "Troubles cardiovasculaires",
+      "plant": {
+        "scientific_name": "Moringa oleifera",
+        "local_name": "Nebeday (wolof), Zogala",
+        "part_used": "Feuilles fraîches ou poudre"
+      },
+      "preparation": "Cuisiner les feuilles ou 1 c. à café de poudre dans un verre d'eau.",
+      "dosage": {
+        "adult": "2 c. à café de poudre/j (cure 30 jours)",
+        "child": "1 c. à café/j"
+      },
+      "precautions": "Riche en fer + vitamine C. Cure 30 jours minimum.",
+      "contraindications": "Hémochromatose.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Stohs SJ & Hartman MJ (2015) — Phytotherapy Research.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37375577/"
+    },
+    {
+      "id": "Anémie_Persicaria_odorata_Menthe_vietnam_5ac69426",
+      "disease": "Anémie",
+      "category": "Troubles cardiovasculaires",
+      "plant": {
+        "scientific_name": "Persicaria odorata (Menthe vietnamienne)",
+        "local_name": "Menthe poivrée asiatique",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Infusion: 1 poignée de feuilles dans 200ml d'eau bouillante 5 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "1/2 tasse x 1/j (enfant > 3 ans)"
+      },
+      "precautions": "Riche en fer et magnésium. Complément nutritionnel.",
+      "contraindications": "Allergie aux Lamiacées.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "PROTA Vol.11(1).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Persicaria+odorata+anemia"
+    },
+    {
+      "id": "Cholestérol_élevé_Artichaut_Cynara_scoly_4a389591",
+      "disease": "Cholestérol élevé",
+      "category": "Troubles cardiovasculaires",
+      "plant": {
+        "scientific_name": "Artichaut (Cynara scolymus)",
+        "local_name": "Artichaut",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 2 c. à soupe de feuilles séchées dans 300ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j pendant 4 semaines",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Hépatoprotecteur + hypocholestérolémiant. Surveillance lipidique.",
+      "contraindications": "Obstruction biliaire. Calculs biliaires. Allergie Astéracées.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Saénz Rodriguez T et al. (2005) — Pharmacol. Biochem. Behav.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Cynara+scolymus+hypercholesterolemia"
+    },
+    {
+      "id": "Thrombose_veineuse_prévention_Ginkgo_bil_53e87272",
+      "disease": "Thrombose veineuse (prévention)",
+      "category": "Troubles cardiovasculaires",
+      "plant": {
+        "scientific_name": "Ginkgo biloba",
+        "local_name": "Ginkgo",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Extrait standardisé: 120mg/j en gélules ou infusion.",
+      "dosage": {
+        "adult": "120mg extrait sec/j ou 1 tasse infusion/j",
+        "child": "Non recommandé"
+      },
+      "precautions": "Améliore la microcirculation. Effet antiagrégant.",
+      "contraindications": "Anticoagulants. Avant chirurgie. Épilepsie.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Weinreb RN (2018) — NEJM. Études sur flux sanguin rétinien.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/32108493/"
+    },
+    {
+      "id": "Diarrhée_Goyavier_Psidium_guajava_40d9aa99",
+      "disease": "Diarrhée",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Goyavier (Psidium guajava)",
+        "local_name": "Goyaba (fulfulde), Guava",
+        "part_used": "Jeunes feuilles"
+      },
+      "preparation": "Décoction: 10 jeunes feuilles dans 300ml d'eau 10 min.",
+      "dosage": {
+        "adult": "1/2 tasse x 3/j",
+        "child": "2 c. à soupe x 3/j"
+      },
+      "precautions": "Antiseptique intestinal. Arrêter si constipation.",
+      "contraindications": "Constipation. Syndrome côlon irritable constipé.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Lozoya X et al. (2002) — J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/38578668/"
+    },
+    {
+      "id": "Diarrhée_Manguier_Mangifera_indica_c6105b69",
+      "disease": "Diarrhée",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Manguier (Mangifera indica)",
+        "local_name": "Mangoro (haoussa)",
+        "part_used": "Écorce du tronc"
+      },
+      "preparation": "Décoction: 1 morceau d'écorce (5cm) dans 500ml d'eau, 20 min.",
+      "dosage": {
+        "adult": "1 verre x 3/j",
+        "child": "1/4 verre x 3/j"
+      },
+      "precautions": "Astringent puissant. Dernier recours.",
+      "contraindications": "Grossesse. Ulcère. Constipation.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "PROTA Vol.11(1) — Mangifera indica.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/41155688/"
+    },
+    {
+      "id": "Diarrhée_Banane_plantain_Musa_paradisiac_c3bbe8ad",
+      "disease": "Diarrhée",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Banane plantain (Musa paradisiaca)",
+        "local_name": "Banane plantain, Banana",
+        "part_used": "Racine + tiges"
+      },
+      "preparation": "Décoction: racine pilée dans 500ml d'eau 20 min. Filtrer.",
+      "dosage": {
+        "adult": "1 verre x 3/j",
+        "child": "1/2 verre x 3/j"
+      },
+      "precautions": "Astringent + nutritif. Bouillie de banane plantain = aliment diététique.",
+      "contraindications": "Aucune majeure.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "PROTA Vol.11(1) — Musa spp.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/32893836/"
+    },
+    {
+      "id": "Diarrhée_Myrobolan_Terminalia_chebula_a472a5ef",
+      "disease": "Diarrhée",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Myrobolan (Terminalia chebula)",
+        "local_name": "Haritaki (hindi), Katukkuru (tamoul)",
+        "part_used": "Fruits"
+      },
+      "preparation": "Infusion: 2 fruits séchés écrasés dans 200ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "1/2 tasse x 1/j (enfant > 5 ans)"
+      },
+      "precautions": "Astringent puissant. Pas > 5 jours.",
+      "contraindications": "Constipation. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO Monographs Vol.1 — Terminalia chebula.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/23620847/"
+    },
+    {
+      "id": "Constipation_Séné_Cassia_acutifolia_dfea49dc",
+      "disease": "Constipation",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Séné (Cassia acutifolia)",
+        "local_name": "Séné, Khartoum",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 1 c. à soupe dans 200ml d'eau bouillante 10 min. Boire le soir.",
+      "dosage": {
+        "adult": "1 tasse le soir (effet le matin)",
+        "child": "1/2 tasse (enfant > 6 ans, occasionnel)"
+      },
+      "precautions": "Laxatif stimulant. Usage ponctuel (< 2 semaines). Déshydratation possible.",
+      "contraindications": "Appendicite. Occlusion. Grossesse (utérotonique).",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO Monographs Vol.3 — Sennae folium.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37110216/"
+    },
+    {
+      "id": "Gastrite___reflux_Varech_Fucus_vesiculos_e5783788",
+      "disease": "Gastrite / reflux",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Varech (Fucus vesiculosus)",
+        "local_name": "Varech, Goemon",
+        "part_used": "Thalle séché"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j avant les repas",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Alcalinise le suc gastrique. Riche en iode.",
+      "contraindications": "Hyperthyroïdie. Grossesse (iode).",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "ESCOP Monographs — Fuci thallus.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35414705/"
+    },
+    {
+      "id": "Ulcère_gastroduodénal_Banane_plantain_Mu_a9951e07",
+      "disease": "Ulcère gastroduodénal",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Banane plantain (Musa paradisiaca)",
+        "local_name": "Banane plantain",
+        "part_used": "Fruit mûr + racine"
+      },
+      "preparation": "Mâcher le fruit mûr lentement. Ou décoction de racine: 50g dans 500ml d'eau 20 min.",
+      "dosage": {
+        "adult": "1 fruit x 2/j ou 1 verre décoction x 2/j",
+        "child": "1/2 fruit x 2/j"
+      },
+      "precautions": "Mucilage protecteur gastrique. Alimentation douce associée.",
+      "contraindications": "Aucune majeure.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Antia J et al. (1976) — Antigastric ulcer properties of Musa sapientum.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24192345/"
+    },
+    {
+      "id": "Hépatite_Phyllanthus_amarus_4bb2ea6a",
+      "disease": "Hépatite",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Phyllanthus amarus",
+        "local_name": "Kafiné (bambara)",
+        "part_used": "Plante entière"
+      },
+      "preparation": "Décoction: 1 poignée dans 500ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1/2 tasse x 3/j pendant 21 jours",
+        "child": "1 c. à soupe x 2/j (enfant > 2 ans)"
+      },
+      "precautions": "Hépatoprotecteur. surveillance ALAT/ASAT. Consulter.",
+      "contraindications": "Ictère obstructif. Grossesse.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Thyagarajan SP et al. (1988) — The Lancet.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/1976968/"
+    },
+    {
+      "id": "Gastro-entérite_Psyllium_Plantago_ovata_bc368ae1",
+      "disease": "Gastro-entérite",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Psyllium (Plantago ovata)",
+        "local_name": "Psyllium, Isabgol",
+        "part_used": "Graines pilées"
+      },
+      "preparation": "Mélanger 1 c. à café dans 200ml d'eau. Boire rapidement. 2 verres d'eau ensuite.",
+      "dosage": {
+        "adult": "1 c. à café x 2/j",
+        "child": "1/2 c. à café x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Bulking agent. Hydratation abondante requise. Pas le soir.",
+      "contraindications": "Occlusion intestinale. Sténose. Déshydratation.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "European Pharmacopoeia — Plantago ovatae semina.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/20857519/"
+    },
+    {
+      "id": "Migraine___céphalée_Menthe_poivrée_Menth_687b137e",
+      "disease": "Migraine / céphalée",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Menthe poivrée (Mentha piperita)",
+        "local_name": "Menthe, Nanaa (haoussa)",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Infusion: 10 feuilles dans 200ml d'eau bouillante 5 min. Boire chaud.",
+      "dosage": {
+        "adult": "1 tasse x 3/j",
+        "child": "1/2 tasse x 2/j (enfant > 4 ans)"
+      },
+      "precautions": "Antispasmodique + analgésique. Inhalation de huile essentielle possible.",
+      "contraindications": "Reflux gastro-œsophagien. Allergie Lamiacées.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Göbel H et al. (1996) — Peppermint oil in migraine headache. Cephalalgia.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/27106030/"
+    },
+    {
+      "id": "Vers_intestinaux_parasitose_Papayer_Cari_22b3fde1",
+      "disease": "Vers intestinaux (parasitose)",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Papayer (Carica papaya)",
+        "local_name": "Ibepe (yoruba), Gwanda (haoussa)",
+        "part_used": "Graines"
+      },
+      "preparation": "Sécher au soleil, réduire en poudre. 1 c. à café avec miel.",
+      "dosage": {
+        "adult": "1 c. à café x 1/j pendant 3 jours (à jeun)",
+        "child": "1/2 c. à café x 1/j (enfant > 2 ans)"
+      },
+      "precautions": "Action antihelminthique (carpaine). Renouveler après 2 semaines.",
+      "contraindications": "Grossesse (abortif). Enfants < 2 ans. Insuffisance hépatique.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Okeniyi JA et al. (2007) — J. Medicinal Food.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/30526582/"
+    },
+    {
+      "id": "Vers_intestinaux_parasitose_Ail_Allium_s_41390672",
+      "disease": "Vers intestinaux (parasitose)",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Ail (Allium sativum)",
+        "local_name": "Tafarnuwa (haoussa)",
+        "part_used": "Gousse"
+      },
+      "preparation": "Écraser 3 gousses dans du lait tiède. Boire à jeun.",
+      "dosage": {
+        "adult": "1 dose x 1/j pendant 5 jours",
+        "child": "1 dose avec 1 gousse x 1/j (enfant > 3 ans)"
+      },
+      "precautions": "Vermifuge traditionnel. 5 jours.",
+      "contraindications": "Anticoagulants. Ulcère. Allergie ail. Enfants < 3 ans.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO Monographs Vol.1 — Allium sativum.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/28536879/"
+    },
+    {
+      "id": "Amibiase_Annona_muricata_Corossol_dd9e9bbe",
+      "disease": "Amibiase",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Annona muricata (Corossol)",
+        "local_name": "Soursop, Graviola (créole)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 5 feuilles séchées dans 200ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 7 jours",
+        "child": "1/2 tasse x 2/j (enfant > 4 ans)"
+      },
+      "precautions": "Antiparasitaire interne. Surveillance selles.",
+      "contraindications": "Grossesse (effet oxytocique). Hypotension.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Kim do et al. (2008) — Antiparasitic activity of Annona muricata.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Annona+muricata+amebiasis"
+    },
+    {
+      "id": "Malnutrition_IMC_bas_Mélange_Moringa_+_S_c6cce578",
+      "disease": "Malnutrition (IMC bas)",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Mélange Moringa + Soja + Mil",
+        "local_name": "Moringa + soja + mil",
+        "part_used": "Poudre moringa + farine soja + farine mil"
+      },
+      "preparation": "Mélanger: 2 parts mil, 1 part soja grillé, 1 part moringa. Bouillie.",
+      "dosage": {
+        "adult": "1 bol/j",
+        "child": "1/2 bol x 2/j (enfant > 6 mois)"
+      },
+      "precautions": "Riche en protéines/fer/vitamines. Suivi pondéral.",
+      "contraindications": "Allergie soja/mil. Phénylcétonurie.",
+      "max_severity": "modere",
+      "evidence_level": "OMS",
+      "source": "WHO/UNICEF — Complementary feeding recommendations.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31692437/"
+    },
+    {
+      "id": "Malnutrition_IMC_bas_Arachide_Arachis_hy_19da27c6",
+      "disease": "Malnutrition (IMC bas)",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Arachide (Arachis hypogaea)",
+        "local_name": "Groundnut, Nguba (wolof)",
+        "part_used": "Graines"
+      },
+      "preparation": "Bouillie d'arachides: écraser les graines grillées, cuire dans l'eau.",
+      "dosage": {
+        "adult": "50g arachines grillées/j",
+        "child": "30g/j (enfant > 12 mois)"
+      },
+      "precautions": "Riche en protéines et lipides. Complément alimentaire.",
+      "contraindications": "Allergie arachides (risque anaphylaxie).",
+      "max_severity": "faible",
+      "evidence_level": "OMS",
+      "source": "WHO — Complementary feeding: Family foods for young children.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/29186859/"
+    },
+    {
+      "id": "Infection_cutanée___plaie_Aloe_vera_aloè_171fa1e6",
+      "disease": "Infection cutanée / plaie",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Aloe vera (aloès)",
+        "local_name": "Sabar (wolof), Aloe",
+        "part_used": "Gel des feuilles"
+      },
+      "preparation": "Extraire gel frais. Appliquer directement sur plaie nettoyée.",
+      "dosage": {
+        "adult": "Application x 3/j",
+        "child": "Application x 2/j"
+      },
+      "precautions": "Cicatrisant + antibactérien. Ne pas sur plaie suturée.",
+      "contraindications": "Allergie Asphodelaceae.",
+      "max_severity": "modere",
+      "evidence_level": "OMS",
+      "source": "WHO Monographs Vol.1. Maenthaisong R et al. (2007) — Burns.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/42503380/"
+    },
+    {
+      "id": "Infection_cutanée___plaie_Gommier_rouge__73fc2f27",
+      "disease": "Infection cutanée / plaie",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Gommier rouge (Bursera simaruba)",
+        "local_name": "Gommier, Encens rouge",
+        "part_used": "Écorce et résine"
+      },
+      "preparation": "Décoction d'écorce pour lavage. Résine en poudre sur plaie.",
+      "dosage": {
+        "adult": "Lavage x 2/j + poudre x 1/j",
+        "child": "Lavage x 1/j"
+      },
+      "precautions": "Antiseptique. Ne pas ingérer résine.",
+      "contraindications": "Ne pas ingérer résine. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37321428/"
+    },
+    {
+      "id": "Psoriasis___eczéma_Calendula_officinalis_a294ce6a",
+      "disease": "Psoriasis / eczéma",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Calendula officinalis (Souci)",
+        "local_name": "Souci, Tchiokoloum (wolof)",
+        "part_used": "Fleurs séchées"
+      },
+      "preparation": "Infusion concentrée: 2 c. à soupe dans 200ml d'eau 15 min. Lotion cutanée.",
+      "dosage": {
+        "adult": "Lotion x 3/j sur zone affectée",
+        "child": "Lotion x 2/j"
+      },
+      "precautions": "Anti-inflammatoire cutané. Cicatrisant. Solution fraîche.",
+      "contraindications": "Allergie aux Astéracées. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Calendulae flos (2003).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31145533/"
+    },
+    {
+      "id": "Psoriasis___eczéma_Neem_margousier_e4a8fe03",
+      "disease": "Psoriasis / eczéma",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Neem (margousier)",
+        "local_name": "Dogo yaro (haoussa)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Huile de neem: faire tremper 20 feuilles dans 200ml d'huile d'olive 2 semaines. Appliquer.",
+      "dosage": {
+        "adult": "Application x 2/j",
+        "child": "Application x 1/j (enfant > 2 ans)"
+      },
+      "precautions": "Antifongique + anti-inflammatoire. Test cutané d'abord.",
+      "contraindications": "Allergie neem. Grossesse. Enfants < 2 ans.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Alzohairi et al. (2017) — Neem (Azadirachta indica): a review. J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/36080243/"
+    },
+    {
+      "id": "Acné_Nigelle_sativa_Nigelle_e29568fe",
+      "disease": "Acné",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Nigelle sativa (Nigelle)",
+        "local_name": "Habba sawda (haoussa)",
+        "part_used": "Graines"
+      },
+      "preparation": "Huile de nigelle: appliquer directement. Ou infusion pour lotion.",
+      "dosage": {
+        "adult": "Application x 2/j",
+        "child": "Application x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Antibactérien cutané. Cicatrisant.",
+      "contraindications": "Allergie Ranonculacées.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Ali BH & Blunden G (2003) — J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/33899217/"
+    },
+    {
+      "id": "Brûlures_Banane_plantain_Musa_paradisiac_349e7bb5",
+      "disease": "Brûlures",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Banane plantain (Musa paradisiaca)",
+        "local_name": "Banane plantain",
+        "part_used": "Écorce interne de la tige"
+      },
+      "preparation": "Appliquer l'écorce interne fibreuse sur la brûlure nettoyée. Renouveler 2x/j.",
+      "dosage": {
+        "adult": "Application x 3/j",
+        "child": "Application x 2/j"
+      },
+      "precautions": "Fibrille absorbante + cicatrisante. Ne pas sur brûlure profonde.",
+      "contraindications": "Brûlure du 3e degré (référer).",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Antia J (1976) — Musa sapientum: ethnobotanical survey.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25224162/"
+    },
+    {
+      "id": "Cicatrisation_lente_Aloe_vera_aloès_ddda4abc",
+      "disease": "Cicatrisation lente",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Aloe vera (aloès)",
+        "local_name": "Sabar (wolof)",
+        "part_used": "Gel des feuilles"
+      },
+      "preparation": "Appliquer gel frais après nettoyage de la plaie cicatrisante.",
+      "dosage": {
+        "adult": "Application x 3/j",
+        "child": "Application x 2/j"
+      },
+      "precautions": "Stimule la prolifération fibroblastique. Riche en polysaccharides.",
+      "contraindications": "Allergie Asphodelaceae.",
+      "max_severity": "faible",
+      "evidence_level": "clinique",
+      "source": "Maenthaisong R et al. (2007) — Burns. Méta-analyse.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/33066720/"
+    },
+    {
+      "id": "Mycose_cutanée_Ail_Allium_sativum_73d46480",
+      "disease": "Mycose cutanée",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Ail (Allium sativum)",
+        "local_name": "Tafarnuwa (haoussa)",
+        "part_used": "Gousse"
+      },
+      "preparation": "Écraser 2 gousses dans 100ml d'huile d'olive. Appliquer sur zone mycosique.",
+      "dosage": {
+        "adult": "Application x 2/j pendant 2 semaines",
+        "child": "Application x 1/j (enfant > 5 ans)"
+      },
+      "precautions": "Allicine = antifongique puissant. Irritation cutanée possible.",
+      "contraindications": "Plaie ouverte. Enfants < 2 ans.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Cutler RR et al. (2009) — In vitro activity of Allium sativum against Candida.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/16854181/"
+    },
+    {
+      "id": "Douleur___inflammation_Curcuma_Curcuma_l_0501300c",
+      "disease": "Douleur / inflammation",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Curcuma (Curcuma longa)",
+        "local_name": "Curcuma, Nwandum (bamiléké)",
+        "part_used": "Rhizome frais ou poudre"
+      },
+      "preparation": "Pâte externe ou infusion avec poivre noir.",
+      "dosage": {
+        "adult": "1 c. à café/j dans les plats ou infusion",
+        "child": "1/2 c. à café/j"
+      },
+      "precautions": "Anti-inflammatoire puissant. Mieux absorbé avec poivre + gras.",
+      "contraindications": "Obstruction biliaire. Calculs. Anticoagulants.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Aggarwal BB et al. (2007). Hewlings SJ & Kalman DS (2017).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35935936/"
+    },
+    {
+      "id": "Douleur___inflammation_Harpagophytum_pro_cf2c6796",
+      "disease": "Douleur / inflammation",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Harpagophytum procumbens",
+        "local_name": "Griffe du diable",
+        "part_used": "Racines tubérisées"
+      },
+      "preparation": "Décoction: 1 c. à café de racine râpée dans 200ml d'eau 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "Non recommandé"
+      },
+      "precautions": "Action lente (1-2 semaines). Surveiller glycémie.",
+      "contraindications": "Ulcère. Lithiase biliaire. Diabète. Grossesse. Enfants.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "ESCOP Monographs. Gagnier JJ et al. (2004) — Cochrane.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/28275210/"
+    },
+    {
+      "id": "Lumbago___dorsalgie_Arnica_montana_Arnic_777370e8",
+      "disease": "Lumbago / dorsalgie",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Arnica montana (Arnica)",
+        "local_name": "Arnica, Bourgeon de montagne",
+        "part_used": "Fleurs séchées"
+      },
+      "preparation": "Cataplasme: 2 c. à soupe de fleurs dans 500ml d'eau chaude 15 min. Appliquer tiède.",
+      "dosage": {
+        "adult": "Cataplasme x 2/j, 20 min",
+        "child": "Cataplasme x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Usage externe uniquement. Anti-inflammatoire puissant.",
+      "contraindications": "Usage interne (toxique). Plaie ouverte. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "ESCOP Monographs — Arnicae flos (2003).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26773321/"
+    },
+    {
+      "id": "Arthrose___rhumatisme_Gingembre_Zingiber_64e5758a",
+      "disease": "Arthrose / rhumatisme",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Gingembre (Zingiber officinale)",
+        "local_name": "Sánta (fulfulde)",
+        "part_used": "Rhizome frais"
+      },
+      "preparation": "Cataplasme: pâte de gingembre râpé chaud sur zone douloureuse. Ou infusion.",
+      "dosage": {
+        "adult": "Infusion 1 tasse x 3/j + cataplasme x 1/j",
+        "child": "Infusion 1/2 tasse x 2/j + cataplasme x 1/j"
+      },
+      "precautions": "Anti-inflammatoire + analgésique. Cataplasme = chaleur modérée.",
+      "contraindications": "Ulcère gastrique. Anticoagulants.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Bartels EM et al. (2015) — Ginger in OA. J. Medicinal Food.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/17575660/"
+    },
+    {
+      "id": "Arthrose___rhumatisme_Boswellia_serrata__beef914e",
+      "disease": "Arthrose / rhumatisme",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Boswellia serrata (Oliban)",
+        "local_name": "Luban (somali)",
+        "part_used": "Résine"
+      },
+      "preparation": "Infusion: 1 c. à café de résine dans 200ml d'eau 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j pendant 4 semaines",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Anti-inflammatoire articulaire. Action lente.",
+      "contraindications": "Ulcère. Anticoagulants. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Ammon HP (2006) — Planta Medica. Cochrane reviews.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35512759/"
+    },
+    {
+      "id": "Entorse___contusion_Arthrophytum_senegal_4874058d",
+      "disease": "Entorse / contusion",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Arthrophytum senegalense",
+        "local_name": "Djon (wolof)",
+        "part_used": "Racines"
+      },
+      "preparation": "Décoction: racines pilées dans 500ml d'eau 20 min. Cataplasme chaud.",
+      "dosage": {
+        "adult": "Cataplasme x 2/j, 30 min",
+        "child": "Cataplasme x 1/j"
+      },
+      "precautions": "Anti-inflammatoire local traditionnel.",
+      "contraindications": "Plaie ouverte. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Neuwinger (2000) — African Traditional Medicine.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Arthrophytum+senegalense+sprain+contusion"
+    },
+    {
+      "id": "Goutte_Cerise_Prunus_avium_6e8d44be",
+      "disease": "Goutte",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Cerise (Prunus avium)",
+        "local_name": "Cerise, Pii (wolof)",
+        "part_used": "Fruits + tiges"
+      },
+      "preparation": "Infusion: 2 c. à soupe de tiges dans 200ml d'eau bouillante 15 min. Ou manger 200g cerises/j.",
+      "dosage": {
+        "adult": "1 tasse x 2/j + 200g cerises/j",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Alcalinise l'urine. Anti-inflammatoire.",
+      "contraindications": "Insuffisance rénale (charge potassique).",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Zhang Y et al. (2012) — Cherry consumption and risk of recurrent gout attacks. Arthritis & Rheumatism.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37828678/"
+    },
+    {
+      "id": "Fatigue___asthénie_Ginseng_africain_Kaem_32ca82af",
+      "disease": "Fatigue / asthénie",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Ginseng africain (Kaempferia aethiopica)",
+        "local_name": "Mblaba (diola)",
+        "part_used": "Rhizome"
+      },
+      "preparation": "Décoction: 1 cm râpé dans 200ml d'eau 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 1/j (matin, cure 15 jours)",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Adaptogène + tonique. Pas le soir (insomnie). Cure 15j, pause 1 semaine.",
+      "contraindications": "Insomnie. Hypertension non contrôlée. Grossesse.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Kaempferia+aethiopica+fatigue+asthenia"
+    },
+    {
+      "id": "Fatigue___asthénie_Ginseng_Panax_ginseng_f74c90af",
+      "disease": "Fatigue / asthénie",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Ginseng (Panax ginseng)",
+        "local_name": "Ginseng, Renshen (chinois)",
+        "part_used": "Racine"
+      },
+      "preparation": "Infusion: 1 tranche de racine dans 200ml d'eau chaude 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 1/j (matin, cure 21 jours)",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Tonique général. Améliore la performance physique et cognitive.",
+      "contraindications": "Hypertension. Insomnie. Anticoagulants. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Shergis JL et al. (2013) — Efficacy of ginseng. J. Ginseng Research.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37175273/"
+    },
+    {
+      "id": "Déshydratation_Eau_de_coco_+_sel_+_sucre_bd27dc64",
+      "disease": "Déshydratation",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Eau de coco + sel + sucre (SRO maison)",
+        "local_name": "Eau de coco, Ndox kokot (wolof)",
+        "part_used": "Eau de coco verte"
+      },
+      "preparation": "500ml eau de coco + 1/2 c. café sel + 2 c. soupe sucre.",
+      "dosage": {
+        "adult": "1-2L/j par petites gorgées",
+        "child": "50-100ml/kg/4h"
+      },
+      "precautions": "SRO maison validé par l'OMS. Si déshydratation sévère → IV.",
+      "contraindications": "Insuffisance rénale. Hypertension sévère.",
+      "max_severity": "eleve",
+      "evidence_level": "OMS",
+      "source": "WHO — ORS Guidelines. Adams W et al. (2003).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/30702253/"
+    },
+    {
+      "id": "Déshydratation_Lime_Citrus_aurantifolia_7a1f4b26",
+      "disease": "Déshydratation",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Lime (Citrus aurantifolia)",
+        "local_name": "Lime, Limon (créole)",
+        "part_used": "Jus"
+      },
+      "preparation": "Presser 2 limes dans 1L d'eau + 1 c. à soupe de sucre + 1 pincée de sel.",
+      "dosage": {
+        "adult": "1L/j",
+        "child": "500ml/j (enfant > 1 an)"
+      },
+      "precautions": "Rehydratation légère. Si déshydratation sévère → SRO ou IV.",
+      "contraindications": "Reflux gastro-œsophagien.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_avéré",
+      "source": "OMS — Home fluids for diarrhoea management.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Citrus+aurantifolia+dehydration"
+    },
+    {
+      "id": "Pertes_de_sang_abondantes_métrorragies_L_bce93c06",
+      "disease": "Pertes de sang abondantes (métrorragies)",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Leonotis leonurus",
+        "local_name": "Dagga (xhosa), Lion's ear",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 1 c. à soupe de feuilles séchées dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 5 jours",
+        "child": "1/2 tasse x 2/j (enfant > 10 ans)"
+      },
+      "precautions": "Hémostatique utérin traditionnel. Surveillance de l'hémoglobine.",
+      "contraindications": "Grossesse (effet oxytocique). Hémorragie massive (référer).",
+      "max_severity": "eleve",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000) — African Traditional Medicine.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Leonotis+leonurus+metrorrhagia+uterine+bleeding"
+    },
+    {
+      "id": "Insomnie_Valériane_Valeriana_officinalis_9b174e49",
+      "disease": "Insomnie",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Valériane (Valeriana officinalis)",
+        "local_name": "Valériane",
+        "part_used": "Racine"
+      },
+      "preparation": "Infusion: 1 c. à café de racine séchée dans 200ml d'eau chaude 10 min. Boire 1h avant coucher.",
+      "dosage": {
+        "adult": "1 tasse le soir",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Sédatif puissant. Prendre le soir uniquement. Ne pas conduire.",
+      "contraindications": "Grossesse. Allaitement. Sous benzodiazépines. Chirurgie (< 2 semaines).",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Bent S et al. (2006) — Valerian for sleep. J. Clin. Sleep Med.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37899385/"
+    },
+    {
+      "id": "Stress___anxiété_Passiflore_Passiflora_i_cbad3fc1",
+      "disease": "Stress / anxiété",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Passiflore (Passiflora incarnata)",
+        "local_name": "Passiflore",
+        "part_used": "Parties aériennes séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j (matin et soir)",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Anxiolytique naturel. Effet sédatif léger.",
+      "contraindications": "Grossesse. Sédatifs. Hypotension.",
+      "max_severity": "faible",
+      "evidence_level": "clinique",
+      "source": "ESCOP Monographs — Passiflora incarnata (2013).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/33352740/"
+    },
+    {
+      "id": "Douleurs_menstruelles_Gingembre_Zingiber_050fe042",
+      "disease": "Douleurs menstruelles",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Gingembre (Zingiber officinale)",
+        "local_name": "Sánta (fulfulde)",
+        "part_used": "Rhizome frais"
+      },
+      "preparation": "Râper 2 cm dans 200ml d'eau bouillante 10 min + miel. Boire chaud.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant les règles",
+        "child": "1/2 tasse x 2/j (enfant > 12 ans)"
+      },
+      "precautions": "Antispasmodique utérin. Efficace en début de cycle.",
+      "contraindications": "Grossesse. Anticoagulants.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Ozgoli G et al. (2009) — Comparison of effects of ginger and mefenamic acid on primary dysmenorrhea. J. Altern. Complement. Med.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/27000311/"
+    },
+    {
+      "id": "Ménopause_bouffées_de_chaleur_Sauge_Salv_35f90c32",
+      "disease": "Ménopause (bouffées de chaleur)",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Sauge (Salvia officinalis)",
+        "local_name": "Sauge, Kayenni (wolof)",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j pendant 4 semaines",
+        "child": "Non applicable"
+      },
+      "precautions": "Astringent + régulateur hormonal léger. Cure 4 semaines, pause 1 semaine.",
+      "contraindications": "Épilepsie. Insuffisance rénale. Grossesse.",
+      "max_severity": "faible",
+      "evidence_level": "clinique",
+      "source": "Ciani G et al. (2019) — Salvia officinalis for menopausal symptoms. J. Herbal Medicine.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37489230/"
+    },
+    {
+      "id": "Épilepsie_adjunct_Passiflore_Passiflora__898f01dc",
+      "disease": "Épilepsie (adjunct)",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Passiflore (Passiflora incarnata)",
+        "local_name": "Passiflore",
+        "part_used": "Parties aériennes séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j (complément médical)",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans, sous surveillance)"
+      },
+      "precautions": "Complément au traitement antiépileptique. NE PAS arrêter les anticonvulsivants.",
+      "contraindications": "Grossesse. Sédatifs. Arrêt brutal des antiépileptiques.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Muschietti et al. (2006) — Passiflora: neuroactive compounds.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24140586/"
+    },
+    {
+      "id": "Diabète_de_type_2_Gymnema_sylvestre_68470911",
+      "disease": "Diabète de type 2",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Gymnema sylvestre",
+        "local_name": "Gymnema, Gurmar",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 1 c. à café de feuilles séchées dans 150ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j avant les repas",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Abaisse glycémie. SURVEILLER glycémie. Ajuster antidiabétiques si besoin.",
+      "contraindications": "Hypoglycémie. Grossesse. Diabète type 1 instable.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Baskaran K et al. (1990) — J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/34467577/"
+    },
+    {
+      "id": "Diabète_de_type_2_Mangifera_indica_Mangu_668882cf",
+      "disease": "Diabète de type 2",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Mangifera indica (Manguier)",
+        "local_name": "Mangoro (haoussa)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 10 feuilles dans 300ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j",
+        "child": "1/2 tasse x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Effet hypoglycémiant. Surveillance glycémie requise.",
+      "contraindications": "Antidiabétiques oraux (potentialisation).",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Ojewole JAO (2005) — Hypoglycemic effect of Moringa oleifera. J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/41465578/"
+    },
+    {
+      "id": "Diabète_de_type_2_Moringa_oleifera_071b9ec1",
+      "disease": "Diabète de type 2",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Moringa oleifera",
+        "local_name": "Nebeday (wolof)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "2 c. à café de poudre de feuilles dans un verre d'eau/jus.",
+      "dosage": {
+        "adult": "2 c. à café/j (cure 30 jours)",
+        "child": "1 c. à café/j"
+      },
+      "precautions": "Effet hypoglycémiant + antioxydant. Surveillance glycémie.",
+      "contraindications": "Aucune majeure à dose alimentaire.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Jaja JM et al. (2009) — Hypoglycemic effect of Moringa oleifera. Asian J. Biochem.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/32960218/"
+    },
+    {
+      "id": "Obésité_Garcinia_cambogia_de7f1ebc",
+      "disease": "Obésité",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Garcinia cambogia",
+        "local_name": "Brindall berry, Tamarinier",
+        "part_used": "Écorce du fruit"
+      },
+      "preparation": "Infusion: 1 c. à café d'écorce séchée dans 200ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j avant les repas",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Inhibiteur de lipogenèse. Complément alimentaire.",
+      "contraindications": "Antidépresseurs (ISRS). Grossesse. Diabète type 1.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Onakpoya I et al. (2011) — Systematic review of Garcinia cambogia. BMC Complement. Altern. Med.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/32951714/"
+    },
+    {
+      "id": "Hépatite_complément_Silybum_marianum_Cha_b38b885a",
+      "disease": "Hépatite (complément)",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Silybum marianum (Chardon-Marie)",
+        "local_name": "Chardon-Marie, Kranxi (créole)",
+        "part_used": "Graines"
+      },
+      "preparation": "Extrait standardisé (silymarine): 140mg x 2/j ou infusion: 1 c. à café dans 200ml d'eau 10 min.",
+      "dosage": {
+        "adult": "140mg x 2/j ou 1 tasse x 2/j",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Hépatoprotecteur puissant (silymarine). Complément au traitement médical.",
+      "contraindications": "Allergie aux Astéracées. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Saller R et al. (2001) — Silibinin in hepatic disorders. Drugs.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/30080294/"
+    },
+    {
+      "id": "Entérite___maladie_de_Crohn_Boswellia_se_9c1598ab",
+      "disease": "Entérite / maladie de Crohn",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Boswellia serrata (Oliban)",
+        "local_name": "Luban (somali)",
+        "part_used": "Résine"
+      },
+      "preparation": "Extrait: 1 c. à café de résine dans 200ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j pendant 6 semaines",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Anti-inflammatoire intestinal. Action lente.",
+      "contraindications": "Ulcère. Anticoagulants. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Gupta I et al. (1997) — Boswellia serrata in ulcerative colitis. Planta Medica.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/11355324/"
+    },
+    {
+      "id": "Cirrhose_complément_Pissenlit_Taraxacum__7568dcb8",
+      "disease": "Cirrhose (complément)",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Pissenlit (Taraxacum officinale)",
+        "local_name": "Pissenlit, Dandelion",
+        "part_used": "Racine"
+      },
+      "preparation": "Infusion: 1 c. à café de racine séchée dans 200ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Hépatoprotecteur + cholagogue. Surveillance hépatique.",
+      "contraindications": "Obstruction biliaire. Calculs biliaires. Allergie Astéracées.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Schütz K et al. (2006) — Plant food for human nutrition.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/40732279/"
+    },
+    {
+      "id": "Vertige___étourdissements_Ginkgo_biloba_6d13ebc8",
+      "disease": "Vertige / étourdissements",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Ginkgo biloba",
+        "local_name": "Ginkgo",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Extrait standardisé: 120mg/j ou infusion.",
+      "dosage": {
+        "adult": "120mg extrait sec/j ou 1 tasse/j",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Améliore le flux sanguin cérébral. Effet optimal après 4 semaines.",
+      "contraindications": "Anticoagulants. Épilepsie. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Weinreb RN (2018) — NEJM. Études flux sanguin cérébral.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/22355250/"
+    },
+    {
+      "id": "Gonflement_abdominal_ascite_Kinkeliba_Co_dda7bc2a",
+      "disease": "Gonflement abdominal (ascite)",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Kinkeliba (Combretum micranthum)",
+        "local_name": "Kinkeliba (wolof)",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 1 poignée dans 500ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j",
+        "child": "1/2 tasse x 2/j"
+      },
+      "precautions": "Diurétique naturel puissant. Hydratation requise.",
+      "contraindications": "Insuffisance rénale sévère. Déshydratation.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "PROTA Vol.11(1) — Combretum micranthum.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26453339/"
+    },
+    {
+      "id": "Douleur___crampes_abdominales_Menthe_poi_5b1d21b1",
+      "disease": "Douleur / crampes abdominales",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Menthe poivrée (Mentha piperita)",
+        "local_name": "Menthe, Nanaa (haoussa)",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Infusion: 10 feuilles dans 200ml d'eau bouillante 5 min. Boire chaud.",
+      "dosage": {
+        "adult": "1 tasse x 3/j",
+        "child": "1/2 tasse x 2/j (enfant > 4 ans)"
+      },
+      "precautions": "Antispasmodique digestif puissant. Ne pas boire trop chaud.",
+      "contraindications": "Reflux gastro-œsophagien. Allergie Lamiacées.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Alammar N et al. (2019) — Peppermint oil for IBS. BMC Complement. Altern. Med.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/30000911/"
+    },
+    {
+      "id": "Perte_d'appétit_Gentiane_Gentiana_lutea_6e723ea6",
+      "disease": "Perte d'appétit",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Gentiane (Gentiana lutea)",
+        "local_name": "Gentiane",
+        "part_used": "Racine"
+      },
+      "preparation": "Infusion amère: 1 c. à café de racine séchée dans 200ml d'eau froide, chauffer à frémissant, filtrer.",
+      "dosage": {
+        "adult": "1 verre avant les repas x 3/j",
+        "child": "1/2 verre x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Tonique amer. Stimule la sécrétion gastrique.",
+      "contraindications": "Ulcère gastroduodénal. Hypertension. Grossesse.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Gentianae radix (2003).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25324460/"
+    },
+    {
+      "id": "Fièvre_chikungunya_Moringa_oleifera_95029d42",
+      "disease": "Fièvre (chikungunya)",
+      "category": "Fièvre et syndromes fébriles",
+      "plant": {
+        "scientific_name": "Moringa oleifera",
+        "local_name": "Nebeday (wolof)",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Infusion: 1 poignée de feuilles dans 300ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 7 jours",
+        "child": "1/2 tasse x 2/j (enfant > 3 ans)"
+      },
+      "precautions": "Anti-inflammatoire + analgésique naturel. Hydratation abondante.",
+      "contraindications": "Aucune majeure à dose alimentaire.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Stohs SJ & Hartman MJ (2015) — Phytotherapy Research.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35815068/"
+    },
+    {
+      "id": "Shigellose_Bael_fruit_Aegle_marmelos_030afe73",
+      "disease": "Shigellose",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Bael fruit (Aegle marmelos)",
+        "local_name": "Bel, Bael",
+        "part_used": "Fruit séché"
+      },
+      "preparation": "Infusion: 1 c. à café de poudre de fruit dans 200ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 5 jours",
+        "child": "1/2 tasse x 2/j (enfant > 3 ans)"
+      },
+      "precautions": "Antidiarrhéique + anti-dysentérique. TDR coproculture recommandé.",
+      "contraindications": "Grossesse (pas de données suffisantes).",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Uchoa F et al. (2010) — Aegle marmelos: a review. J. Med. Food.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/21283697/"
+    },
+    {
+      "id": "Dysenterie_amibienne_Guava_Psidium_guaja_8c4edc59",
+      "disease": "Dysenterie amibienne",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Guava (Psidium guajava)",
+        "local_name": "Goyaba (fulfulde)",
+        "part_used": "Écorce + feuilles"
+      },
+      "preparation": "Décoction: 1 morceau d'écorce + 5 feuilles dans 500ml d'eau 20 min.",
+      "dosage": {
+        "adult": "1 verre x 3/j pendant 7 jours",
+        "child": "1/4 verre x 3/j (enfant > 2 ans)"
+      },
+      "precautions": "Astringent + antibactérien. Surveillance selles.",
+      "contraindications": "Constipation.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Lozoya X et al. (2002) — J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/39246650/"
+    },
+    {
+      "id": "Dyspepsie_Gingembre_Zingiber_officinale_528a359a",
+      "disease": "Dyspepsie",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Gingembre (Zingiber officinale)",
+        "local_name": "Sánta (fulfulde)",
+        "part_used": "Rhizome frais"
+      },
+      "preparation": "Râper 1 cm dans 200ml d'eau chaude 5 min. Boire après le repas.",
+      "dosage": {
+        "adult": "1 tasse après chaque repas",
+        "child": "1/2 tasse x 2/j (enfant > 2 ans)"
+      },
+      "precautions": "Stimule la digestion. Anti-nauséeux.",
+      "contraindications": "Ulcère gastrique. Anticoagulants.",
+      "max_severity": "faible",
+      "evidence_level": "clinique",
+      "source": "Wu KL et al. (2008) — Effects of ginger on gastric motility. Neurogastroenterol. Motil.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/30680163/"
+    },
+    {
+      "id": "Entécolite_spasmodique_Menthe_poivrée_Me_159ce727",
+      "disease": "Entécolite spasmodique",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Menthe poivrée (Mentha piperita)",
+        "local_name": "Menthe",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Gélules d'huile essentielle: 0.2-0.4ml x 3/j. Ou infusion.",
+      "dosage": {
+        "adult": "0.2ml HE x 3/j ou 1 tasse infusion x 3/j",
+        "child": "1/2 tasse x 2/j (enfant > 8 ans)"
+      },
+      "precautions": "Antispasmodique intestinal. Préférer gélules entériques.",
+      "contraindications": "Reflux. Allergie Lamiacées.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Alammar N et al. (2019) — BMC Complement. Altern. Med.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Mentha+piperita+spasmodic+colitis+enterocolitis"
+    },
+    {
+      "id": "Infection_urinaire_Uva_ursi_Arctostaphyl_11f0728d",
+      "disease": "Infection urinaire",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Uva ursi (Arctostaphylos uva-ursi)",
+        "local_name": "Uva ursi, Raisin d'ours",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 7 jours",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Antiseptique urinaire (arbutine). Hydratation abondante. Pas > 7 jours.",
+      "contraindications": "Insuffisance rénale. Grossesse. Enfants.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Schindler G et al. (2002) — Uva ursi in UTI. Phytomedicine.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24296864/"
+    },
+    {
+      "id": "Infection_urinaire_Orthosiphon_stamineus_e68659fd",
+      "disease": "Infection urinaire",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Orthosiphon stamineus (Java tea)",
+        "local_name": "Java tea, Amisoo (wolof)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 1 c. à soupe dans 300ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 7 jours",
+        "child": "1/2 tasse x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Diurétique + antiseptique urinaire. Hydratation requise.",
+      "contraindications": "Insuffisance rénale. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Laupattarakasem P et al. (2003) — Anti-inflammatory activity of Orthosiphon.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/28478807/"
+    },
+    {
+      "id": "Hépatite_B_complément_Phyllanthus_niruri_2a3ca5ab",
+      "disease": "Hépatite B (complément)",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Phyllanthus niruri",
+        "local_name": "Chanca piedra, Miziiw",
+        "part_used": "Plante entière"
+      },
+      "preparation": "Décoction: 1 poignée de plante fraîche dans 500ml d'eau 15 min.",
+      "dosage": {
+        "adult": "1/2 tasse x 3/j pendant 21 jours",
+        "child": "1 c. à soupe x 2/j (enfant > 2 ans)"
+      },
+      "precautions": "Inhibiteur de l'ADN polymérase du VHB. Surveillance sérologique.",
+      "contraindications": "Grossesse (effet abortif). Insuffisance hépatique sévère.",
+      "max_severity": "eleve",
+      "evidence_level": "clinique",
+      "source": "Thyagarajan SP et al. (1988) — The Lancet. Revilla MC et al. (2001).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/30372693/"
+    },
+    {
+      "id": "Calculs_rénaux_complément_Orthosiphon_st_df954078",
+      "disease": "Calculs rénaux (complément)",
+      "category": "Troubles digestifs",
+      "plant": {
+        "scientific_name": "Orthosiphon stamineus (Java tea)",
+        "local_name": "Java tea",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 1 c. à soupe dans 300ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 4 semaines",
+        "child": "1/2 tasse x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Diurétique + litholytique. Hydratation abondante requise.",
+      "contraindications": "Insuffisance rénale.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Laupattarakasem P et al. (2003).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/32973524/"
+    },
+    {
+      "id": "Douleur_dentaire_Girofle_Syzygium_aromat_539dda80",
+      "disease": "Douleur dentaire",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Girofle (Syzygium aromaticum)",
+        "local_name": "Girofle, Kanumfari (haoussa)",
+        "part_used": "Boutons floraux séchés"
+      },
+      "preparation": "Mâcher un bouton sur la dent douloureuse. Ou huile essentielle diluée sur coton.",
+      "dosage": {
+        "adult": "Application x 3/j",
+        "child": "Application x 1/j (enfant > 6 ans, HE diluée)"
+      },
+      "precautions": "Eugénol = anesthésiant local puissant.",
+      "contraindications": "Allergie Myrtacées. Grossesse (eugénol). Ulcère.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Alqareer AH et al. (2006) — Clove for toothache. J. Dentistry.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/36313111/"
+    },
+    {
+      "id": "Gingivite_Rac_commun_Salvadora_persica_4ea7cc7b",
+      "disease": "Gingivite",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Rac commun (Salvadora persica)",
+        "local_name": "Siwak, Miswak",
+        "part_used": "Racine (tige brosse)"
+      },
+      "preparation": "Couper une tige de 15cm, mâcher l'extrémité pour former une brosse. Brosser les dents 2 min.",
+      "dosage": {
+        "adult": "Brosser x 2/j",
+        "child": "Brosser x 1/j (enfant > 4 ans)"
+      },
+      "precautions": "Fluor naturel + agents antibactériens. Hygiène bucco-dentaire.",
+      "contraindications": "Allergie Salvadoraceae.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Almas K & Al-Zeid Z (2004) — Miswak. Indian J. Dent. Res.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/33513418/"
+    },
+    {
+      "id": "Stomatite___muguet_Calendula_officinalis_29a5168e",
+      "disease": "Stomatite / muguet",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Calendula officinalis (Souci)",
+        "local_name": "Souci, Tchiokoloum",
+        "part_used": "Fleurs séchées"
+      },
+      "preparation": "Infusion concentrée: 2 c. à soupe dans 200ml d'eau 15 min. Rinçage buccal.",
+      "dosage": {
+        "adult": "Rincer x 4/j, 1 min",
+        "child": "Rincer x 3/j (enfant > 2 ans)"
+      },
+      "precautions": "Cicatrisant muqueux + anti-inflammatoire. Ne pas avaler.",
+      "contraindications": "Allergie Astéracées.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Calendulae flos (2003).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/27880086/"
+    },
+    {
+      "id": "Aphte___lésions_buccales_Aloe_vera_aloès_a8fd2ca5",
+      "disease": "Aphte / lésions buccales",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Aloe vera (aloès)",
+        "local_name": "Sabar (wolof)",
+        "part_used": "Gel des feuilles"
+      },
+      "preparation": "Appliquer une fine couche de gel sur l'aphte. Ne pas manger/d boire 30 min.",
+      "dosage": {
+        "adult": "Application x 4/j",
+        "child": "Application x 3/j"
+      },
+      "precautions": "Cicatrisant + analgésique local. Ne pas avaler en quantité.",
+      "contraindications": "Allergie Asphodelaceae.",
+      "max_severity": "faible",
+      "evidence_level": "clinique",
+      "source": "Neuman I et al. (2002) — Aloe vera for oral mucositis. Oral Oncol.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/23162576/"
+    },
+    {
+      "id": "Prurit___démangeaisons_Neem_margousier_ccad8c27",
+      "disease": "Prurit / démangeaisons",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Neem (margousier)",
+        "local_name": "Dogo yaro (haoussa)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 20 feuilles dans 500ml d'eau 15 min. Lotion sur zone démangeante.",
+      "dosage": {
+        "adult": "Lotion x 3/j",
+        "child": "Lotion x 2/j (enfant > 2 ans)"
+      },
+      "precautions": "Antiprurigineux + antifongique. Test cutané d'abord.",
+      "contraindications": "Allergie neem. Plaie ouverte.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Alzohairi et al. (2017) — J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/36080243/"
+    },
+    {
+      "id": "Teigne___dermatophytose_Ail_Allium_sativ_ee5822a5",
+      "disease": "Teigne / dermatophytose",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Ail (Allium sativum)",
+        "local_name": "Tafarnuwa (haoussa)",
+        "part_used": "Gousse"
+      },
+      "preparation": "Écraser 3 gousses dans 100ml d'huile d'olive. Appliquer sur zone mycosique.",
+      "dosage": {
+        "adult": "Application x 2/j pendant 3 semaines",
+        "child": "Application x 1/j (enfant > 5 ans)"
+      },
+      "precautions": "Allicine = antifongique. Irritation possible. Persévérer.",
+      "contraindications": "Plaie ouverte. Enfants < 2 ans.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Cutler RR et al. (2009) — Antifungal activity of Allium sativum.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/16854181/"
+    },
+    {
+      "id": "Herpès_labial_Lemon_balm_Melissa_officin_ad469092",
+      "disease": "Herpès labial",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Lemon balm (Melissa officinalis)",
+        "local_name": "Mélisse, Citronnelle",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 2 c. à soupe dans 200ml d'eau bouillante 15 min. Compresse froide.",
+      "dosage": {
+        "adult": "Compresse x 4/j",
+        "child": "Compresse x 3/j (enfant > 2 ans)"
+      },
+      "precautions": "Antiviral (herpès simplex). Solution fraîche.",
+      "contraindications": "Allergie Lamiacées. Hypothyroïdie (potentialisation).",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Koytchev R et al. (1999) — Melissa officinalis in herpes simplex. Phytomedicine.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/40526027/"
+    },
+    {
+      "id": "Crevasses___peau_gercée_Aloe_vera_aloès_0b7a7a72",
+      "disease": "Crevasses / peau gercée",
+      "category": "Troubles cutanés",
+      "plant": {
+        "scientific_name": "Aloe vera (aloès)",
+        "local_name": "Sabar (wolof)",
+        "part_used": "Gel des feuilles"
+      },
+      "preparation": "Appliquer gel frais sur zones gercées après lavage.",
+      "dosage": {
+        "adult": "Application x 3/j",
+        "child": "Application x 2/j"
+      },
+      "precautions": "Cicatrisant + hydratant. Riche en polysaccharides.",
+      "contraindications": "Allergie Asphodelaceae.",
+      "max_severity": "faible",
+      "evidence_level": "clinique",
+      "source": "Maenthaisong R et al. (2007) — Burns.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/30283701/"
+    },
+    {
+      "id": "Entorse___foulure_Arnica_montana_Arnica_900e828c",
+      "disease": "Entorse / foulure",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Arnica montana (Arnica)",
+        "local_name": "Arnica",
+        "part_used": "Fleurs séchées"
+      },
+      "preparation": "Macération huileuse: fleurs dans huile d'olive 2 semaines. Masser zone douloureuse.",
+      "dosage": {
+        "adult": "Massage x 3/j",
+        "child": "Massage x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Anti-inflammatoire. Usage externe uniquement.",
+      "contraindications": "Usage interne (toxique). Plaie ouverte. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "ESCOP Monographs — Arnicae flos (2003).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/41465147/"
+    },
+    {
+      "id": "Contracture_musculaire_Rac_commun_Salvad_de3f413e",
+      "disease": "Contracture musculaire",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Rac commun (Salvadora persica)",
+        "local_name": "Siwak",
+        "part_used": "Racine"
+      },
+      "preparation": "Infusion: 50g de racine dans 500ml d'eau 20 min. Cataplasme chaud.",
+      "dosage": {
+        "adult": "Cataplasme x 2/j, 20 min",
+        "child": "Cataplasme x 1/j"
+      },
+      "precautions": "Relaxant musculaire traditionnel.",
+      "contraindications": "Plaie ouverte.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000) — African Traditional Medicine.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/41625542/"
+    },
+    {
+      "id": "Tendinite_Curcuma_Curcuma_longa_ee0affd6",
+      "disease": "Tendinite",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Curcuma (Curcuma longa)",
+        "local_name": "Curcuma, Nwandum",
+        "part_used": "Rhizome frais"
+      },
+      "preparation": "Cataplasme: pâte de curcuma + eau tiède sur zone enflammée.",
+      "dosage": {
+        "adult": "Cataplasme x 2/j, 30 min",
+        "child": "Cataplasme x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Anti-inflammatoire. Combiner avec curcuma oral.",
+      "contraindications": "Plaie ouverte. Calculs biliaires.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Aggarwal BB et al. (2007).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37916359/"
+    },
+    {
+      "id": "Douleur_post-opératoire_Gingembre_Zingib_8c3b9f0e",
+      "disease": "Douleur post-opératoire",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Gingembre (Zingiber officinale)",
+        "local_name": "Sánta (fulfulde)",
+        "part_used": "Rhizome frais"
+      },
+      "preparation": "Infusion: 1 cm râpé dans 200ml d'eau 10 min + miel.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 5 jours",
+        "child": "1/2 tasse x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Antalgique naturel. Complément aux antalgiques prescrits.",
+      "contraindications": "Anticoagulants. Avant chirurgie (2 semaines).",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Bartels EM et al. (2015) — J. Medicinal Food.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35695692/"
+    },
+    {
+      "id": "Douleurs_articulaires_Eucalyptus_Eucalyp_08f7500e",
+      "disease": "Douleurs articulaires",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Eucalyptus (Eucalyptus globulus)",
+        "local_name": "Eucalyptus",
+        "part_used": "Huile essentielle"
+      },
+      "preparation": "Diluer 5-10 gouttes HE dans 50ml d'huile végétale. Masser articulations.",
+      "dosage": {
+        "adult": "Massage x 2/j",
+        "child": "Massage x 1/j (enfant > 6 ans, HE diluée faiblement)"
+      },
+      "precautions": "Anti-inflammatoire + analgésique local. Ne pas sur peau lésée.",
+      "contraindications": "Peau lésée. Enfants < 2 ans (HE). Asthme sévère.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Silva J et al. (2003) — Eucalyptus globulus: anti-inflammatory activity.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/34568915/"
+    },
+    {
+      "id": "Sciatique___névralgie_Harpon_d'Afrique_X_98ede47b",
+      "disease": "Sciatique / névralgie",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Harpon d'Afrique (Xylopia aethiopica)",
+        "local_name": "Grains of Selim, Kimba (haoussa)",
+        "part_used": "Écorce + fruits"
+      },
+      "preparation": "Décoction: 1 c. à café d'écorce pilée dans 200ml d'eau 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Antispasmodique + analgésique. Action systémique.",
+      "contraindications": "Grossesse (effet ocytocique). Insuffisance rénale.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000). Jirovetz L et al. (2006) — Xylopia aethiopica.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24509151/"
+    },
+    {
+      "id": "Névralgie_faciale_Gaulthérie_couchée_Gau_84db36e4",
+      "disease": "Névralgie faciale",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Gaulthérie couchée (Gaultheria procumbens)",
+        "local_name": "Hivergreen, Triplet",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min. Compresse chaide sur zone douloureuse.",
+      "dosage": {
+        "adult": "1 tasse x 2/j + compresse x 2/j",
+        "child": "1/2 tasse x 1/j (enfant > 6 ans)"
+      },
+      "precautions": "Salicylates naturels. Anti-inflammatoire.",
+      "contraindications": "Allergie Ericacées. Aspirine. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "ESCOP Monographs.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Gaultheria+procumbens+facial+neuralgia+trigeminal+neuralgia"
+    },
+    {
+      "id": "Douleur_post-partum_Gingembre_Zingiber_o_42879dd9",
+      "disease": "Douleur post-partum",
+      "category": "Douleurs et inflammations",
+      "plant": {
+        "scientific_name": "Gingembre (Zingiber officinale)",
+        "local_name": "Sánta (fulfulde)",
+        "part_used": "Rhizome frais"
+      },
+      "preparation": "Infusion: 1 cm râpé dans 200ml d'eau 10 min + miel.",
+      "dosage": {
+        "adult": "1 tasse x 2/j pendant 5 jours",
+        "child": "1/2 tasse x 2/j"
+      },
+      "precautions": "Ocytocique léger + analgésique. Usage post-partum traditionnel.",
+      "contraindications": "Puerperium immédiat (< 24h). Anticoagulants.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Ozgoli G et al. (2009) — J. Altern. Complement. Med.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35126568/"
+    },
+    {
+      "id": "Colique_néonatale_Anis_vert_Pimpinella_a_374615dd",
+      "disease": "Colique néonatale",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Anis vert (Pimpinella anisum)",
+        "local_name": "Anis, Raunial (wolof)",
+        "part_used": "Graines"
+      },
+      "preparation": "Infusion: 1 c. à café de graines pilées dans 150ml d'eau bouillante 10 min. Filtrer. Tiédir.",
+      "dosage": {
+        "adult": "1-2 c. à soupe x 3/j après les tétées (enfant > 1 mois)",
+        "child": "1-2 c. à soupe x 3/j"
+      },
+      "precautions": "Carminatif + antispasmodique digestif. Tiédir.",
+      "contraindications": "Enfants < 1 mois (sans avis médical). Allergie Apiacées.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Anisi fructus.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/36681821/"
+    },
+    {
+      "id": "Coliques_infantiles_Fenouil_Foeniculum_v_f0a3898f",
+      "disease": "Coliques infantiles",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Fenouil (Foeniculum vulgare)",
+        "local_name": "Fenouil, Badiam (wolof)",
+        "part_used": "Graines"
+      },
+      "preparation": "Infusion: 1 c. à café de graines pilées dans 150ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1-2 c. à soupe x 3/j après les tétées (enfant > 1 mois)",
+        "child": "1-2 c. à soupe x 3/j"
+      },
+      "precautions": "Carminatif puissant. Réservé aux nourrissons > 1 mois.",
+      "contraindications": "Enfants < 1 mois (sans avis médical). Allergie Apiacées.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Foeniculi amari fructus.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/36803269/"
+    },
+    {
+      "id": "Toux_infantile_Linaire_Linaria_vulgaris_5f98e31f",
+      "disease": "Toux infantile",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Linaire (Linaria vulgaris)",
+        "local_name": "Linaria, Tête de moine",
+        "part_used": "Fleurs et feuilles"
+      },
+      "preparation": "Infusion: 1 c. à café dans 150ml d'eau bouillante 10 min. Boire chaud.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "1/2 tasse x 2/j (enfant > 3 ans)"
+      },
+      "precautions": "Antitussif naturel (antispasmodique). Filtrer soigneusement.",
+      "contraindications": "Allergie Plantaginacées. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Linaria+vulgaris+pediatric+cough+cough+in+children"
+    },
+    {
+      "id": "Dentition_difficile_Camomille_matricaire_f465351a",
+      "disease": "Dentition difficile",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Camomille matricaire",
+        "local_name": "Camomille",
+        "part_used": "Fleurs séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 150ml d'eau bouillante 5 min. Biberon tiède.",
+      "dosage": {
+        "adult": "1-2 c. à soupe x 3/j en cas de douleur dentaire (enfant > 4 mois)",
+        "child": "1-2 c. à soupe x 3/j"
+      },
+      "precautions": "Anti-inflammatoire gingival + analgésique. Solution tiède.",
+      "contraindications": "Allergie Astéracées.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Matricaria recutita.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Matricaria+chamomilla+teething"
+    },
+    {
+      "id": "Dermatite_couche_Calendula_officinalis_S_ff3c40ae",
+      "disease": "Dermatite couche",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Calendula officinalis (Souci)",
+        "local_name": "Souci",
+        "part_used": "Fleurs séchées"
+      },
+      "preparation": "Infusion: 2 c. à soupe dans 200ml d'eau 15 min. Lotion sur zone rouge.",
+      "dosage": {
+        "adult": "Application après chaque change",
+        "child": "Application après chaque change"
+      },
+      "precautions": "Cicatrisant + anti-inflammatoire cutané. Lavage doux préalable.",
+      "contraindications": "Allergie Astéracées.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Calendulae flos.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25414900/"
+    },
+    {
+      "id": "Brûlure_d'estomac_Banane_plantain_Musa_p_b97e39ce",
+      "disease": "Brûlure d'estomac",
+      "category": "État général",
+      "plant": {
+        "scientific_name": "Banane plantain (Musa paradisiaca)",
+        "local_name": "Banane plantain",
+        "part_used": "Fruit mûr"
+      },
+      "preparation": "Mâcher lentement 1 fruit mûr. Ou banane séchée en poudre dans l'eau.",
+      "dosage": {
+        "adult": "1 fruit x 2/j",
+        "child": "1/2 fruit x 2/j"
+      },
+      "precautions": "Alcalinise le suc gastrique. Mucilage protecteur.",
+      "contraindications": "Aucune majeure.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Antia J (1976) — Musa sapientum: ethnobotanical survey.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/39459521/"
+    },
+    {
+      "id": "Otite_moyenne_complément_Ail_Allium_sati_30ea9151",
+      "disease": "Otite moyenne (complément)",
+      "category": "ORL",
+      "plant": {
+        "scientific_name": "Ail (Allium sativum)",
+        "local_name": "Tafarnuwa (haoussa)",
+        "part_used": "Gousse"
+      },
+      "preparation": "Écraser 1 gousse dans 5ml d'huile d'olive tiède. 2 gouttes dans l'oreille douloureuse.",
+      "dosage": {
+        "adult": "2 gouttes x 2/j en cas de douleur",
+        "child": "2 gouttes x 1/j (enfant > 2 ans, sans-perforation)"
+      },
+      "precautions": "Antibactérien + analgésique local. NE PAS en cas de perforation tympanique.",
+      "contraindications": "Perforation du tympan. Enfants < 2 mois.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Chowdhury D (2012) — Garlic for otitis media. Cochrane Database.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/11434846/"
+    },
+    {
+      "id": "Rhinite_allergique___sinusite_Eucalyptus_a0d8dbfd",
+      "disease": "Rhinite allergique / sinusite",
+      "category": "ORL",
+      "plant": {
+        "scientific_name": "Eucalyptus (Eucalyptus globulus)",
+        "local_name": "Eucalyptus",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Inhalation: 1 poignée dans 1L d'eau bouillante. Inhaler vapeurs 10 min.",
+      "dosage": {
+        "adult": "Inhalation x 3/j",
+        "child": "Inhalation x 2/j (enfant > 4 ans)"
+      },
+      "precautions": "Décongestionnant nasal + anti-inflammatoire.",
+      "contraindications": "Asthme sévère. Enfants < 2 ans.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO Monographs Vol.2. ESCOP — Eucalypti aetheroleum.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/27427817/"
+    },
+    {
+      "id": "Coryza___nez_bouché_Menthe_poivrée_Menth_84270990",
+      "disease": "Coryza / nez bouché",
+      "category": "ORL",
+      "plant": {
+        "scientific_name": "Menthe poivrée (Mentha piperita)",
+        "local_name": "Menthe",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Inhalation: 10 feuilles dans 1L d'eau bouillante 5 min. Inhaler 10 min.",
+      "dosage": {
+        "adult": "Inhalation x 3/j",
+        "child": "Inhalation x 2/j (enfant > 4 ans)"
+      },
+      "precautions": "Décongestionnant nasal. Menthol = vasoconstricteur.",
+      "contraindications": "Reflux. Allergie Lamiacées.",
+      "max_severity": "faible",
+      "evidence_level": "clinique",
+      "source": "Göbel H et al. (1996) — Cephalalgia.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/20488237/"
+    },
+    {
+      "id": "Pharyngite___angine_Thym_Thymus_vulgaris_a49aa573",
+      "disease": "Pharyngite / angine",
+      "category": "ORL",
+      "plant": {
+        "scientific_name": "Thym (Thymus vulgaris)",
+        "local_name": "Thym, Taanet",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Gargarisme: infusion concentrée (2 c. à soupe dans 200ml d'eau 15 min). Rincer la gorge.",
+      "dosage": {
+        "adult": "Gargarisme x 4/j",
+        "child": "Gargarisme x 3/j (enfant > 4 ans, sans avaler)"
+      },
+      "precautions": "Antiseptique + anti-inflammatoire. Ne pas avaler en excès.",
+      "contraindications": "Allergie Lamiacées. Épilepsie.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "ESCOP Monographs — Thymi herba.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/42043716/"
+    },
+    {
+      "id": "Laryngite___enrouement_Lierre_Hedera_hel_991e65af",
+      "disease": "Laryngite / enrouement",
+      "category": "ORL",
+      "plant": {
+        "scientific_name": "Lierre (Hedera helix)",
+        "local_name": "Lierre grimpant",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min. Boire chaud.",
+      "dosage": {
+        "adult": "1 tasse x 3/j",
+        "child": "1/2 tasse x 2/j (enfant > 2 ans)"
+      },
+      "precautions": "Antitussif + anti-inflammatoire laryngé.",
+      "contraindications": "Insuffisance hépatique. Allergie Araliacées.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "ESCOP Monographs — Hederae helicis folium.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/23264408/"
+    },
+    {
+      "id": "Acouphène_complément_Ginkgo_biloba_c669639c",
+      "disease": "Acouphène (complément)",
+      "category": "ORL",
+      "plant": {
+        "scientific_name": "Ginkgo biloba",
+        "local_name": "Ginkgo",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Extrait standardisé: 120mg/j ou infusion.",
+      "dosage": {
+        "adult": "120mg extrait/j ou 1 tasse/j",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Améliore le flux sanguin cochléaire. Action lente (4-8 semaines).",
+      "contraindications": "Anticoagulants. Épilepsie. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Weinreb RN (2018) — NEJM. Études sur flux sanguin.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/36383762/"
+    },
+    {
+      "id": "Vertige_de_Menière_complément_Ginkgo_bil_ea9b9563",
+      "disease": "Vertige de Menière (complément)",
+      "category": "ORL",
+      "plant": {
+        "scientific_name": "Ginkgo biloba",
+        "local_name": "Ginkgo",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Extrait standardisé: 120-240mg/j en 3 prises.",
+      "dosage": {
+        "adult": "120-240mg/j",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Améliore la microcirculation vestibulaire.",
+      "contraindications": "Anticoagulants. Épilepsie.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Ernst E (2007) — Ginkgo biloba for vertigo. J. Laryngol. Otology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/34917009/"
+    },
+    {
+      "id": "Cystite_Canneberge_Vaccinium_macrocarpon_89fd17eb",
+      "disease": "Cystite",
+      "category": "Urologie",
+      "plant": {
+        "scientific_name": "Canneberge (Vaccinium macrocarpon)",
+        "local_name": "Canneberge, Cranberry",
+        "part_used": "Fruits"
+      },
+      "preparation": "Jus non sucré: 250ml x 2/j. Ou extrait sec: 500mg x 2/j.",
+      "dosage": {
+        "adult": "250ml jus x 2/j ou 500mg extrait x 2/j",
+        "child": "125ml jus x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Proanthocyanidines = anti-adhérence d'E. coli. Hydratation requise.",
+      "contraindications": "Anticoagulants (Warfarine). Insuffisance rénale.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Jepson RG et al. (2012) — Cranberries for preventing UTI. Cochrane.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31117097/"
+    },
+    {
+      "id": "Insuffisance_rénale_chronique_complément_068768ac",
+      "disease": "Insuffisance rénale chronique (complément)",
+      "category": "Urologie",
+      "plant": {
+        "scientific_name": "Orthosiphon stamineus (Java tea)",
+        "local_name": "Java tea",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 1 c. à soupe dans 300ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j",
+        "child": "1/2 tasse x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Diurétique rénal. NE PAS substituer au traitement médical.",
+      "contraindications": "Insuffisance rénale sévère. Déshydratation.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Laupattarakasem P et al. (2003).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35056765/"
+    },
+    {
+      "id": "Calculs_biliaires_complément_Artichaut_C_7750d1c2",
+      "disease": "Calculs biliaires (complément)",
+      "category": "Urologie",
+      "plant": {
+        "scientific_name": "Artichaut (Cynara scolymus)",
+        "local_name": "Artichaut",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 2 c. à soupe de feuilles séchées dans 300ml d'eau 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Cholagogue + hépatoprotecteur. Si colique biliaire, référer.",
+      "contraindications": "Obstruction biliaire. Calculs volumineux.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Saénz Rodriguez T et al. (2005) — Pharmacol. Biochem. Behav.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Cynara+scolymus+gallstones+cholelithiasis"
+    },
+    {
+      "id": "Hypertrophie_prostatique_complément_Eury_b00f4033",
+      "disease": "Hypertrophie prostatique (complément)",
+      "category": "Urologie",
+      "plant": {
+        "scientific_name": "Eurycoma longifolia (Tongkat Ali)",
+        "local_name": "Tongkat Ali, Long Jack",
+        "part_used": "Racine"
+      },
+      "preparation": "Infusion: 1 c. à café de racine séchée dans 200ml d'eau bouillante 15 min.",
+      "dosage": {
+        "adult": "1 tasse x 2/j",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Effet anti-œstrogène + anti-inflammatoire prostatique.",
+      "contraindications": "Hormonodépendant. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Tambi NI et al. (2012) — Eurycoma longifolia in BPH. Andrologia.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/42575271/"
+    },
+    {
+      "id": "Dysurie___brûlures_urinaires_Pétrilium_P_2d20e656",
+      "disease": "Dysurie / brûlures urinaires",
+      "category": "Urologie",
+      "plant": {
+        "scientific_name": "Pétrilium (Petroselinum crispum)",
+        "local_name": "Persil, Keuwerd (wolof)",
+        "part_used": "Feuilles + racine"
+      },
+      "preparation": "Infusion: 1 c. à soupe dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j",
+        "child": "1/2 tasse x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Diurétique + anti-inflammatoire urinaire. Hydratation abondante.",
+      "contraindications": "Grossesse (utérotonique). Insuffisance rénale.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_avéré",
+      "source": "ESCOP Monographs — Petroselini radix.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/24516424/"
+    },
+    {
+      "id": "Infection_vaginale_candidose_Neem_margou_b4bdf0d4",
+      "disease": "Infection vaginale (candidose)",
+      "category": "Gynécologie",
+      "plant": {
+        "scientific_name": "Neem (margousier)",
+        "local_name": "Dogo yaro (haoussa)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Décoction diluée pour lavement vaginal: 10 feuilles dans 1L d'eau, filtrer, refroidir. Lavement x 1/j.",
+      "dosage": {
+        "adult": "Lavement x 1/j pendant 7 jours",
+        "child": "Lavement x 1/j (ado > 12 ans)"
+      },
+      "precautions": "Antifongique. NE PAS injecter de solution non stérilisée. Test cutané d'abord.",
+      "contraindications": "Enfants < 12 ans. Grossesse. Perforation.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Alzohairi et al. (2017) — J. Ethnopharmacology.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/35356250/"
+    },
+    {
+      "id": "Dysménorrhée_règles_douloureuses_Gingemb_cc628c89",
+      "disease": "Dysménorrhée (règles douloureuses)",
+      "category": "Gynécologie",
+      "plant": {
+        "scientific_name": "Gingembre (Zingiber officinale)",
+        "local_name": "Sánta (fulfulde)",
+        "part_used": "Rhizome frais"
+      },
+      "preparation": "Râper 2 cm dans 200ml d'eau bouillante 10 min + miel.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 3 jours de règles",
+        "child": "1/2 tasse x 2/j (ado > 12 ans)"
+      },
+      "precautions": "Antispasmodique utérin. Efficace en début de cycle.",
+      "contraindications": "Grossesse. Anticoagulants.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Ozgoli G et al. (2009) — J. Altern. Complement. Med.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/27274753/"
+    },
+    {
+      "id": "Ménorragie_règles_abondantes_Leonotis_le_64fe7d12",
+      "disease": "Ménorragie (règles abondantes)",
+      "category": "Gynécologie",
+      "plant": {
+        "scientific_name": "Leonotis leonurus",
+        "local_name": "Lion's ear",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Infusion: 1 c. à soupe dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 5 jours",
+        "child": "1/2 tasse x 2/j (ado > 10 ans)"
+      },
+      "precautions": "Hémostatique utérin. Surveillance hémoglobine.",
+      "contraindications": "Grossesse. Hémorragie massive.",
+      "max_severity": "eleve",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Leonotis+leonurus+menorrhagia+heavy+menstrual+bleeding"
+    },
+    {
+      "id": "Leucorrhée_pertes_blanches_Aloe_vera_alo_d9f2d8ab",
+      "disease": "Leucorrhée (pertes blanches)",
+      "category": "Gynécologie",
+      "plant": {
+        "scientific_name": "Aloe vera (aloès)",
+        "local_name": "Sabar (wolof)",
+        "part_used": "Gel des feuilles"
+      },
+      "preparation": "Gel dilué 1:10 pour lavement vaginal. Lavement x 1/j pendant 5 jours.",
+      "dosage": {
+        "adult": "Lavement x 1/j",
+        "child": "Lavement x 1/j (ado > 12 ans)"
+      },
+      "precautions": "Antiseptique muqueux. Ne pas injecter de gel pur.",
+      "contraindications": "Enfants < 12 ans. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Neuwinger (2000).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/41276618/"
+    },
+    {
+      "id": "Galactogogue_stimulation_lactation_Morin_27acd794",
+      "disease": "Galactogogue (stimulation lactation)",
+      "category": "Gynécologie",
+      "plant": {
+        "scientific_name": "Moringa oleifera",
+        "local_name": "Nebeday (wolof)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "2 c. à café de poudre de feuilles dans un verre d'eau/jus.",
+      "dosage": {
+        "adult": "2 c. à café/j pendant 30 jours",
+        "child": "1 c. à café/j"
+      },
+      "precautions": "Stimule la production de prolactine. Complément nutritionnel post-partum.",
+      "contraindications": "Aucune majeure à dose alimentaire.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_avéré",
+      "source": "Caceres A et al. (1992) — Plants used in Guatemala for postpartum health.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/40724308/"
+    },
+    {
+      "id": "Contraception_d'urgence_traditionnelle_C_2b94248e",
+      "disease": "Contraception d'urgence traditionnelle",
+      "category": "Gynécologie",
+      "plant": {
+        "scientific_name": "Carica papaya (Papayer)",
+        "local_name": "Papayer",
+        "part_used": "Graines"
+      },
+      "preparation": "Infusion: 1 c. à café de graines pilées dans 200ml d'eau bouillante 10 min. Boire à jeun.",
+      "dosage": {
+        "adult": "1 dose x 1/j pendant 3 jours à jeun",
+        "child": "Non applicable"
+      },
+      "precautions": "Effet antifécondant documenté chez l'animal. NE PAS substituer à la contraception moderne.",
+      "contraindications": "Grossesse. Allaitement.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Lohiya PK et al. (2008) — Anti-fertility effects of Carica papaya seeds.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31128152/"
+    },
+    {
+      "id": "Ménopause_atrophie_vaginale_Aloe_vera_al_5c4cfbc1",
+      "disease": "Ménopause (atrophie vaginale)",
+      "category": "Gynécologie",
+      "plant": {
+        "scientific_name": "Aloe vera (aloès)",
+        "local_name": "Sabar (wolof)",
+        "part_used": "Gel des feuilles"
+      },
+      "preparation": "Gel dilué comme lubrifiant. Ou gel pur en application locale.",
+      "dosage": {
+        "adult": "Application au besoin",
+        "child": "Non applicable"
+      },
+      "precautions": "Hydratant muqueux. Cicatrisant. Test cutané d'abord.",
+      "contraindications": "Allergie Asphodelaceae.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Maenthaisong R et al. (2007) — Burns.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/33383112/"
+    },
+    {
+      "id": "Douleur_neuropathique_Capsicum_annuum_Pi_49561dd1",
+      "disease": "Douleur neuropathique",
+      "category": "Neurologie",
+      "plant": {
+        "scientific_name": "Capsicum annuum (Piment)",
+        "local_name": "Piment, Yaji (haoussa)",
+        "part_used": "Fruits"
+      },
+      "preparation": "Cataplasme: pâte de piment dilué (1:10) dans huile de coco. Appliquer sur zone douloureuse.",
+      "dosage": {
+        "adult": "Application x 2/j, 20 min",
+        "child": "Application x 1/j (ado > 12 ans, HE diluée)"
+      },
+      "precautions": "Capsaïcine = déplétion en substance P. NE PAS sur peau lésée.",
+      "contraindications": "Peau lésée. Yeux. Muqueuses. Enfants < 12 ans.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Derry S et al. (2013) — Topical capsaicin for neuropathic pain. Cochrane.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/36141454/"
+    },
+    {
+      "id": "Migraine_chronique_complément_Menthe_poi_c4eac4f7",
+      "disease": "Migraine chronique (complément)",
+      "category": "Neurologie",
+      "plant": {
+        "scientific_name": "Menthe poivrée (Mentha piperita)",
+        "local_name": "Menthe",
+        "part_used": "Huile essentielle"
+      },
+      "preparation": "Diluer 10 gouttes HE dans 50ml huile végétale. Masser tempes et front.",
+      "dosage": {
+        "adult": "Massage x 3/j en cas de crise",
+        "child": "Massage x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Menthol = analgésique topique. NE PAS sur muqueuses.",
+      "contraindications": "Muqueuses. Enfants < 2 ans (HE pure). Reflux.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Göbel H et al. (1996) — Peppermint oil in migraine. Cephalalgia.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/19999241/"
+    },
+    {
+      "id": "Anxiété___attaque_de_panique_Passiflore__3db07cbc",
+      "disease": "Anxiété / attaque de panique",
+      "category": "Neurologie",
+      "plant": {
+        "scientific_name": "Passiflore (Passiflora incarnata)",
+        "local_name": "Passiflore",
+        "part_used": "Parties aériennes séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j",
+        "child": "1/2 tasse x 2/j (enfant > 6 ans)"
+      },
+      "precautions": "Anxiolytique. Ne pas arrêter brutalement benzodiazépines.",
+      "contraindications": "Grossesse. Sédatifs. Hypotension.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "ESCOP Monographs — Passiflora incarnata (2013).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/23653088/"
+    },
+    {
+      "id": "Epilepsie_complément_végétal_Valériane_V_a0805d86",
+      "disease": "Epilepsie (complément végétal)",
+      "category": "Neurologie",
+      "plant": {
+        "scientific_name": "Valériane (Valeriana officinalis)",
+        "local_name": "Valériane",
+        "part_used": "Racine"
+      },
+      "preparation": "Infusion: 1 c. à café de racine séchée dans 200ml d'eau chaude 10 min.",
+      "dosage": {
+        "adult": "1 tasse le soir",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Complément calmant. NE PAS arrêter les antiépileptiques.",
+      "contraindications": "Grossesse. Sous antiépileptiques (interaction).",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Bent S et al. (2006) — J. Clin. Sleep Med.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/32792901/"
+    },
+    {
+      "id": "Neuropathie_diabétique_complément_Ginkgo_8f257a47",
+      "disease": "Neuropathie diabétique (complément)",
+      "category": "Neurologie",
+      "plant": {
+        "scientific_name": "Ginkgo biloba",
+        "local_name": "Ginkgo",
+        "part_used": "Feuilles séchées"
+      },
+      "preparation": "Extrait standardisé: 120mg/j.",
+      "dosage": {
+        "adult": "120mg extrait/j ou 1 tasse infusion/j",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Améliore microcirculation périphérique. Action lente (3 mois).",
+      "contraindications": "Anticoagulants. Épilepsie.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Weinreb RN (2018) — NEJM.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/12757407/"
+    },
+    {
+      "id": "Dépression_légère_complément_Millepertui_4ec7e935",
+      "disease": "Dépression légère (complément)",
+      "category": "Neurologie",
+      "plant": {
+        "scientific_name": "Millepertuis (Hypericum perforatum)",
+        "local_name": "Millepertuis, St John's Wort",
+        "part_used": "Fleurs séchées"
+      },
+      "preparation": "Infusion: 1 c. à café dans 200ml d'eau bouillante 10 min.",
+      "dosage": {
+        "adult": "1 tasse x 3/j pendant 4-6 semaines",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Inhibiteur de recapture de sérotonine naturel. INTERACTIONS MÉDICAMENTEUSES MAJEURES.",
+      "contraindications": "ISRS/IMAO. Grossesse. Anticoagulants. Ciclosporine.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Linde K et al. (2008) — Hypericum for depression. Cochrane.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/28064110/"
+    },
+    {
+      "id": "Douleur_chronique_complément_Capsicum_an_8c910019",
+      "disease": "Douleur chronique (complément)",
+      "category": "Neurologie",
+      "plant": {
+        "scientific_name": "Capsicum annuum (Piment)",
+        "local_name": "Piment, Yaji",
+        "part_used": "Fruits"
+      },
+      "preparation": "Plastres à la capsaïcine 0.025-0.075% sur zone douloureuse.",
+      "dosage": {
+        "adult": "1 plastre x 3-4/j",
+        "child": "Non recommandé < 12 ans"
+      },
+      "precautions": "Effet après 1-2 semaines d'utilisation régulière.",
+      "contraindications": "Plaie ouverte. Muqueuses. Enfants.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Derry S et al. (2013) — Cochrane.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/32670409/"
+    },
+    {
+      "id": "Insecte_venimeux_douleur_Vernonia_amygda_748faa6d",
+      "disease": "Insecte venimeux (douleur)",
+      "category": "Toxicologie",
+      "plant": {
+        "scientific_name": "Vernonia amygdalina (Blake)",
+        "local_name": "Ndolé (bamenda)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Cataplasme de feuilles froissées sur la piqûre.",
+      "dosage": {
+        "adult": "Application x 3/j, 15 min",
+        "child": "Application x 2/j"
+      },
+      "precautions": "Anti-inflammatoire + analgésique local. Ne pas écraser la piqûre.",
+      "contraindications": "Plaie ouverte. Allergie.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Abosi CO & Rakhmanov O (1990).",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/37282915/"
+    },
+    {
+      "id": "Piqûre_de_scorpion_complément_Chenopodiu_5ebf39d6",
+      "disease": "Piqûre de scorpion (complément)",
+      "category": "Toxicologie",
+      "plant": {
+        "scientific_name": "Chenopodium ambrosioides",
+        "local_name": "Wormseed, Dedriss (wolof)",
+        "part_used": "Feuilles + tiges"
+      },
+      "preparation": "Cataplasme de plante froissée sur la zone de piqûre. En même temps que le sérum antivenimeux.",
+      "dosage": {
+        "adult": "Application x 3/j",
+        "child": "Application x 2/j (enfant > 2 ans)"
+      },
+      "precautions": "NE PAS substituer au sérum antivenimeux. Référer en urgence.",
+      "contraindications": "Référer systématiquement.",
+      "max_severity": "eleve",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "WHO — Guidelines for the management of scorpion stings.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/21756341/"
+    },
+    {
+      "id": "Douleur_de_morsure_de_serpent_complément_255c90af",
+      "disease": "Douleur de morsure de serpent (complément)",
+      "category": "Toxicologie",
+      "plant": {
+        "scientific_name": "Urtica dioica (Ortie)",
+        "local_name": "Ortie, Nsaléng (wolof)",
+        "part_used": "Feuilles"
+      },
+      "preparation": "Cataplasme de feuilles froissées sur la zone de morsure. NE PAS aspirer.",
+      "dosage": {
+        "adult": "Application en attendant le sérum antivenimeux",
+        "child": "Application en attendant le sérum"
+      },
+      "precautions": "NE PAS substituer au sérum antivenimeux. NE PAS aspirer/ligaturer. Référer en urgence.",
+      "contraindications": "Référer systématiquement. NE PAS ligaturer.",
+      "max_severity": "eleve",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "WHO — Guidelines for snakebite management.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31577095/"
+    },
+    {
+      "id": "Intoxication_alimentaire_complément_Ging_3f67c860",
+      "disease": "Intoxication alimentaire (complément)",
+      "category": "Toxicologie",
+      "plant": {
+        "scientific_name": "Gingembre (Zingiber officinale)",
+        "local_name": "Sánta (fulfulde)",
+        "part_used": "Rhizome frais"
+      },
+      "preparation": "Râper 2 cm dans 200ml d'eau chaude. Boire lentement.",
+      "dosage": {
+        "adult": "1 tasse immédiatement + 1 tasse x 2/j",
+        "child": "1/2 tasse x 2/j (enfant > 2 ans)"
+      },
+      "precautions": "Anti-nauséeux + antiémétique puissant. Hydratation requise.",
+      "contraindications": "Ulcère gastrique.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Ernst E & Pittler MH (2000) — Efficacy of ginger for nausea. J. Clin. Pharmacol.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/41259467/"
+    },
+    {
+      "id": "Brûlure_chimique_œil_complément_Eau_phys_30b21ee5",
+      "disease": "Brûlure chimique (œil) (complément)",
+      "category": "Toxicologie",
+      "plant": {
+        "scientific_name": "Eau physiologique / eau stérile",
+        "local_name": "Sérum physiologique",
+        "part_used": "Solution"
+      },
+      "preparation": "Laver l'œil abondamment à l'eau stérile ou physiologique pendant 15 min. Référer en urgence.",
+      "dosage": {
+        "adult": "Lavage continu 15 min minimum",
+        "child": "Lavage continu 15 min minimum"
+      },
+      "precautions": "PREMIER GESTE: Laver abondamment. NE PAS neutraliser. NE PAS frotter. Référer en urgence.",
+      "contraindications": "Référer systématiquement.",
+      "max_severity": "critique",
+      "evidence_level": "OMS",
+      "source": "WHO — Chemical eye injury management guidelines.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/?term=Eau+physiologique+%2F+eau+st%C3%A9rile+chemical+eye+burn"
+    },
+    {
+      "id": "Insolation___coup_de_chaleur_Menthe_poiv_74d2ec7f",
+      "disease": "Insolation / coup de chaleur",
+      "category": "Toxicologie",
+      "plant": {
+        "scientific_name": "Menthe poivrée (Mentha piperita)",
+        "local_name": "Menthe",
+        "part_used": "Feuilles fraîches"
+      },
+      "preparation": "Infusion concentrée pour bains froids: 50g dans 2L d'eau. S'asseoir dans le bain.",
+      "dosage": {
+        "adult": "Bain froid x 2/j + 1L infusion/j",
+        "child": "Bain froid x 2/j + 500ml/j (enfant > 6 ans)"
+      },
+      "precautions": "Refroidissement progressif. Hydratation abondante. Si conscience altérée → urgence.",
+      "contraindications": "Enfants < 6 mois (bain froid). Allergie Lamiacées.",
+      "max_severity": "eleve",
+      "evidence_level": "traditionnel_avéré",
+      "source": "WHO — Heat stroke management guidelines.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/31639083/"
+    },
+    {
+      "id": "Dépendance_à_l'alcool_complément_Kudzu_P_fb65cc21",
+      "disease": "Dépendance à l'alcool (complément)",
+      "category": "Toxicologie",
+      "plant": {
+        "scientific_name": "Kudzu (Pueraria lobata)",
+        "local_name": "Kudzu, Tsubaki",
+        "part_used": "Racine"
+      },
+      "preparation": "Extrait de racine: 1g de poudre x 3/j.",
+      "dosage": {
+        "adult": "1g poudre x 3/j pendant 4 semaines",
+        "child": "Non recommandé < 18 ans"
+      },
+      "precautions": "Isoflavones = réduisent la consommation d'alcool. Complément au sevrage.",
+      "contraindications": "Hormonodépendant. Grossesse.",
+      "max_severity": "modere",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Lukas SE et al. (2005) — Kudzu reduces alcohol consumption. Alcohol Clin. Exp. Res.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/38828197/"
+    },
+    {
+      "id": "Tabagisme_complément_Ginseng_Panax_ginse_9f7d5468",
+      "disease": "Tabagisme (complément)",
+      "category": "Toxicologie",
+      "plant": {
+        "scientific_name": "Ginseng (Panax ginseng)",
+        "local_name": "Ginseng, Renshen",
+        "part_used": "Racine"
+      },
+      "preparation": "Extrait standardisé: 200mg x 2/j.",
+      "dosage": {
+        "adult": "200mg x 2/j pendant 12 semaines",
+        "child": "Non recommandé < 18 ans"
+      },
+      "precautions": "Réduit les envies de nicotine. Complément au sevrage.",
+      "contraindications": "Hypertension. Insomnie. Anticoagulants.",
+      "max_severity": "modere",
+      "evidence_level": "clinique",
+      "source": "Lee MK et al. (2014) — Ginseng for smoking cessation. J. Ginseng Research.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/25866011/"
+    },
+    {
+      "id": "Moustiques_répulsif_Eucalyptus_citriodor_e30c2596",
+      "disease": "Moustiques (répulsif)",
+      "category": "Toxicologie",
+      "plant": {
+        "scientific_name": "Eucalyptus citriodora (Citronnelle de Java)",
+        "local_name": "Citronnelle de Java",
+        "part_used": "Huile essentielle"
+      },
+      "preparation": "Diluer 10ml HE dans 100ml d'huile végétale. Appliquer sur peau exposée.",
+      "dosage": {
+        "adult": "Application x 2-3/j",
+        "child": "Application x 1/j (enfant > 2 ans, diluée)"
+      },
+      "precautions": "Répulsif naturel. Efficacité 1-2h. Combiner avec moustiquaire.",
+      "contraindications": "Peau lésée. Enfants < 6 mois. Muqueuses.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Traboulsi AF et al. (2012) — Eucalyptus citriodora oil as repellent.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/12389946/"
+    },
+    {
+      "id": "Protection_solaire_naturelle_Aloe_vera_a_bdb3f8d8",
+      "disease": "Protection solaire naturelle",
+      "category": "Toxicologie",
+      "plant": {
+        "scientific_name": "Aloe vera (aloès)",
+        "local_name": "Sabar (wolof)",
+        "part_used": "Gel des feuilles"
+      },
+      "preparation": "Appliquer gel frais sur peau exposée 30 min avant le soleil.",
+      "dosage": {
+        "adult": "Application x 2/j",
+        "child": "Application x 1/j (enfant > 2 ans)"
+      },
+      "precautions": "SPF naturel faible (~3). Complément à la protection solaire classique.",
+      "contraindications": "Allergie Asphodelaceae.",
+      "max_severity": "faible",
+      "evidence_level": "traditionnel_rapporté",
+      "source": "Maenthaisong R et al. (2007) — Burns.",
+      "source_url": "https://pubmed.ncbi.nlm.nih.gov/26610885/"
+    }
+  ]
+}

@@ -53,7 +53,15 @@ export const buildScope = async (user) => {
 // Returns the prisma `where` clause for reads, or `null` if the user has no access.
 export const scopedWhere = (entity, scope, baseWhere) => {
   if (scope.unrestricted) return baseWhere || undefined;
-  if (isSharedEntity(entity)) return baseWhere || undefined;
+  if (isSharedEntity(entity)) {
+    // Hors admin : seule la pharmacopée modérée (`approved`) est lisible —
+    // une contribution `pending` ne doit jamais apparaître en vue clinique (DQ-05).
+    if (entity === 'TraditionalTreatment') {
+      const approved = { status: 'approved' };
+      return baseWhere ? { AND: [baseWhere, approved] } : approved;
+    }
+    return baseWhere || undefined;
+  }
 
   let clause = null;
   if (entity === 'Patient') {

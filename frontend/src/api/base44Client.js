@@ -59,9 +59,10 @@ const buildListArgs = (orderOrFilter, orderOrLimit, maybeLimit) => {
   return query;
 };
 
+const asArray = (v) => Array.isArray(v) ? v : [];
 const makeEntity = (name) => ({
-  list: (order, limit) => request(`/entities/${name}`, { query: buildListArgs(order, limit) }),
-  filter: (filter, order, limit) => request(`/entities/${name}`, { query: buildListArgs(filter, order, limit) }),
+  list: (order, limit) => request(`/entities/${name}`, { query: buildListArgs(order, limit) }).then(asArray),
+  filter: (filter, order, limit) => request(`/entities/${name}`, { query: buildListArgs(filter, order, limit) }).then(asArray),
   get: (id) => request(`/entities/${name}/${encodeURIComponent(id)}`),
   create: (data) => request(`/entities/${name}`, { method: 'POST', body: data }),
   update: (id, data) => request(`/entities/${name}/${encodeURIComponent(id)}`, { method: 'PATCH', body: data }),
@@ -179,6 +180,12 @@ const admin = {
   listAssignments: () => request('/admin/assignments'),
   createAssignment: (doctor_id, encadreur_id) => request('/admin/assignments', { method: 'POST', body: { doctor_id, encadreur_id } }),
   deleteAssignment: (id) => request(`/admin/assignments/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+  // Pharmacopée administrée
+  listTreatments: (params = {}) => request('/admin/pharmacopee', { query: params }),
+  listCultures: () => request('/admin/pharmacopee/cultures'),
+  createTreatment: (payload) => request('/admin/pharmacopee', { method: 'POST', body: payload }),
+  updateTreatment: (id, data) => request(`/admin/pharmacopee/${encodeURIComponent(id)}`, { method: 'PATCH', body: data }),
+  deleteTreatment: (id) => request(`/admin/pharmacopee/${encodeURIComponent(id)}`, { method: 'DELETE' }),
 };
 
 export const base44 = { entities, auth, patient, admin, devices, notifications, treatments, integrations: { Core } };

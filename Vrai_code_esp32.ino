@@ -23,17 +23,13 @@
 #define LOAD_FONT2
 #define LOAD_FONT4
 #define LOAD_FONT6
-#define LOAD_FONT7
 #define LOAD_FONT8
-#define LOAD_GFXFF
-#define SMOOTH_FONT
 // ============================================================
 // INCLUDES
 // ============================================================
 #include <TB_TFT_eSPI.h>
-#include <MAX30105.h>
-#include <heartRate.h>
 #include <Adafruit_MLX90614.h>
+#include "MAX30100_PulseOximeter.h"
 // ✅ BALANCE BLE — écoute des annonces Bluetooth de la balance connectée
 #include <BLEDevice.h>
 #include <BLEScan.h>
@@ -133,27 +129,15 @@ const float TEMPERATURE_NORMALE_MIN = 36.1;
 const float TEMPERATURE_NORMALE_MAX = 37.2;
 const float TEMPERATURE_FIEVRE_LEGERE = 37.5;
 const float TEMPERATURE_FIEVRE = 38.0;
-const float SPO2_ALPHA = 0.95;
 // 🩸 ALGORITHME PULSEOX MAX30102 - CONSTANTES ÉQUILIBRÉES
-// Buffer de 6 échantillons : assez court pour rester réactif, assez long pour lisser
-// les artefacts (mouvement du doigt, variations d'amplitude) et rester en SpO2 réel.
 const int SPO2_BUFFER_SIZE = 6;
-// Formule polynomiale : SpO2 = A + B*Ratio² (calibration empirique MAX30102)
-// A=110, B=-18 donne une plage 90-100 % pour un doigt bien posé (R≈0.4-0.7)
-const float SPO2_COEFF_A = 110.0;
-const float SPO2_COEFF_B = -18.0;
-const float SPO2_DC_ALPHA = 0.95;  // Baseline IR/RED lente (50-100 ms d'inertie)
-const float SPO2_AC_ALPHA = 0.30;  // Composante AC = pulsations
-const int   SPO2_MIN_PHYSIO = 90;  // Borne basse réaliste pour un sujet sain
-const int   SPO2_MAX_PHYSIO = 100; // Borne haute physiologique
-const int   SPO2_MIN_BEATS_BEFORE_VALID = 6; // ≥6 battements pour valider SpO2
+const int   SPO2_MIN_PHYSIO = 90;
+const int   SPO2_MAX_PHYSIO = 100;
+const int   SPO2_MIN_BEATS_BEFORE_VALID = 6;
 // 🫀 ALGORITHME BEAT FINDER PRO - CONSTANTES
 const int BPM_BUFFER_SIZE = 6;     // Historique pour moyenne pondérée
 const float KALMAN_PROCESS_NOISE = 1.0;  // Q (processus)
 const float KALMAN_MEASUREMENT_NOISE = 2.0;  // R (mesure)
-const int BEAT_PATTERN_MIN = 200;   // Temps min entre 2 beats (ms)
-const int BEAT_PATTERN_MAX = 1800;  // Temps max entre 2 beats (ms)
-const float TOLERANCE_ADAPTATIVE_FACTOR = 0.15;  // 15% de variabilité
 // 🏋️ CONSTANTES BALANCE BLE (réception du poids par annonces Bluetooth)
 const float BLE_WEIGHT_MIN = 10.0;                 // Poids min valide (scanner Python)
 const float BLE_WEIGHT_MAX = 300.0;                // Poids max valide
@@ -187,7 +171,15 @@ const int SCREEN_H = 320;
 // OBJETS GLOBAUX
 // ============================================================
 TFT_eSPI tft = TFT_eSPI();
-MAX30105 particleSensor;
+// MAX30100 - tâche FreeRTOS dédiée sur Core 0
+PulseOximeter pox;
+SemaphoreHandle_t max30100Mutex = nullptr;
+volatile float sharedHeartRate = 0;
+volatile uint8_t sharedSpO2 = 0;
+volatile bool max30100FingerDetected = false;
+volatile unsigned long max30100LastBeat = 0;
+volatile bool max30100NewData = false;
+TaskHandle_t max30100TaskHandle = nullptr;
 // (Balance : plus de HX711 — le poids arrive par BLE, cf. section « BALANCE BLE »)
 Adafruit_MLX90614 mlx = Adafruit_MLX90614();
 // ✅ COMMUNICATION UART AVEC ESP32 ESCLAVE RFID
@@ -295,28 +287,18 @@ ResultatsOculaires resultatOeux;       // Résultats finaux oculaires
 unsigned long tempsDebutEtat = 0;
 unsigned long dernierUpdateAffichage = 0;
 // Pulse sensor variables - AMÉLIORÉ
-const byte RATE_SIZE = 12;
-byte rates[RATE_SIZE];
-byte rateSpot = 0;
-long lastBeat = 0;
-unsigned long dernierAffichageIR = 0;
 // 🫀 VARIABLES POUR ALGORITHME PULSEOX OPTIMISÉ
-float spo2Buffer[SPO2_BUFFER_SIZE];  // Historique SpO2 (8 dernières mesures)
-int spo2BufferIndex = 0;            // Index du buffer
-float irDC = 0, irAC = 0;           // Composantes DC/AC du signal IR
-float redDC = 0, redAC = 0;         // Composantes DC/AC du signal RED
-float dernierIRValue = 0, dernierRedValue = 0;  // Dernières valeurs pour delta
-int spo2Counter = 0;                // Compteur pour décimation
+float spo2Buffer[SPO2_BUFFER_SIZE];
+int spo2BufferIndex = 0;
 // Variables améliorées pour stabilité BPM
 int compteurMesuresStables = 0;
 int dernierBPMValide = 0;
 // 🫀 VARIABLES POUR ALGORITHME BEAT FINDER PRO
 float bpmBuffer[BPM_BUFFER_SIZE] = {0};  // Historique 6 valeurs BPM (dernière 10s)
 int bpmBufferIndex = 0;                  // Index circulaire du buffer
-float kalmanState = 0;                   // État estimé du filtre Kalman (BPM filtré)
-float kalmanCovariance = 1.0;            // Incertitude du Kalman (covariance)
-long lastBeatTime = 0;                   // Timestamp du dernier beat détecté (ms)
-float bpmVariance = 0;                   // Variance des BPM récentes (pour adaptatif)
+float kalmanState = 0;
+float kalmanCovariance = 1.0;
+float bpmVariance = 0;
 int beatPatternCount = 0;                // Nombre de beats valides consécutifs
 float adaptativeTolerance = 10.0;        // TOLERANCE_BPM adaptatif (initialisation)
 long detectionStartTime = 0;             // Timestamp début détection rapide (0.5-1s)
@@ -355,7 +337,6 @@ char tempSSID[32], tempPass[64], tempURL[128];
 // FORWARD DECLARATIONS - BEAT FINDER PRO
 void reinitialiserBufferSpO2();
 float filtreKalmanBPM(float bpmMesu);
-bool estBeatValide(long timeSinceLast);
 float calculerToleranceAdaptative();
 void reinitialiserBPMAlgorithme();
 // FORWARD DECLARATIONS - BALANCE BLE
@@ -368,7 +349,36 @@ void reinitialiserPoids();
 // ============================================================
 void beep(int freq, int duration);
 void beepOK();
-void reinitialiserBufferSpO2();  // Forward declaration for SpO2 algorithm
+// ============================================================
+// TÂCHE FREE RTOS MAX30100 - CALLBACK BEAT
+// ============================================================
+void onMax30100BeatDetected() {
+    max30100LastBeat = millis();
+}
+void max30100Task(void *pvParameters) {
+    if (!pox.begin()) {
+        Serial.println("[MAX30100] FAILED to init");
+        etatCapteurs.max30102Actif = false;
+        vTaskDelete(NULL);
+        return;
+    }
+    pox.setIRLedCurrent(MAX30100_LED_CURR_7_6MA);
+    pox.setOnBeatDetectedCallback(onMax30100BeatDetected);
+    Serial.println("[MAX30100] Task started on Core 0");
+    etatCapteurs.max30102Actif = true;
+    for (;;) {
+        pox.update();
+        bool finger = (millis() - max30100LastBeat) < 3000;
+        if (xSemaphoreTake(max30100Mutex, (TickType_t)5) == pdTRUE) {
+            sharedHeartRate = pox.getHeartRate();
+            sharedSpO2 = pox.getSpO2();
+            max30100FingerDetected = finger;
+            max30100NewData = true;
+            xSemaphoreGive(max30100Mutex);
+        }
+        vTaskDelay(1 / portTICK_PERIOD_MS);
+    }
+}
 // ============================================================
 // COMMUNICATION UART AVEC ESP32 ESCLAVE RFID
 // ============================================================
@@ -1059,31 +1069,35 @@ yield();  // ✅ Laisser respirer le watchdog
 // GESTION ÉNERGÉTIQUE DES CAPTEURS - VERSION AMÉLIORÉE ✅
 // ============================================================
 void activerCapteurCardiaque() {
-if (!etatCapteurs.max30102Actif) {
-Serial.println("Activation capteur cardiaque...");
-Wire.begin();
-Wire.setClock(400000);
-if (particleSensor.begin(Wire, I2C_SPEED_FAST)) {
-// Configuration optimisée pour stabilité
-particleSensor.setup(0x5F, 4, 2, 400, 411, 4096);
-particleSensor.setPulseAmplitudeRed(0x1F);
-particleSensor.setPulseAmplitudeIR(0x1F);
-etatCapteurs.max30102Actif = true;
-etatCapteurs.ledBright = 0x1F;
-// 🎯 Réinitialiser les buffers SpO2 pour nouvelles mesures
-reinitialiserBufferSpO2();
-Serial.println("Capteur cardiaque active - Mode stable");
-} else {
-Serial.println("ERREUR: Capteur cardiaque non detecte!");
-}
-}
+	if (!etatCapteurs.max30102Actif) {
+		Serial.println("[MAX30100] Création tâche FreeRTOS sur Core 0...");
+		if (max30100Mutex == nullptr) {
+			max30100Mutex = xSemaphoreCreateMutex();
+		}
+		max30100NewData = false;
+		sharedHeartRate = 0;
+		sharedSpO2 = 0;
+		max30100FingerDetected = false;
+		max30100LastBeat = 0;
+		xTaskCreatePinnedToCore(
+			max30100Task,
+			"MAX30100_Task",
+			4096, NULL, 2, &max30100TaskHandle, 0
+		);
+		reinitialiserBufferSpO2();
+		Serial.println("[MAX30100] ✅ Tâche créée");
+	}
 }
 void desactiverCapteurCardiaque() {
-if (etatCapteurs.max30102Actif) {
-particleSensor.shutDown();
-etatCapteurs.max30102Actif = false;
-etatCapteurs.doigtPresent = false;
-}
+	if (etatCapteurs.max30102Actif) {
+		if (max30100TaskHandle != nullptr) {
+			vTaskDelete(max30100TaskHandle);
+			max30100TaskHandle = nullptr;
+		}
+		etatCapteurs.max30102Actif = false;
+		etatCapteurs.doigtPresent = false;
+		Serial.println("[MAX30100] 💤 Tâche supprimée");
+	}
 }
 void activerCapteurTemperature() {
 if (!etatCapteurs.mlx90614Actif) {
@@ -1197,11 +1211,6 @@ void afficherStatut(const String& texte, uint16_t couleur) {
 clear(0, 180, SCREEN_W, 30);
 tft.setTextColor(couleur, BACKGROUND_COLOR);
 tft.drawCentreString(tronc(texte, 45), SCREEN_W / 2, 185, 2);
-}
-void afficherValeurIR(long irValue) {
-clear(350, 270, 120, 20);
-tft.setTextColor(TEXT_COLOR, BACKGROUND_COLOR);
-tft.drawString("IR: " + String(irValue), 350, 270, 1);
 }
 void afficherBPM(int valeurBPM) {
 clear(80, 80, 150, 60);
@@ -1423,84 +1432,13 @@ return false;
 }
 }
 // ============================================================
-// ALGORITHME PULSEOX MAX30102 (ratio-of-ratios)
+// SPO2 BUFFER - REINITIALISATION
 // ============================================================
-// Filtrage DC (baseline lente) : alpha élevé = baseline stable
-float filtrerDC(float nouvelleMesure, float valeurActuelle, float alpha) {
-    return alpha * valeurActuelle + (1.0f - alpha) * nouvelleMesure;
-}
-// AC = composante pulsatile (signal - baseline)
-float calculerAC(float mesure, float dc) {
-    return mesure - dc;
-}
-
-// Calcul SpO2 réaliste (MAX30102, formule du ratio des ratios)
-// Cadence d'appel ~50-100 Hz (chaque échantillon IR/RED), pas seulement aux beats.
-void calculerSpO2(long irValue, long redValue) {
-    if (irValue < config.seuilIrDoigt) {
-        donnees.spo2 = 0;
-        // Reset baseline pour éviter une transition brutale au retour du doigt
-        irDC = 0; redDC = 0;
-        return;
-    }
-
-    // 1) Initialisation de la baseline au premier doigt posé
-    if (irDC == 0) irDC = (float)irValue;
-    if (redDC == 0) redDC = (float)redValue;
-
-    // 2) Baseline DC (lente, alpha=0.95)
-    irDC  = filtrerDC((float)irValue,  irDC,  SPO2_DC_ALPHA);
-    redDC = filtrerDC((float)redValue, redDC, SPO2_DC_ALPHA);
-
-    // 3) AC instantané, puis enveloppe (moyenne absolue lissée)
-    float irAcSample  = calculerAC((float)irValue,  irDC);
-    float redAcSample = calculerAC((float)redValue, redDC);
-    irAC  = filtrerDC(fabsf(irAcSample),  irAC,  1.0f - SPO2_AC_ALPHA);
-    redAC = filtrerDC(fabsf(redAcSample), redAC, 1.0f - SPO2_AC_ALPHA);
-
-    if (irDC < 1.0f || redDC < 1.0f || irAC < 1.0f) {
-        return; // Pas encore assez de signal, on garde la valeur précédente
-    }
-
-    // 4) Ratio des ratios R = (AC_red/DC_red) / (AC_ir/DC_ir)
-    float r = (redAC / redDC) / (irAC / irDC);
-    // Garde-fou : R typique humain ~0.4 (98 %) à 1.0 (~85 %)
-    if (r < 0.2f) r = 0.2f;
-    if (r > 1.6f) r = 1.6f;
-
-    // 5) Polynôme empirique étalonné : SpO2 = A + B*R²
-    float spo2_value = SPO2_COEFF_A + SPO2_COEFF_B * (r * r);
-
-    // 6) Clamp dans la plage physiologique réaliste (90-100 %)
-    if (spo2_value < SPO2_MIN_PHYSIO) spo2_value = SPO2_MIN_PHYSIO;
-    if (spo2_value > SPO2_MAX_PHYSIO) spo2_value = SPO2_MAX_PHYSIO;
-
-    // 7) Moyenne glissante sur le buffer
-    spo2Buffer[spo2BufferIndex] = spo2_value;
-    spo2BufferIndex = (spo2BufferIndex + 1) % SPO2_BUFFER_SIZE;
-    float moyenneSpO2 = 0;
-    for (int i = 0; i < SPO2_BUFFER_SIZE; i++) moyenneSpO2 += spo2Buffer[i];
-    moyenneSpO2 /= SPO2_BUFFER_SIZE;
-    donnees.spo2 = (int)(moyenneSpO2 + 0.5f);
-
-    // 8) Debug 1 fois sur 25 (≈ 1 par seconde à 25 Hz d'appel)
-    if (spo2Counter++ % 25 == 0) {
-        Serial.print("[SPO2] R: "); Serial.print(r, 3);
-        Serial.print(" | DC_IR: "); Serial.print(irDC, 0);
-        Serial.print(" | AC_IR: "); Serial.print(irAC, 0);
-        Serial.print(" | raw: "); Serial.print(spo2_value, 1);
-        Serial.print(" | moy: "); Serial.println(donnees.spo2);
-    }
-}
-
 void reinitialiserBufferSpO2() {
     for (int i = 0; i < SPO2_BUFFER_SIZE; i++) {
-        spo2Buffer[i] = 98;  // Valeur neutre haute mais plausible
+        spo2Buffer[i] = 98;
     }
     spo2BufferIndex = 0;
-    irDC = 0; irAC = 0;
-    redDC = 0; redAC = 0;
-    spo2Counter = 0;
 }
 // ============================================================
 // GESTION DES ÉTATS AVEC ACTIVATION CAPTEURS ✅
@@ -1809,15 +1747,6 @@ kalmanCovariance = (1.0 - kalmanGain) * covariancePred;
 return kalmanState;
 }
 // Validation d'un beat selon pattern physiologique
-bool estBeatValide(long timeSinceLast) {
-// Validation physiologie: 40-300 BPM = 200-1500ms entre beats
-if (timeSinceLast < BEAT_PATTERN_MIN || timeSinceLast > BEAT_PATTERN_MAX) {
-beatPatternCount = 0;  // Reset pattern
-return false;
-}
-beatPatternCount++;
-return true;
-}
 // Tolerance adaptatif basé variance - PLUS STRICT
 float calculerToleranceAdaptative() {
 // Commence strict, se relâche si variance monte (faux positifs)
@@ -1842,7 +1771,6 @@ bpmBuffer[i] = 0;
 bpmBufferIndex = 0;
 kalmanState = 0;
 kalmanCovariance = 1.0;
-lastBeatTime = 0;
 bpmVariance = 0;
 beatPatternCount = 0;
 adaptativeTolerance = 10.0;
@@ -1863,9 +1791,6 @@ tft.drawCentreString("OF THE BLOOD", 360, 70, 2);
 afficherBPM(0);
 afficherSpO2(0);
 afficherStatut("Place your finger on the sensor", WARNING_COLOR);
-for(byte i = 0; i < RATE_SIZE; i++) rates[i] = 0;
-rateSpot = 0;
-lastBeat = 0;
 donnees.bpm = 0;
 donnees.spo2 = 0;
 etatCapteurs.doigtPresent = false;
@@ -1885,45 +1810,34 @@ desactiverCapteurCardiaque();
 changerEtat(TEMPERATURE);
 return;
 }
-long irValue = particleSensor.getIR();
-long redValue = particleSensor.getRed();
-if (millis() - dernierAffichageIR > 1000) {
-Serial.println("[HR] IR: " + String(irValue) + ", RED: " + String(redValue));
-afficherValeurIR(irValue);
-dernierAffichageIR = millis();
+float currentHR = 0;
+uint8_t currentSpO2 = 0;
+bool finger = false;
+bool newData = false;
+if (xSemaphoreTake(max30100Mutex, (TickType_t)10) == pdTRUE) {
+currentHR = sharedHeartRate;
+currentSpO2 = sharedSpO2;
+finger = max30100FingerDetected;
+newData = max30100NewData;
+max30100NewData = false;
+xSemaphoreGive(max30100Mutex);
 }
-// ✨ SpO2 doit être calculée à CHAQUE échantillon pour que la baseline DC/AC
-// se construise correctement. Pas seulement aux beats détectés.
-calculerSpO2(irValue, redValue);
-if (irValue > config.seuilIrDoigt) {
-// ✅ DOIGT DÉTECTÉ
+if (finger) {
 if (!etatCapteurs.doigtPresent) {
 etatCapteurs.doigtPresent = true;
 afficherStatut("Finger detected - Keep still 3-4 s...", SUCCESS_COLOR);
-lastBeatTime = millis();
 debutMesureStable = millis();
 detectionStartTime = millis();
 mesureEnCours = true;
 reinitialiserBPMAlgorithme();
 reinitialiserBufferSpO2();
-Serial.println("[BPM] 🟢 Doigt détecté - Démarrage mesure équilibrée");
+Serial.println("[BPM] 🟢 Doigt détecté - Démarrage mesure");
 }
-float qualiteSignal = min(100.0, (float)(irValue - config.seuilIrDoigt) / 30000.0 * 100.0);
-// 🫀 BEAT FINDER PRO - Détection beat avec pattern
-if (checkForBeat(irValue) == true) {
-long timeSinceLast = millis() - lastBeatTime;
-lastBeatTime = millis();
-// Calculer BPM brut
-int rawBPM = 60000 / timeSinceLast;
-// Valider selon pattern physiologique
-if (estBeatValide(timeSinceLast)) {
-// ✅ Beat valide
-// Appliquer filtre Kalman
-float filteredBPM = filtreKalmanBPM(rawBPM);
-// Ajouter au buffer circulaire
+if (currentSpO2 > 0) donnees.spo2 = currentSpO2;
+if (newData && currentHR > 0) {
+float filteredBPM = filtreKalmanBPM(currentHR);
 bpmBuffer[bpmBufferIndex] = filteredBPM;
 bpmBufferIndex = (bpmBufferIndex + 1) % BPM_BUFFER_SIZE;
-// Calculer variance buffer
 float sum = 0, sumSq = 0;
 int validCount = 0;
 for (int i = 0; i < BPM_BUFFER_SIZE; i++) {
@@ -1937,11 +1851,8 @@ if (validCount > 0) {
 float mean = sum / validCount;
 bpmVariance = (sumSq / validCount) - (mean * mean);
 donnees.bpm = (int)mean;
-// Mettre à jour tolerance adaptatif
 adaptativeTolerance = calculerToleranceAdaptative();
 }
-// (SpO2 déjà calculée plus haut, à chaque échantillon)
-// 🔒 GESTION STABILITÉ BPM
 if (dernierBPMValide == 0) {
 dernierBPMValide = donnees.bpm;
 compteurMesuresStables = 1;
@@ -1960,16 +1871,10 @@ compteurMesuresStables = max(0, compteurMesuresStables - 1);
 }
 dernierBPMValide = donnees.bpm;
 }
-// Debug
-Serial.println("[BPM] Raw:" + String(rawBPM) + " Filt:" + String((int)filteredBPM) +
+Serial.println("[BPM] HR:" + String(currentHR,1) + " Filt:" + String((int)filteredBPM) +
 " Moy:" + String(donnees.bpm) + " Tol:" + String((int)adaptativeTolerance) +
 " Var:" + String((int)bpmVariance) + " SpO2:" + String(donnees.spo2));
-// 🎯 VALIDATION ÉQUILIBRÉE :
-// - Au moins TEMPS_MIN_MESURE_BPM (3 s) écoulés
-// - Au moins NOMBRE_MESURES_STABLES_REQUIS (2) mesures consécutives stables
-// - Au moins SPO2_MIN_BEATS_BEFORE_VALID battements valides comptés
-// - SpO2 dans la plage physiologique (90-100 %)
-// - BPM dans la plage physiologique (SEUIL_BPM_MIN .. SEUIL_BPM_MAX)
+beatPatternCount++;
 unsigned long tempsMesure = millis() - debutMesureStable;
 bool tempsOK     = (tempsMesure >= TEMPS_MIN_MESURE_BPM);
 bool stableOK    = (compteurMesuresStables >= NOMBRE_MESURES_STABLES_REQUIS);
@@ -1977,48 +1882,37 @@ bool beatsOK     = (beatPatternCount >= SPO2_MIN_BEATS_BEFORE_VALID);
 bool varianceOK  = (bpmVariance < 25.0);
 bool bpmRangeOK  = (donnees.bpm >= SEUIL_BPM_MIN && donnees.bpm <= SEUIL_BPM_MAX);
 bool spo2RangeOK = (donnees.spo2 >= SPO2_MIN_PHYSIO && donnees.spo2 <= SPO2_MAX_PHYSIO);
-
 bool mesureValide = tempsOK && stableOK && beatsOK && varianceOK && bpmRangeOK && spo2RangeOK;
-
-// Filet de sécurité : timeout absolu - on accepte la moyenne courante si BPM raisonnable
 bool fallback = (tempsMesure >= TEMPS_MAX_MESURE_BPM) && bpmRangeOK;
-
 if (mesureValide || fallback) {
 donnees.bpmStable = donnees.bpm;
-// Si SpO2 hors plage, on n'enregistre rien plutôt qu'une valeur incorrecte
 donnees.spo2Stable = spo2RangeOK ? donnees.spo2 : 0;
 donnees.donneesValides = true;
 long timeToDetection = millis() - detectionStartTime;
-Serial.println(String(fallback ? "[BPM] ⚠️ TIMEOUT - " : "[BPM] ✅ ") + "DETECTÉ EN " +
+Serial.println(String(fallback ? "[BPM] ⚠️ TIMEOUT - " : "[BPM] ✅ ") + "DÉTECTÉ EN " +
 String(timeToDetection) + "ms - BPM:" + String(donnees.bpmStable) +
 " SpO2:" + String(donnees.spo2Stable) + "% Var:" + String((int)bpmVariance));
-afficherStatut(String("Measurements complete (") + String(timeToDetection/1000.0, 1) + "s)",
-                fallback ? WARNING_COLOR : SUCCESS_COLOR);
+afficherStatut(String("Measures complete (") + String(timeToDetection/1000.0, 1) + "s)",
+fallback ? WARNING_COLOR : SUCCESS_COLOR);
 beepOK();
 delay(800);
 desactiverCapteurCardiaque();
 changerEtat(TEMPERATURE);
 return;
 }
-} else {
-// ❌ Beat rejeté (hors pattern physiologique)
-Serial.println("[BPM] ❌ Beat rejeté (pattern invalide): delta=" + String(timeSinceLast) + "ms");
 }
-}
-// Affichage mis à jour tous les 500ms
 if (millis() - dernierUpdateAffichage > 500) {
 afficherBPM(donnees.bpm);
 afficherSpO2(donnees.spo2);
-afficherQualiteSignal(qualiteSignal);
+afficherQualiteSignal(finger ? 80.0 : 0);
 String status = "BPM:" + String(donnees.bpm) +
-                " | Beats:" + String(beatPatternCount) + "/" + String(SPO2_MIN_BEATS_BEFORE_VALID) +
-                " | Var:" + String((int)bpmVariance);
+" | Beats:" + String(beatPatternCount) + "/" + String(SPO2_MIN_BEATS_BEFORE_VALID) +
+" | Var:" + String((int)bpmVariance);
 afficherStatut(status, PRIMARY_COLOR);
 afficherProgressionStabilite(compteurMesuresStables, NOMBRE_MESURES_STABLES_REQUIS);
 dernierUpdateAffichage = millis();
 }
 } else {
-// ❌ DOIGT RETIRÉ
 if (etatCapteurs.doigtPresent) {
 etatCapteurs.doigtPresent = false;
 donnees.bpm = 0;
@@ -2512,6 +2406,7 @@ etatCapteurs.balanceActif = false;
 delay(200);
 Serial.println("[INIT] Étape 7/7 - Finalisation...");
 initBuzzer();
+max30100Mutex = xSemaphoreCreateMutex();
 Serial.println();
 Serial.println("[INIT] ========================================");
 Serial.println("[INIT] ✅ SYSTÈME SANS EEPROM INITIALISÉ");
@@ -2565,9 +2460,6 @@ Serial.println("\n[LOOP] ===== DEBUG ETAT =====");
 Serial.println("[LOOP] État: " + String(etatActuel));
 Serial.println("[LOOP] Temps écoulé: " + String((millis() - tempsDebutEtat) / 1000) + "s");
 Serial.println("[LOOP] Heap libre: " + String(ESP.getFreeHeap()) + " bytes");
-if (etatActuel == BADGE) {
-sendCommand("PING");
-}
 Serial.println("[LOOP] ========================\n");
 lastDebug = millis();
 }

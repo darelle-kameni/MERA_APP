@@ -19,6 +19,7 @@ const MedicalReview = lazy(() => import('./pages/MedicalReview'));
 const DeviceManagement = lazy(() => import('./pages/DeviceManagement'));
 const AISimulator = lazy(() => import('./pages/AISimulator'));
 const Attendance = lazy(() => import('./pages/Attendance'));
+const Epidemiology = lazy(() => import('./pages/Epidemiology'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
@@ -28,6 +29,7 @@ const PageNotFound = lazy(() => import('./lib/PageNotFound'));
 const AdminRequests = lazy(() => import('./pages/admin/Requests'));
 const AdminUsers = lazy(() => import('./pages/admin/Users'));
 const AdminAssignments = lazy(() => import('./pages/admin/Assignments'));
+const AdminPharmacopee = lazy(() => import('./pages/admin/Pharmacopee'));
 
 // Patient pages
 const PatientLogin = lazy(() => import('./pages/patient/Login'));
@@ -99,10 +101,12 @@ const StaffApp = () => (
           <Route path="/devices" element={<DeviceManagement />} />
           <Route path="/simulator" element={<AISimulator />} />
           <Route path="/attendance" element={<Attendance />} />
+          <Route path="/epidemiology" element={<Epidemiology />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/admin/requests" element={<RequireAdmin><AdminRequests /></RequireAdmin>} />
           <Route path="/admin/users" element={<RequireAdmin><AdminUsers /></RequireAdmin>} />
           <Route path="/admin/assignments" element={<RequireAdmin><AdminAssignments /></RequireAdmin>} />
+          <Route path="/admin/pharmacopee" element={<RequireAdmin><AdminPharmacopee /></RequireAdmin>} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

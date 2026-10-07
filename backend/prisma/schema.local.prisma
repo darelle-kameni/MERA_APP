@@ -4,8 +4,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 // ─── Identity & access ──────────────────────────────────────
@@ -257,17 +257,12 @@ model TraditionalTreatment {
   evidence_level    String   @default("traditionnel_rapporté") // OMS | clinique | traditionnel_avéré | traditionnel_rapporté
   source            String?  // Référence bibliographique complète
   source_url        String?  // URL de vérification de la source (PubMed, Cochrane, WHO, etc.)
-  culture           String?  // Culture / pays / ethnie d'origine (ex: "Massaï", "Kenya", "Inde", "Maroc")
-  country           String?  // Pays d'origine (code 2 lettres ISO, ex: "KE", "IN", "MA")
-  contributed_by    String?  // Personne/organisation qui a contribué ce traitement
-  status            String   @default("approved") // pending | approved | rejected (pour la modération)
   created_date      DateTime @default(now())
   updated_date      DateTime @updatedAt
 
   indications TreatmentIndication[]
 
-  // Une même plante ne peut être proposée qu'une fois pour une maladie donnée
-  // (anti-doublon côté base ; la route admin fait le contrôle avant création).
+  // Anti-doublon : une plante = une entrée par maladie (aligné sur schema.prisma).
   @@unique([disease, plant_name_fr])
 }
 

@@ -15,11 +15,10 @@ export default defineConfig({
    server: {
      host: '0.0.0.0',
      proxy: {
-      '/api': {
-        target: process.env.VITE_API_TARGET || 'http://localhost:4000',
-        changeOrigin: true,
-        rewrite: (p) => p.replace(/^\/api/, ''),
-      },
+       '/api': {
+         target: process.env.VITE_API_TARGET || 'http://localhost:4000',
+         changeOrigin: true,
+       },
     },
   },
 });

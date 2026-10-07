@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 import { useTranslation } from "@/lib/useTranslation";
-import { Users, Stethoscope, AlertTriangle, Activity, UserCog, Shield, Wifi, Baby } from "lucide-react";
+import { Stethoscope, AlertTriangle, Activity, UserCog, Shield, Wifi, Baby } from "lucide-react";
 import StatsCard from "../components/dashboard/StatsCard";
 import RecentSessions from "../components/dashboard/RecentSessions";
 import UrgencyChart from "../components/dashboard/UrgencyChart";
@@ -28,10 +28,10 @@ export default function Dashboard() {
         promises.push(base44.admin.listUsers().catch(() => []));
       }
       const [p, s, d, u] = await Promise.all(promises);
-      setPatients(p || []);
-      setSessions(s || []);
-      setDevices(d || []);
-      if (u) setUsers(u || []);
+      setPatients(Array.isArray(p) ? p : []);
+      setSessions(Array.isArray(s) ? s : []);
+      setDevices(Array.isArray(d) ? d : []);
+      if (u) setUsers(Array.isArray(u) ? u : []);
       setLoading(false);
     }
     load();

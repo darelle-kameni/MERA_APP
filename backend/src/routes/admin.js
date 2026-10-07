@@ -391,4 +391,197 @@ adminRouter.delete('/assignments/:id', async (req, res, next) => {
   }
 });
 
+// ─── Admin: pharmacopée traditionnelle (contributions + modération) ─────
+const EVIDENCE_LEVELS = ['OMS', 'clinique', 'traditionnel_avéré', 'traditionnel_rapporté'];
+// À la création, le contributeur ne peut pas s'attribuer `OMS`/`clinique` :
+// ces niveaux supposent une source vérifiée par un modérateur (via PATCH).
+const CREATE_EVIDENCE_LEVELS = ['traditionnel_rapporté', 'traditionnel_avéré'];
+const SEVERITIES = ['faible', 'modere', 'eleve', 'critique'];
+const TREATMENT_STATUSES = ['pending', 'approved', 'rejected'];
+
+// '' du formulaire → valeur absente (le champ est facultatif côté serveur)
+const optStr = (min = 1) => z.preprocess(
+  (v) => (v === '' ? undefined : v),
+  z.string().trim().min(min).nullable().optional(),
+);
+const optEnum = (values, def) => z.preprocess(
+  (v) => (v === '' || v == null ? undefined : v),
+  z.enum(values).optional().default(def),
+);
+const optEnumNd = (values) => z.preprocess(
+  (v) => (v === '' || v == null ? undefined : v),
+  z.enum(values).optional(),
+);
+
+// DQ-01 : pas d'entrée sans source + URL ; DQ-04 : pas d'entrée sans contre-indications.
+const treatmentCreateSchema = z.object({
+  disease: z.string().trim().min(2, 'Maladie obligatoire'),
+  plant_name_fr: z.string().trim().min(2, 'Plante obligatoire'),
+  plant_name_local: optStr(),
+  synonyms_locaux: optStr(),
+  part_used: optStr(),
+  preparation: z.string().trim().min(5, 'Préparation obligatoire'),
+  dosage_adult: optStr(),
+  dosage_child: optStr(),
+  precautions: optStr(),
+  contre_indications: z.string().trim().min(5, 'Contre-indications obligatoires (DQ-01)'),
+  max_severity: optEnum(SEVERITIES, 'modere'),
+  evidence_level: optEnum(CREATE_EVIDENCE_LEVELS, 'traditionnel_rapporté'),
+  source: z.string().trim().min(3, 'Référence bibliographique obligatoire (DQ-01)'),
+  source_url: z.string().trim().url('URL invalide')
+    .refine((v) => /^https?:\/\//i.test(v), 'URL http(s) attendue'),
+  culture: optStr(),
+  country: z.preprocess(
+    (v) => (typeof v === 'string' ? v.trim().toUpperCase() || undefined : v),
+    z.string().regex(/^[A-Z]{2}$/, 'Code pays ISO sur 2 lettres').nullable().optional(),
+  ),
+  contributed_by: optStr(),
+  // `status` est volontairement absent : toute création part en `pending`.
+});
+
+const treatmentUpdateSchema = treatmentCreateSchema.partial().extend({
+  status: z.enum(TREATMENT_STATUSES).optional(),
+  // Pas de valeur par défaut en modification : ne jamais réécrire par défaut.
+  max_severity: optEnumNd(SEVERITIES),
+  // Un modérateur peut promouvoir le niveau d'évidence en cours de vie.
+  evidence_level: z.enum(EVIDENCE_LEVELS).optional(),
+});
+
+const zodErrorMessage = (e) => e.errors
+  .map((err) => `${err.path.join('.') || 'body'} : ${err.message}`)
+  .join(' | ');
+
+
+// GET /admin/pharmacopee?culture=&status=&q= — liste les traitements
+adminRouter.get('/pharmacopee', async (req, res, next) => {
+  try {
+    const { culture, status, q } = req.query;
+    const where = {};
+    if (culture) where.culture = { contains: culture, mode: 'insensitive' };
+    if (status) where.status = status;
+    if (q) {
+      where.OR = [
+        { disease: { contains: q, mode: 'insensitive' } },
+        { plant_name_fr: { contains: q, mode: 'insensitive' } },
+        { culture: { contains: q, mode: 'insensitive' } },
+      ];
+    }
+    const items = await prisma.traditionalTreatment.findMany({
+      where,
+      orderBy: [{ status: 'asc' }, { created_date: 'desc' }],
+      take: 500,
+    });
+    res.json(items);
+  } catch (e) { next(e); }
+});
+
+// GET /admin/pharmacopee/cultures — liste distincte des cultures
+adminRouter.get('/pharmacopee/cultures', async (req, res, next) => {
+  try {
+    const items = await prisma.traditionalTreatment.findMany({
+      select: { culture: true },
+      where: { culture: { not: null } },
+      distinct: ['culture'],
+      orderBy: { culture: 'asc' },
+    });
+    res.json(items.map((i) => i.culture));
+  } catch (e) { next(e); }
+});
+
+// POST /admin/pharmacopee — ajouter un traitement (contribution).
+// La contribution part toujours en `pending` : elle n'apparaît en vue clinique
+// qu'après modération (DQ-05). `status` dans le body est ignoré.
+adminRouter.post('/pharmacopee', async (req, res, next) => {
+  try {
+    const data = treatmentCreateSchema.parse(req.body);
+
+    const duplicate = await prisma.traditionalTreatment.findFirst({
+      where: { disease: data.disease, plant_name_fr: data.plant_name_fr },
+      select: { id: true },
+    });
+    if (duplicate) {
+      return res.status(409).json({
+        error: 'duplicate',
+        message: 'Ce traitement (maladie + plante) existe déjà dans la pharmacopée.',
+      });
+    }
+
+    const treatment = await prisma.traditionalTreatment.create({
+      data: {
+        disease: data.disease,
+        plant_name_fr: data.plant_name_fr,
+        plant_name_local: data.plant_name_local || null,
+        synonyms_locaux: data.synonyms_locaux || null,
+        part_used: data.part_used || null,
+        preparation: data.preparation,
+        dosage_adult: data.dosage_adult || null,
+        dosage_child: data.dosage_child || null,
+        precautions: data.precautions || null,
+        contre_indications: data.contre_indications,
+        max_severity: data.max_severity || 'modere',
+        evidence_level: data.evidence_level || 'traditionnel_rapporté',
+        source: data.source,
+        source_url: data.source_url,
+        culture: data.culture || null,
+        country: data.country || null,
+        contributed_by: data.contributed_by || req.user.full_name || req.user.email || null,
+        status: 'pending',
+      },
+    });
+    res.status(201).json(treatment);
+  } catch (e) {
+    if (e.name === 'ZodError') {
+      return res.status(400).json({ error: 'validation', message: zodErrorMessage(e), details: e.errors });
+    }
+    next(e);
+  }
+});
+
+// PATCH /admin/pharmacopee/:id — modifier ou modérer un traitement.
+// Passer à `approved` exige une source + URL exploitables (DQ-01).
+adminRouter.patch('/pharmacopee/:id', async (req, res, next) => {
+  try {
+    const data = treatmentUpdateSchema.parse(req.body);
+
+    if (data.status === 'approved') {
+      const existing = await prisma.traditionalTreatment.findUnique({
+        where: { id: req.params.id },
+        select: { source: true, source_url: true },
+      });
+      if (!existing) return res.status(404).json({ error: 'not_found' });
+      const source = data.source ?? existing.source;
+      const sourceUrl = data.source_url ?? existing.source_url;
+      if (!source || !sourceUrl) {
+        return res.status(400).json({
+          error: 'source_required',
+          message: 'Approbation refusée : une référence bibliographique et une URL de source sont obligatoires (DQ-01).',
+        });
+      }
+    }
+
+    const treatment = await prisma.traditionalTreatment.update({
+      where: { id: req.params.id },
+      data,
+    });
+    res.json(treatment);
+  } catch (e) {
+    if (e.name === 'ZodError') {
+      return res.status(400).json({ error: 'validation', message: zodErrorMessage(e), details: e.errors });
+    }
+    if (e.code === 'P2025') return res.status(404).json({ error: 'not_found' });
+    next(e);
+  }
+});
+
+// DELETE /admin/pharmacopee/:id — supprimer un traitement
+adminRouter.delete('/pharmacopee/:id', async (req, res, next) => {
+  try {
+    await prisma.traditionalTreatment.delete({ where: { id: req.params.id } });
+    res.json({ ok: true });
+  } catch (e) {
+    if (e.code === 'P2025') return res.status(404).json({ error: 'not_found' });
+    next(e);
+  }
+});
+
 export default adminRouter;

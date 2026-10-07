@@ -46,9 +46,11 @@ router.get('/sessions/:id', async (req, res, next) => {
 });
 
 // Patient: list traditional treatments (read-only reference, useful for display).
+// Seules les entrées modérées (`approved`) sont lisibles côté patient (DQ-05).
 router.get('/treatments', async (req, res, next) => {
   try {
     const treatments = await prisma.traditionalTreatment.findMany({
+      where: { status: 'approved' },
       orderBy: { disease: 'asc' },
     });
     res.json(treatments);

@@ -1,6 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import { readFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const prisma = new PrismaClient();
 
@@ -12,7 +18,30 @@ const generateIdCard = (role) => {
   return `${prefix}-${randomBlock(4)}-${randomBlock(4)}`;
 };
 
-const treatments = [
+// Load treatments from expanded dataset (JSON)
+const datasetPath = join(__dirname, '..', '..', 'datasets', 'traditional_treatments.json');
+const dataset = JSON.parse(readFileSync(datasetPath, 'utf-8'));
+const treatments = dataset.treatments.map((t) => ({
+  disease: t.disease,
+  plant_name_fr: t.plant.scientific_name,
+  plant_name_local: t.plant.local_name,
+  synonyms_locaux: null,
+  part_used: t.plant.part_used,
+  preparation: t.preparation,
+  dosage_adult: t.dosage?.adult || null,
+  dosage_child: t.dosage?.child || null,
+  precautions: t.precautions,
+  contre_indications: t.contraindications,
+  max_severity: t.max_severity,
+  evidence_level: t.evidence_level,
+  source: t.source,
+  source_url: t.source_url || null,
+}));
+
+// Fallback: original hardcoded treatments if dataset not found
+if (!treatments.length) {
+  console.warn('⚠ Dataset JSON non trouvé, utilisation des traitements intégrés');
+const treatments_fallback = [
   // ─── Maladies oculaires contagieuses ─────────────────────────
   { disease: 'Conjonctivite bactérienne', plant_name_fr: 'Neem (margousier)', plant_name_local: 'Dogo yaro (haoussa), Kine (bambara)',
     synonyms_locaux: '{"fulfulde":"Dogo yaro","bambara":"Kine","wolof":"Paradi"}',
@@ -352,6 +381,8 @@ const treatments = [
     max_severity: 'eleve', evidence_level: 'OMS',
     source: 'WHO — Guidelines on Oral Rehydration Salts (ORS). Adams W et al. (2003) — Coconut water as an oral rehydration solution. American Journal of Clinical Nutrition.' },
 ];
+  treatments.push(...treatments_fallback);
+}
 
 const upsertUser = async ({ email, password, full_name, role, id_card_override }) => {
   const existing = await prisma.user.findUnique({ where: { email } });
@@ -447,6 +478,7 @@ const main = async () => {
           max_severity: t.max_severity || null,
           evidence_level: t.evidence_level || 'traditionnel_rapporté',
           source: t.source || null,
+          source_url: t.source_url || null,
         },
       });
     } else {
@@ -467,6 +499,7 @@ const main = async () => {
           max_severity: t.max_severity || null,
           evidence_level: t.evidence_level || 'traditionnel_rapporté',
           source: t.source || null,
+          source_url: t.source_url || null,
         },
       });
     }

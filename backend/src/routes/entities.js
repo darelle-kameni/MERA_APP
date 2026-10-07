@@ -73,6 +73,15 @@ router.post('/:entity', async (req, res, next) => {
 
     const scope = await buildScope(req.user);
 
+    // La pharmacopée ne s'écrit que via /admin/pharmacopee (validation DQ-01,
+    // anti-doublon, création en `pending`) — jamais par la route générique.
+    if (entity === 'TraditionalTreatment') {
+      return res.status(403).json({
+        error: 'use_admin_pharmacopee',
+        message: 'Utilisez POST /api/admin/pharmacopee : validations et modération obligatoires.',
+      });
+    }
+
     // Shared reference entities: admin-write-only (and not via this generic route).
     if (isSharedEntity(entity) && !scope.unrestricted) {
       return res.status(403).json({ error: 'forbidden_shared_entity' });
@@ -110,6 +119,14 @@ router.patch('/:entity/:id', async (req, res, next) => {
     delete data.id; delete data.created_date; delete data.updated_date;
 
     const scope = await buildScope(req.user);
+
+    // Même restriction qu'à la création : voir /admin/pharmacopee/:id (PATCH).
+    if (entity === 'TraditionalTreatment') {
+      return res.status(403).json({
+        error: 'use_admin_pharmacopee',
+        message: 'Utilisez PATCH /api/admin/pharmacopee/:id : validations et modération obligatoires.',
+      });
+    }
 
     if (isSharedEntity(entity) && !scope.unrestricted) {
       return res.status(403).json({ error: 'forbidden_shared_entity' });

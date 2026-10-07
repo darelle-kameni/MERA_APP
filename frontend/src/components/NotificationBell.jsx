@@ -39,9 +39,9 @@ export default function NotificationBell() {
   const refresh = useCallback(async () => {
     setLoading(true);
     try {
-      const { items, unread_count } = await base44.notifications.list({ limit: 12 });
-      setItems(items);
-      setUnread(unread_count);
+      const data = await base44.notifications.list({ limit: 12 });
+      setItems(Array.isArray(data?.items) ? data.items : []);
+      setUnread(data?.unread_count ?? 0);
     } catch {
       // silent — TopBar shouldn't toast on every poll error
     } finally {

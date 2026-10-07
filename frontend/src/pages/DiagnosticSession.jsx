@@ -159,7 +159,11 @@ export default function DiagnosticSession() {
         </TabsContent>
 
         <TabsContent value="treatment" className="mt-4">
-          <TraditionalTreatmentPanel vitals={vitalsData} eyeResults={eyeData} />
+          <TraditionalTreatmentPanel
+            vitals={vitalsData}
+            eyeResults={eyeData}
+            patientAge={selectedSession?.patient_age ?? null}
+          />
         </TabsContent>
 
         <TabsContent value="conversation" className="mt-4">
