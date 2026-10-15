@@ -82,7 +82,6 @@ const ENTITY_NAMES = [
   'TraditionalTreatment',
   'VocalExchange',
   'MedicalReview',
-  'Attendance',
 ];
 
 const entities = Object.fromEntries(ENTITY_NAMES.map((n) => [n, makeEntity(n)]));

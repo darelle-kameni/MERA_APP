@@ -21,7 +21,6 @@ const ENTITY_MAP = {
   TraditionalTreatment: 'traditionalTreatment',
   VocalExchange: 'vocalExchange',
   MedicalReview: 'medicalReview',
-  Attendance: 'attendance',
 };
 
 const router = Router();

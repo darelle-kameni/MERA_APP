@@ -318,20 +318,3 @@ model MedicalReview {
   created_date      DateTime @default(now())
   updated_date      DateTime @updatedAt
 }
-
-model Attendance {
-  id               String    @id @default(cuid())
-  patient_id       String?
-  card_id          String
-  patient_name     String?
-  role             String    @default("patient")
-  device_id        String?
-  health_center_id String?
-  badged_at        DateTime  @default(now())
-  created_date     DateTime  @default(now())
-
-  @@index([card_id])
-  @@index([patient_id])
-  @@index([badged_at])
-  @@index([health_center_id])
-}

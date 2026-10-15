@@ -3,7 +3,7 @@ export default {
 
   nav: {
     dashboard: "Tableau de bord", newChild: "Nouvel enfant", session: "Session diagnostic",
-    children: "Dossiers enfants", attendance: "Pointage", review: "Revue médicale", devices: "Appareils MERA",
+    children: "Dossiers enfants", review: "Revue médicale", devices: "Appareils MERA",
     simulator: "Simulateur IA", settings: "Paramètres", admin: "Administration",
     requests: "Demandes", users: "Utilisateurs", assignments: "Associations",
     epidemiology: "Épidémiologie",

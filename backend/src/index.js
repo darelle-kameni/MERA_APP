@@ -21,7 +21,6 @@ import notificationsRouter from './routes/notifications.js';
 import robotRouter from './routes/robot.js';
 import treatmentsRouter from './routes/treatments.js';
 import devicesRouter from './routes/devices.js';
-import attendanceRouter from './routes/attendance.js';
 import { globalLimiter, loginLimiter, publicWriteLimiter } from './middleware/rateLimit.js';
 import { notFound, errorHandler } from './middleware/error.js';
 
@@ -88,16 +87,14 @@ app.use('/api/llm', llmRouter);
 app.use('/api/llm', llmPredictRouter);  // monte /api/llm/predict-diagnosis
 app.use('/api/llm', voiceRouter);        // monte /api/llm/transcribe et /api/llm/speak
 app.use('/api/treatments', treatmentsRouter);
-app.use('/api/attendance', attendanceRouter);
 
 const DIST_DIR = path.resolve(ROOT_DIR, '..', 'frontend', 'dist');
 if (existsSync(DIST_DIR)) {
   app.use(express.static(DIST_DIR));
   const indexHtml = readFileSync(path.resolve(DIST_DIR, 'index.html'), 'utf-8');
-  app.get('*', (req, res) => {
-    if (!req.path.startsWith('/api')) {
-      res.set('Content-Type', 'text/html').send(indexHtml);
-    }
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) return next();
+    res.set('Content-Type', 'text/html').send(indexHtml);
   });
 } else {
   console.warn('⚠ dist/ directory not found at', DIST_DIR, '— frontend will not be served');
