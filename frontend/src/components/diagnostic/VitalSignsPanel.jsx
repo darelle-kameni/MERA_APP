@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { speak } from "../../hooks/useSpeech";
 import { LineChart, Line, ResponsiveContainer, Tooltip } from "recharts";
-import { Thermometer, Heart, Wind, Weight } from "lucide-react";
+import { Thermometer, Heart, Wind, Weight, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { generateVitals } from "../../lib/simulatorData";
 import { useTranslation } from "@/lib/useTranslation";
@@ -52,9 +52,10 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false,
   const [tempHistory, setTempHistory] = useState([]);
   const [spo2History, setSpo2History] = useState([]);
   const [hrHistory, setHrHistory] = useState([]);
+  const [bpHistory, setBpHistory] = useState([]);
   const intervalRef = useRef(null);
   const isFirstTick = useRef(true);
-  const prevAlerts = useRef({ temp: false, spo2: false, hr: false });
+  const prevAlerts = useRef({ temp: false, spo2: false, hr: false, bp: false });
 
   useEffect(() => {
     if (sessionData?.temperature != null) {
@@ -63,10 +64,13 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false,
         spo2: sessionData.spo2,
         heart_rate: sessionData.heart_rate,
         weight: sessionData.weight,
+        bp_systolic: sessionData.bp_systolic,
+        bp_diastolic: sessionData.bp_diastolic,
       });
       setTempHistory([{ v: sessionData.temperature }]);
       setSpo2History([{ v: sessionData.spo2 }]);
       setHrHistory([{ v: sessionData.heart_rate }]);
+      setBpHistory([{ v: sessionData.bp_systolic }]);
     }
   }, [sessionData]);
 
@@ -79,6 +83,8 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false,
         const highTemp = vitals.temperature > 38.5;
         const lowSpo2 = vitals.spo2 < 94;
         const abnormalHR = vitals.heart_rate > THRESHOLDS.HR_CRITICAL || vitals.heart_rate < THRESHOLDS.HR_LOW;
+        const abnormalBP = vitals.bp_systolic >= THRESHOLDS.BP_SYS_HIGH || vitals.bp_systolic < THRESHOLDS.BP_SYS_LOW
+          || vitals.bp_diastolic >= THRESHOLDS.BP_DIA_HIGH || vitals.bp_diastolic < THRESHOLDS.BP_DIA_LOW;
 
         if (isFirstTick.current) {
           isFirstTick.current = false;
@@ -93,11 +99,15 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false,
         if (abnormalHR && !prevAlerts.current.hr) {
           setTimeout(() => speak(`Alerte ! Fréquence cardiaque anormale : ${vitals.heart_rate} battements par minute.`), 6000);
         }
-        prevAlerts.current = { temp: highTemp, spo2: lowSpo2, hr: abnormalHR };
+        if (abnormalBP && !prevAlerts.current.bp) {
+          setTimeout(() => speak(`Alerte ! Tension artérielle anormale : ${vitals.bp_systolic} sur ${vitals.bp_diastolic}.`), 7000);
+        }
+        prevAlerts.current = { temp: highTemp, spo2: lowSpo2, hr: abnormalHR, bp: abnormalBP };
 
         setTempHistory(p => [...p.slice(-15), { v: vitals.temperature }]);
         setSpo2History(p => [...p.slice(-15), { v: vitals.spo2 }]);
         setHrHistory(p => [...p.slice(-15), { v: vitals.heart_rate }]);
+        setBpHistory(p => [...p.slice(-15), { v: vitals.bp_systolic }]);
       };
       tick();
       intervalRef.current = setInterval(tick, 2000);
@@ -118,9 +128,13 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false,
   const isHighTemp = current.temperature > 38.5;
   const isLowSpo2 = current.spo2 < 94;
   const isAbnormalHR = current.heart_rate > THRESHOLDS.HR_CRITICAL || current.heart_rate < THRESHOLDS.HR_LOW;
+  const isAbnormalBP = current.bp_systolic != null && (
+    current.bp_systolic >= THRESHOLDS.BP_SYS_HIGH || current.bp_systolic < THRESHOLDS.BP_SYS_LOW
+    || current.bp_diastolic >= THRESHOLDS.BP_DIA_HIGH || current.bp_diastolic < THRESHOLDS.BP_DIA_LOW
+  );
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
       <VitalCard icon={Thermometer} label={t("vitals.temperature")} value={current.temperature}
         unit="°C" color="red" isAbnormal={isHighTemp} history={tempHistory} alertText={alertTxt} />
       <VitalCard icon={Wind} label={t("vitals.spo2")} value={current.spo2}
@@ -129,6 +143,10 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false,
         unit="bpm" color="orange" isAbnormal={isAbnormalHR} history={hrHistory} alertText={alertTxt} />
       <VitalCard icon={Weight} label={t("vitals.weight")} value={current.weight}
         unit="kg" color="green" isAbnormal={false} history={[]} alertText={alertTxt} />
+      <VitalCard icon={Gauge} label={t("vitals.bloodPressure")}
+        value={current.bp_systolic != null && current.bp_diastolic != null
+          ? `${current.bp_systolic}/${current.bp_diastolic}` : "—"}
+        unit="mmHg" color="purple" isAbnormal={isAbnormalBP} history={bpHistory} alertText={alertTxt} />
     </div>
   );
 }

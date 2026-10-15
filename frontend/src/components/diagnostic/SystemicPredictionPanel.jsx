@@ -15,6 +15,16 @@ function buildVitalsSummary(vitals) {
   if (vitals.heart_rate > THRESHOLDS.HR_CRITICAL) findings.push({ label: "Tachycardie", value: `${vitals.heart_rate} bpm`, severity: "high" });
   else if (vitals.heart_rate < THRESHOLDS.HR_LOW) findings.push({ label: "Bradycardie", value: `${vitals.heart_rate} bpm`, severity: "high" });
   else if (vitals.heart_rate > THRESHOLDS.HR_MEDIUM) findings.push({ label: "Pouls élevé", value: `${vitals.heart_rate} bpm`, severity: "medium" });
+  if (vitals.bp_systolic != null && vitals.bp_diastolic != null) {
+    const bp = `${vitals.bp_systolic}/${vitals.bp_diastolic} mmHg`;
+    if (vitals.bp_systolic >= THRESHOLDS.BP_SYS_CRITICAL || vitals.bp_diastolic >= THRESHOLDS.BP_DIA_CRITICAL) {
+      findings.push({ label: "Crise hypertensive", value: bp, severity: "high" });
+    } else if (vitals.bp_systolic >= THRESHOLDS.BP_SYS_HIGH || vitals.bp_diastolic >= THRESHOLDS.BP_DIA_HIGH) {
+      findings.push({ label: "Tension élevée", value: bp, severity: "medium" });
+    } else if (vitals.bp_systolic < THRESHOLDS.BP_SYS_LOW || vitals.bp_diastolic < THRESHOLDS.BP_DIA_LOW) {
+      findings.push({ label: "Hypotension", value: bp, severity: "high" });
+    }
+  }
   return findings;
 }
 
@@ -39,7 +49,8 @@ function determineUrgency(vitalsFindings, eyeFindings) {
 function getAIAnalysis(vitals, eyeData, urgency) {
   const parts = [];
   if (vitals) {
-    parts.push(`Signes vitaux: température=${vitals.temperature}°C, SpO2=${vitals.spo2}%, fréquence cardiaque=${vitals.heart_rate}bpm, poids=${vitals.weight}kg.`);
+    const bp = (vitals.bp_systolic != null && vitals.bp_diastolic != null) ? `, tension artérielle=${vitals.bp_systolic}/${vitals.bp_diastolic}mmHg` : "";
+    parts.push(`Signes vitaux: température=${vitals.temperature}°C, SpO2=${vitals.spo2}%, fréquence cardiaque=${vitals.heart_rate}bpm, poids=${vitals.weight}kg${bp}.`);
   }
   if (eyeData) {
     const left = eyeData.eye_left;

@@ -190,6 +190,7 @@ export default {
 
   vitals: {
     temperature: "Température", spo2: "SpO2", heartRate: "Rythme ɓernde", weight: "Mbu á nyul",
+    bloodPressure: "Tension artérielle",
     alert: "TIIƊƊO",
     waitingRobot: "Yom kelle ngól á robot...",
     activateSimulation: "Wú simulation ngula sá mam",

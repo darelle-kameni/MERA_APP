@@ -190,6 +190,7 @@ export default {
 
   vitals: {
     temperature: "Ngulundi", spo2: "SpO2", heartRate: "Pakitirol ɓernde", weight: "Teddeendi",
+    bloodPressure: "Tension artérielle",
     alert: "TIIƊƊO",
     waitingRobot: "Hedii kelle cellal e robot...",
     activateSimulation: "Wurtu simulation ngam jibinde data",

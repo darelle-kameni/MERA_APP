@@ -17,6 +17,8 @@ model User {
   full_name        String?
   role             String   @default("encadreur") // admin | encadreur | medecin
   status           String   @default("pending")   // pending | active | suspended
+  failed_login_attempts Int  @default(0)
+  locked_until     DateTime?
   signature_url    String?
   health_center_id String?
   health_center    HealthCenter? @relation(fields: [health_center_id], references: [id])
@@ -115,6 +117,8 @@ model Patient {
   guardian         User?    @relation("guardian", fields: [guardian_id], references: [id])
   is_pediatric     Boolean  @default(false)
   last_login       DateTime?
+  failed_login_attempts Int @default(0)
+  locked_until     DateTime?
   created_date     DateTime @default(now())
   updated_date     DateTime @updatedAt
 
@@ -185,6 +189,8 @@ model VitalSigns {
   weight       Float?
   heart_rate   Float?
   bmi          Float?
+  bp_systolic  Int?
+  bp_diastolic Int?
   timestamp    DateTime @default(now())
   created_date DateTime @default(now())
   updated_date DateTime @updatedAt
@@ -260,7 +266,7 @@ model TraditionalTreatment {
   culture           String?  // Culture / pays / ethnie d'origine (ex: "Massaï", "Kenya", "Inde", "Maroc")
   country           String?  // Pays d'origine (code 2 lettres ISO, ex: "KE", "IN", "MA")
   contributed_by    String?  // Personne/organisation qui a contribué ce traitement
-  status            String   @default("approved") // pending | approved | rejected (pour la modération)
+  status            String   @default("pending") // pending | approved | rejected (pour la modération)
   created_date      DateTime @default(now())
   updated_date      DateTime @updatedAt
 

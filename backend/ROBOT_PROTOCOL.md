@@ -51,7 +51,7 @@ L'ESP32 est équipé d'un lecteur RFID. Lorsqu'un badge RFID est détecté :
 ## 3. Envoyer les mesures (POST /robot/measurements)
 
 Une fois le patient identifié, l'ESP32 envoie en un seul POST :
-- Les vitales (T°, SpO2, pouls, poids, IMC)
+- Les vitales (T°, SpO2, pouls, poids, IMC, **tension artérielle**)
 - Les résultats oculaires (contagieux + non-contagieux)
 - Optionnel : urgence calculée ou laissée au backend
 - Optionnel : transcript vocal et recommandations IA embarquée
@@ -63,8 +63,8 @@ Le backend crée atomiquement (transaction Prisma) :
 - 1× `NonContagiousEyeResult` (si bloc `non_contagious` présent)
 
 **Calcul automatique de l'urgence** si non fournie :
-- `CRITIQUE` : T° > 40, SpO2 < 90, pouls > 120
-- `ELEVE` : `contagion_alert` = true, T° ≥ 38, SpO2 < 95
+- `CRITIQUE` : T° > 40, SpO2 < 90, pouls > 120, PA systolique ≥ 130, PA diastolique ≥ 90
+- `ELEVE` : `contagion_alert` = true, T° ≥ 38, SpO2 < 95, PA systolique hors [80–120[, PA diastolique hors [50–80[
 - `MODERE` : un diagnostic oculaire > 50%
 - `NORMAL` sinon
 
@@ -81,6 +81,8 @@ Content-Type: application/json
   "heart_rate": 92,
   "weight": 24.5,
   "bmi": 17.2,
+  "bp_systolic": 110,
+  "bp_diastolic": 70,
   "contagious": {
     "conjunctivitis_bacterial": 72.3,
     "conjunctivitis_viral": 12.1,

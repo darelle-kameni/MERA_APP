@@ -94,6 +94,11 @@ function buildDiseaseKeywords(vitals, eyeData) {
     else if (vitals.heart_rate > THRESHOLDS.HR_MEDIUM) keywords.push("Palpitations");
     else if (vitals.heart_rate < THRESHOLDS.HR_LOW) keywords.push("Bradycardie");
     if (vitals.bmi != null && vitals.bmi < 16) keywords.push("Malnutrition");
+    if (vitals.bp_systolic != null && (vitals.bp_systolic >= THRESHOLDS.BP_SYS_HIGH || vitals.bp_diastolic >= THRESHOLDS.BP_DIA_HIGH)) {
+      keywords.push("Hypertension artérielle");
+    } else if (vitals.bp_systolic != null && (vitals.bp_systolic < THRESHOLDS.BP_SYS_LOW || vitals.bp_diastolic < THRESHOLDS.BP_DIA_LOW)) {
+      keywords.push("Hypotension");
+    }
   }
 
   const { contagious, nonContagious } = getEyeSections(eyeData);
@@ -161,13 +166,16 @@ function buildLLMContext(vitals, eyeData, patientAge) {
     parts.push("Âge du patient: inconnu — traiter comme cas pédiatrique possible");
   }
   if (vitals) {
-    parts.push(`Signes vitaux: température=${vitals.temperature}°C, SpO2=${vitals.spo2}%, fréquence cardiaque=${vitals.heart_rate}bpm, poids=${vitals.weight}kg.`);
+    const bp = (vitals.bp_systolic != null && vitals.bp_diastolic != null) ? `, tension artérielle=${vitals.bp_systolic}/${vitals.bp_diastolic}mmHg` : "";
+    parts.push(`Signes vitaux: température=${vitals.temperature}°C, SpO2=${vitals.spo2}%, fréquence cardiaque=${vitals.heart_rate}bpm, poids=${vitals.weight}kg${bp}.`);
     const anomalies = [];
     if (vitals.temperature > 38.5) anomalies.push("fièvre élevée");
     else if (vitals.temperature > 37.5) anomalies.push("fièvre légère");
     if (vitals.spo2 < 94) anomalies.push("désaturation");
     if (vitals.heart_rate > THRESHOLDS.HR_CRITICAL) anomalies.push("tachycardie");
     else if (vitals.heart_rate < THRESHOLDS.HR_LOW) anomalies.push("bradycardie");
+    if (vitals.bp_systolic != null && (vitals.bp_systolic >= THRESHOLDS.BP_SYS_HIGH || vitals.bp_diastolic >= THRESHOLDS.BP_DIA_HIGH)) anomalies.push("tension élevée");
+    else if (vitals.bp_systolic != null && (vitals.bp_systolic < THRESHOLDS.BP_SYS_LOW || vitals.bp_diastolic < THRESHOLDS.BP_DIA_LOW)) anomalies.push("hypotension");
     if (anomalies.length) parts.push(`Anomalies: ${anomalies.join(", ")}.`);
   }
   const { contagious, nonContagious } = getEyeSections(eyeData);

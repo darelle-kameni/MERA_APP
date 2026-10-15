@@ -189,6 +189,7 @@ export default {
 
   vitals: {
     temperature: "Temperature", spo2: "SpO2", heartRate: "Heart rate", weight: "Weight",
+    bloodPressure: "Blood pressure",
     alert: "ALERT",
     waitingRobot: "Waiting for vital signs from robot...",
     activateSimulation: "Enable simulation to generate data",

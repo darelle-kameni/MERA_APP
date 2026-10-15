@@ -191,6 +191,7 @@ export default {
 
   vitals: {
     temperature: "Température", spo2: "SpO2", heartRate: "Fréq. cardiaque", weight: "Poids",
+    bloodPressure: "Tension artérielle",
     alert: "ALERTE",
     waitingRobot: "En attente des signes vitaux du robot...",
     activateSimulation: "Activez la simulation pour générer des données",

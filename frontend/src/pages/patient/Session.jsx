@@ -83,6 +83,7 @@ const buildPdf = (patient, session) => {
     if (v.heart_rate != null) line(`Fréquence cardiaque : ${v.heart_rate} bpm`);
     if (v.weight != null) line(`Poids : ${v.weight} kg`);
     if (v.bmi != null) line(`IMC : ${v.bmi}`);
+    if (v.bp_systolic != null && v.bp_diastolic != null) line(`Tension artérielle : ${v.bp_systolic}/${v.bp_diastolic} mmHg`);
     sep();
   }
 
@@ -222,6 +223,7 @@ export default function PatientSession() {
             <KV label="Fréquence cardiaque" value={vitals.heart_rate} unit="bpm" />
             <KV label="Poids" value={vitals.weight} unit="kg" />
             <KV label="IMC" value={vitals.bmi} />
+            <KV label="Tension artérielle" value={vitals.bp_systolic != null && vitals.bp_diastolic != null ? `${vitals.bp_systolic}/${vitals.bp_diastolic}` : null} unit="mmHg" />
           </div>
         </Section>
       )}

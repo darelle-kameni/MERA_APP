@@ -24,6 +24,8 @@ const measurementsSchema = z.object({
   heart_rate: z.number().optional().nullable(),
   weight: z.number().optional().nullable(),
   bmi: z.number().optional().nullable(),
+  bp_systolic: z.number().int().optional().nullable(),
+  bp_diastolic: z.number().int().optional().nullable(),
   // Oculaire — diagnostic textuel + probabilités
   eye_left: z.object({
     diagnosis: z.string().optional(),
@@ -57,13 +59,17 @@ const measurementsSchema = z.object({
   alerte: z.boolean().optional(),
 });
 
-const computeUrgency = ({ temperature, spo2, heart_rate, contagious, non_contagious, alerte }) => {
+const computeUrgency = ({ temperature, spo2, heart_rate, bp_systolic, bp_diastolic, contagious, non_contagious, alerte }) => {
   if (temperature != null && temperature > THRESHOLDS.TEMP_CRITICAL) return 'CRITIQUE';
   if (spo2 != null && spo2 < THRESHOLDS.SPO2_CRITICAL) return 'CRITIQUE';
   if (heart_rate != null && heart_rate > THRESHOLDS.HR_CRITICAL) return 'CRITIQUE';
+  if (bp_systolic != null && bp_systolic >= THRESHOLDS.BP_SYS_CRITICAL) return 'CRITIQUE';
+  if (bp_diastolic != null && bp_diastolic >= THRESHOLDS.BP_DIA_CRITICAL) return 'CRITIQUE';
   if (alerte || contagious?.contagion_alert) return 'ELEVE';
   if (temperature != null && temperature >= THRESHOLDS.TEMP_HIGH) return 'ELEVE';
   if (spo2 != null && spo2 < THRESHOLDS.SPO2_HIGH) return 'ELEVE';
+  if (bp_systolic != null && (bp_systolic >= THRESHOLDS.BP_SYS_HIGH || bp_systolic < THRESHOLDS.BP_SYS_LOW)) return 'ELEVE';
+  if (bp_diastolic != null && (bp_diastolic >= THRESHOLDS.BP_DIA_HIGH || bp_diastolic < THRESHOLDS.BP_DIA_LOW)) return 'ELEVE';
   if (contagious && Object.values(contagious).some((v) => typeof v === 'number' && v > THRESHOLDS.CONTESTED_SCORE)) return 'MODERE';
   if (non_contagious && Object.values(non_contagious).some((v) => typeof v === 'number' && v > THRESHOLDS.CONTESTED_SCORE)) return 'MODERE';
   return 'NORMAL';
@@ -117,7 +123,7 @@ router.post('/measurements', async (req, res, next) => {
         },
       });
 
-      const hasVitals = ['temperature', 'spo2', 'heart_rate', 'weight', 'bmi']
+      const hasVitals = ['temperature', 'spo2', 'heart_rate', 'weight', 'bmi', 'bp_systolic', 'bp_diastolic']
         .some((k) => data[k] != null);
       if (hasVitals) {
         await tx.vitalSigns.create({
@@ -128,6 +134,8 @@ router.post('/measurements', async (req, res, next) => {
             heart_rate: data.heart_rate ?? null,
             weight: data.weight ?? null,
             bmi: data.bmi ?? null,
+            bp_systolic: data.bp_systolic ?? null,
+            bp_diastolic: data.bp_diastolic ?? null,
           },
         });
       }

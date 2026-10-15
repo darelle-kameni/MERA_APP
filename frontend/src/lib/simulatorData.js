@@ -4,12 +4,16 @@ export function generateVitals(isChild = false) {
   const baseSpo2 = isChild ? 97 : 98;
   const baseHR = isChild ? 110 : 75;
   const baseWeight = isChild ? 18 : 65;
+  const baseSys = isChild ? 100 : 118;
+  const baseDia = isChild ? 65 : 76;
 
   return {
     temperature: +(baseTemp + (Math.random() - 0.3) * 2.5).toFixed(1),
     spo2: Math.max(85, Math.min(100, Math.round(baseSpo2 + (Math.random() - 0.4) * 8))),
     heart_rate: Math.max(50, Math.min(180, Math.round(baseHR + (Math.random() - 0.5) * 40))),
     weight: +(baseWeight + (Math.random() - 0.5) * 6).toFixed(1),
+    bp_systolic: Math.max(70, Math.min(150, Math.round(baseSys + (Math.random() - 0.5) * 20))),
+    bp_diastolic: Math.max(40, Math.min(100, Math.round(baseDia + (Math.random() - 0.5) * 16))),
   };
 }
 

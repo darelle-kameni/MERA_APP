@@ -31,6 +31,8 @@ const schema = z.object({
       heart_rate: z.number().optional().nullable(),
       weight: z.number().optional().nullable(),
       bmi: z.number().optional().nullable(),
+      bp_systolic: z.number().optional().nullable(),
+      bp_diastolic: z.number().optional().nullable(),
     }).optional(),
     eye_results: z.any().optional(),
     vocal_transcript: z.string().optional().nullable(),
@@ -56,8 +58,8 @@ Tu réponds STRICTEMENT en JSON valide selon ce schéma :
 }
 
 Critères d'urgence (à appliquer rigoureusement) :
-- CRITIQUE : T° > ${THRESHOLDS.TEMP_CRITICAL}°C OU SpO2 < ${THRESHOLDS.SPO2_CRITICAL}% OU FC > ${THRESHOLDS.HR_CRITICAL} OU signes de détresse vitale
-- ELEVE : T° ${THRESHOLDS.TEMP_HIGH}-${THRESHOLDS.TEMP_CRITICAL}°C OU SpO2 ${THRESHOLDS.SPO2_CRITICAL}-${THRESHOLDS.SPO2_HIGH - 1}% OU contagion alerte = oui OU déshydratation sévère
+- CRITIQUE : T° > ${THRESHOLDS.TEMP_CRITICAL}°C OU SpO2 < ${THRESHOLDS.SPO2_CRITICAL}% OU FC > ${THRESHOLDS.HR_CRITICAL} OU PA systolique >= ${THRESHOLDS.BP_SYS_CRITICAL} mmHg OU PA diastolique >= ${THRESHOLDS.BP_DIA_CRITICAL} mmHg OU signes de détresse vitale
+- ELEVE : T° ${THRESHOLDS.TEMP_HIGH}-${THRESHOLDS.TEMP_CRITICAL}°C OU SpO2 ${THRESHOLDS.SPO2_CRITICAL}-${THRESHOLDS.SPO2_HIGH - 1}% OU PA systolique hors [${THRESHOLDS.BP_SYS_LOW}-${THRESHOLDS.BP_SYS_HIGH}[ ou PA diastolique hors [${THRESHOLDS.BP_DIA_LOW}-${THRESHOLDS.BP_DIA_HIGH}[ OU contagion alerte = oui OU déshydratation sévère
 - MODERE : symptômes présents non vitaux, à surveiller
 - NORMAL : pas d'anomalie significative
 
@@ -76,6 +78,7 @@ const buildPrompt = (patient, vitals, eyeResults, transcript, additionalNotes) =
       v.heart_rate != null && `FC ${v.heart_rate} bpm`,
       v.weight != null && `${v.weight}kg`,
       v.bmi != null && `IMC ${v.bmi}`,
+      (v.bp_systolic != null && v.bp_diastolic != null) && `PA ${v.bp_systolic}/${v.bp_diastolic} mmHg`,
     ].filter(Boolean).join(', ');
     if (vstr) lines.push(`Signes vitaux : ${vstr}.`);
   }

@@ -185,6 +185,8 @@ model VitalSigns {
   weight       Float?
   heart_rate   Float?
   bmi          Float?
+  bp_systolic  Int?
+  bp_diastolic Int?
   timestamp    DateTime @default(now())
   created_date DateTime @default(now())
   updated_date DateTime @updatedAt
