@@ -21,7 +21,7 @@ export default function PatientLogin() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!cardId || pin.length !== 4) return;
+    if (!cardId || pin.length !== 6) return;
     setSubmitting(true);
     try {
       await login(cardId.trim(), pin);
@@ -58,15 +58,15 @@ export default function PatientLogin() {
 
           <div className="space-y-1.5">
             <Label htmlFor="pin" className="flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5" /> {t("login.pin", "Code PIN (4 chiffres)")}
+              <Lock className="w-3.5 h-3.5" /> {t("login.pin", "Code PIN (6 chiffres)")}
             </Label>
-            <Input id="pin" type="password" inputMode="numeric" pattern="[0-9]*" maxLength={4}
-              placeholder="••••" value={pin}
-              onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+            <Input id="pin" type="password" inputMode="numeric" pattern="[0-9]*" maxLength={6}
+              placeholder="••••••" value={pin}
+              onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
               className="text-center font-mono text-lg tracking-[0.5em]" required />
           </div>
 
-          <Button type="submit" disabled={submitting || pin.length !== 4 || !cardId} className="w-full">
+          <Button type="submit" disabled={submitting || pin.length !== 6 || !cardId} className="w-full">
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : t("login.accessRecord", "Accéder à mon dossier")}
           </Button>
         </form>

@@ -1,14 +1,18 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
+import { randomInt } from 'node:crypto';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma.js';
 import { signToken, COOKIE_NAME, cookieOptions } from '../lib/jwt.js';
 import { requireStaff, requirePatient } from '../middleware/auth.js';
+import {
+  isLocked, lockResponse, recordFailure, logFailedLogin, DUMMY_HASH,
+} from '../lib/loginGuard.js';
 
 const router = Router();
 
-const generatePin = () =>
-  String(Math.floor(1000 + Math.random() * 9000));
+// PIN à 6 chiffres (1 000 000 de combinaisons) généré avec un RNG cryptographique.
+const generatePin = () => String(randomInt(100000, 1000000));
 
 const publicPatient = (p) => ({
   id: p.id, card_id: p.card_id, full_name: p.full_name, age: p.age, sex: p.sex,
@@ -28,7 +32,7 @@ const registerSchema = z.object({
 
 const loginSchema = z.object({
   card_id: z.string().min(1),
-  pin: z.string().regex(/^\d{4}$/, 'pin must be 4 digits'),
+  pin: z.string().regex(/^\d{6}$/, 'pin must be 6 digits'),
 });
 
 const updateSchema = z.object({
@@ -108,7 +112,7 @@ router.post('/regenerate-pin/:id', requireStaff, async (req, res, next) => {
   try {
     let pin = req.body?.pin?.trim();
     if (pin) {
-      if (!/^\d{4}$/.test(pin)) return res.status(400).json({ error: 'pin_must_be_4_digits' });
+      if (!/^\d{6}$/.test(pin)) return res.status(400).json({ error: 'pin_must_be_6_digits' });
     } else {
       pin = generatePin();
     }
@@ -129,16 +133,26 @@ router.post('/login', async (req, res, next) => {
   try {
     const { card_id, pin } = loginSchema.parse(req.body);
     const patient = await prisma.patient.findUnique({ where: { card_id } });
-    if (!patient || !patient.pin_hash) return res.status(401).json({ error: 'invalid_credentials' });
 
-    const ok = await bcrypt.compare(pin, patient.pin_hash);
-    if (!ok) return res.status(401).json({ error: 'invalid_credentials' });
+    if (isLocked(patient)) return res.status(429).json(lockResponse(patient));
 
-    await prisma.patient.update({ where: { id: patient.id }, data: { last_login: new Date() } });
+    // Temps constant, que le patient / le PIN existe ou non.
+    const ok = await bcrypt.compare(pin, patient?.pin_hash || DUMMY_HASH);
+    if (!patient || !patient.pin_hash || !ok) {
+      if (patient) await recordFailure(prisma.patient, patient.id, patient.failed_login_attempts);
+      logFailedLogin(req, 'patient', card_id);
+      return res.status(401).json({ error: 'invalid_credentials' });
+    }
+
+    await prisma.patient.update({
+      where: { id: patient.id },
+      data: { last_login: new Date(), failed_login_attempts: 0, locked_until: null },
+    });
 
     const token = signToken({ patientId: patient.id, kind: 'patient' });
     res.cookie(COOKIE_NAME, token, cookieOptions());
-    res.json({ patient: publicPatient(patient), token });
+    // Le JWT n'est PAS renvoyé dans le corps : uniquement via cookie httpOnly.
+    res.json({ patient: publicPatient(patient) });
   } catch (e) {
     if (e.name === 'ZodError') return res.status(400).json({ error: 'validation', details: e.errors });
     next(e);

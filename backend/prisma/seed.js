@@ -484,6 +484,7 @@ const main = async () => {
           evidence_level: t.evidence_level || 'traditionnel_rapporté',
           source: t.source || null,
           source_url: t.source_url || null,
+          status: 'approved',
         },
       });
     } else {
@@ -505,6 +506,7 @@ const main = async () => {
           evidence_level: t.evidence_level || 'traditionnel_rapporté',
           source: t.source || null,
           source_url: t.source_url || null,
+          status: 'approved',
         },
       });
     }
@@ -529,10 +531,10 @@ const main = async () => {
   }
 
   const childCardId = 'RFID-DEMO-001';
-  const childPinHash = await bcrypt.hash('1234', 10);
+  const childPinHash = await bcrypt.hash('123456', 10);
   await prisma.patient.upsert({
     where: { card_id: childCardId },
-    update: { guardian_id: encadreur.id },
+    update: { guardian_id: encadreur.id, pin_hash: childPinHash },
     create: {
       card_id: childCardId,
       pin_hash: childPinHash,
@@ -546,7 +548,7 @@ const main = async () => {
   const orphanCardId = 'RFID-ORPHAN-002';
   await prisma.patient.upsert({
     where: { card_id: orphanCardId },
-    update: { guardian_id: null },
+    update: { guardian_id: null, pin_hash: childPinHash },
     create: {
       card_id: orphanCardId,
       pin_hash: childPinHash,
@@ -562,7 +564,7 @@ const main = async () => {
   console.log(`Admin    : admin@mera.app    / admin1234`);
   console.log(`Encadreur: demo@mera.app     / demo1234`);
   console.log(`Médecin  : medecin@mera.app  / medecin1234`);
-  console.log(`Enfant   : RFID=${childCardId}     PIN=1234`);
+  console.log(`Enfant   : RFID=${childCardId}     PIN=123456`);
   console.log(`Device   : MERA-DEMO-001    token=${demoDevice.api_token}`);
   console.log('\n');
 };

@@ -4,6 +4,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import bcrypt from 'bcryptjs';
+import { randomInt } from 'node:crypto';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma.js';
 import { requireStaff, requireRole } from '../middleware/auth.js';
@@ -22,18 +23,26 @@ const signatureStorage = multer.diskStorage({
     cb(null, `${Date.now()}-${Math.random().toString(36).slice(2, 10)}${ext}`);
   },
 });
+const SIGNATURE_TYPES = {
+  'image/png': ['.png'],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/webp': ['.webp'],
+};
+
 const signatureUpload = multer({
   storage: signatureStorage,
   limits: { fileSize: 2 * 1024 * 1024 }, // 2MB max
   fileFilter: (_req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) return cb(null, true);
+    const ext = path.extname(file.originalname).toLowerCase();
+    const exts = SIGNATURE_TYPES[file.mimetype];
+    if (exts && exts.includes(ext)) return cb(null, true);
     cb(new Error('signature_must_be_image'));
   },
 });
 
 const ID_CARD_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const randomBlock = (n) => Array.from({ length: n }, () =>
-  ID_CARD_ALPHABET[Math.floor(Math.random() * ID_CARD_ALPHABET.length)]).join('');
+  ID_CARD_ALPHABET[randomInt(0, ID_CARD_ALPHABET.length)]).join('');
 
 const generateIdCard = async (role) => {
   const prefix = role === 'admin' ? 'AD' : role === 'medecin' ? 'MD' : 'EN';
@@ -224,7 +233,7 @@ const createUserSchema = z.object({
 
 const generatePassword = () => {
   const charset = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
-  return Array.from({ length: 10 }, () => charset[Math.floor(Math.random() * charset.length)]).join('');
+  return Array.from({ length: 10 }, () => charset[randomInt(0, charset.length)]).join('');
 };
 
 adminRouter.post('/users', async (req, res, next) => {

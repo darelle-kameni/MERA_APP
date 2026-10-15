@@ -4,6 +4,9 @@ import { z } from 'zod';
 import { prisma } from '../lib/prisma.js';
 import { signToken, COOKIE_NAME, cookieOptions } from '../lib/jwt.js';
 import { requireStaff } from '../middleware/auth.js';
+import {
+  isLocked, lockResponse, recordFailure, recordSuccess, logFailedLogin, DUMMY_HASH,
+} from '../lib/loginGuard.js';
 
 const router = Router();
 
@@ -32,7 +35,17 @@ router.post('/login', async (req, res, next) => {
     const user = await prisma.user.findFirst({
       where: { OR: [{ email: id }, { id_card: id.toUpperCase() }] },
     });
-    if (!user) return res.status(401).json({ error: 'invalid_credentials' });
+
+    // Compte déjà verrouillé → on refuse sans même comparer le mot de passe.
+    if (isLocked(user)) return res.status(429).json(lockResponse(user));
+
+    // Comparaison en temps constant : même coût que le compte existe ou non.
+    const ok = await bcrypt.compare(data.password, user?.password_hash || DUMMY_HASH);
+    if (!user || !ok) {
+      if (user) await recordFailure(prisma.user, user.id, user.failed_login_attempts);
+      logFailedLogin(req, 'staff', id);
+      return res.status(401).json({ error: 'invalid_credentials' });
+    }
 
     if (user.status !== 'active') {
       return res.status(403).json({
@@ -44,12 +57,12 @@ router.post('/login', async (req, res, next) => {
       });
     }
 
-    const ok = await bcrypt.compare(data.password, user.password_hash);
-    if (!ok) return res.status(401).json({ error: 'invalid_credentials' });
+    await recordSuccess(prisma.user, user.id);
 
     const token = signToken({ userId: user.id });
     res.cookie(COOKIE_NAME, token, cookieOptions());
-    res.json({ user: publicUser(user), token });
+    // Le JWT n'est PAS renvoyé dans le corps : uniquement via cookie httpOnly.
+    res.json({ user: publicUser(user) });
   } catch (e) {
     if (e.name === 'ZodError') return res.status(400).json({ error: 'validation', details: e.errors });
     next(e);

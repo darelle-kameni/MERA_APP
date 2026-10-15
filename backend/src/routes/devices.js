@@ -3,6 +3,7 @@
 //   - POST /devices/:id/regenerate-token : génère un nouveau api_token pour l'appareil
 // La création/édition d'appareils reste via /entities/MeraDevice (admin only).
 import { Router } from 'express';
+import { randomInt } from 'node:crypto';
 import { prisma } from '../lib/prisma.js';
 import { requireStaff, requireRole } from '../middleware/auth.js';
 
@@ -12,7 +13,7 @@ router.use(requireStaff);
 const generateToken = () => {
   const charset = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz0123456789';
   return 'dev_' + Array.from({ length: 32 }, () =>
-    charset[Math.floor(Math.random() * charset.length)]).join('');
+    charset[randomInt(0, charset.length)]).join('');
 };
 
 const fetchWithTimeout = async (url, ms = 3000) => {

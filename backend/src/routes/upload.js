@@ -21,13 +21,27 @@ const storage = multer.diskStorage({
   },
 });
 
+// Whitelist stricte mimetype ↔ extension. Pas de `image/*` générique :
+// cela laisserait passer du SVG (XSS stocké potentiel). L'extension doit
+// correspondre au type déclaré.
+const ALLOWED_TYPES = {
+  'image/png': ['.png'],
+  'image/jpeg': ['.jpg', '.jpeg'],
+  'image/webp': ['.webp'],
+  'image/gif': ['.gif'],
+  'application/pdf': ['.pdf'],
+};
+
 const upload = multer({
   storage,
   limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
   fileFilter: (_req, file, cb) => {
-    const ok = file.mimetype.startsWith('image/') || file.mimetype === 'application/pdf';
-    if (ok) return cb(null, true);
-    cb(new Error('unsupported_type'));
+    const ext = path.extname(file.originalname).toLowerCase();
+    const exts = ALLOWED_TYPES[file.mimetype];
+    if (exts && exts.includes(ext)) return cb(null, true);
+    const err = new Error('unsupported_type');
+    err.status = 400;
+    cb(err);
   },
 });
 
