@@ -38,7 +38,7 @@ export default function AdminRequests() {
       const data = await base44.admin.listRequests(statusFilter);
       setRequests(data);
     } catch (err) {
-      setError(err.message || 'Erreur réseau');
+      setError(err.message || t("common.networkError", "Erreur réseau"));
     } finally {
       setLoading(false);
     }
@@ -51,12 +51,12 @@ export default function AdminRequests() {
     try {
       const res = await base44.admin.approveRequest(id, { id_card: cardIdInput.trim() || undefined });
       const card = res.user.id_card;
-      toast.success(`Compte créé — ID Card : ${card}`);
+      toast.success(t("admin.accountCreatedCard", "Compte créé — ID Card : %s").replace("%s", card));
       setCardIdInput('');
       await load();
       setExpandedId(null);
     } catch (err) {
-      toast.error(err.message || 'Échec de la validation');
+      toast.error(err.message || t("admin.approveFailed", "Échec de la validation"));
     } finally {
       setActing(null);
     }
@@ -66,12 +66,12 @@ export default function AdminRequests() {
     setActing(id);
     try {
       await base44.admin.rejectRequest(id, rejectionReason);
-      toast.success('Demande rejetée');
+      toast.success(t("admin.requestRejected", "Demande rejetée"));
       setRejectionReason('');
       await load();
       setExpandedId(null);
     } catch (err) {
-      toast.error(err.message || 'Échec du rejet');
+      toast.error(err.message || t("admin.rejectFailed", "Échec du rejet"));
     } finally {
       setActing(null);
     }
@@ -89,7 +89,7 @@ export default function AdminRequests() {
             {t("admin.requests")}
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {requests.length} demande(s) {statusFilter !== 'all' ? `(${statusFilter})` : ''}
+            {t("admin.requestsCount", "%s demande(s)").replace("%s", requests.length)} {statusFilter !== 'all' ? `(${statusFilter})` : ''}
           </p>
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -149,7 +149,7 @@ export default function AdminRequests() {
                     <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{t("admin.signatureDigital")}</p>
                     <div className="p-3 rounded-lg bg-white border border-border inline-block">
                       <button onClick={() => setSignatureModal(`/api${r.signature_url}`)}>
-                        <img src={`/api${r.signature_url}`} alt="Signature"
+                        <img src={`/api${r.signature_url}`} alt={t("admin.signatureAlt", "Signature")}
                           className="max-h-24 max-w-full cursor-pointer hover:opacity-80 transition-opacity" />
                       </button>
                     </div>
@@ -172,7 +172,7 @@ export default function AdminRequests() {
                         onChange={(e) => setCardIdInput(e.target.value)}
                         className="font-mono" />
                     </div>
-                    <Textarea placeholder={t("admin.reason") + " (optionnel, requis si rejet)..."}
+                    <Textarea placeholder={t("admin.rejectionPlaceholder", "Raison du rejet (optionnel) (optionnel, requis si rejet)...")}
                       value={expandedId === r.id ? rejectionReason : ''}
                       onChange={(e) => setRejectionReason(e.target.value)} rows={2} />
                     <div className="flex gap-2">
@@ -200,7 +200,7 @@ export default function AdminRequests() {
           </DialogHeader>
           <div className="flex items-center justify-center p-4 bg-white rounded-lg">
             {signatureModal && (
-              <img src={signatureModal} alt="Signature" className="max-h-[70vh] max-w-full object-contain" />
+              <img src={signatureModal} alt={t("admin.signatureAlt", "Signature")} className="max-h-[70vh] max-w-full object-contain" />
             )}
           </div>
         </DialogContent>

@@ -19,7 +19,7 @@ export default function DeviceManagement() {
 
   const getDeviceStatus = (device) => {
     if (!isOnline(device)) return { label: t("device.offline"), color: "bg-red-500/10 text-red-600 border-red-500/30", icon: WifiOff };
-    if (device.status === "maintenance") return { label: "Maintenance", color: "bg-yellow-500/10 text-yellow-600 border-yellow-500/30", icon: RefreshCw };
+    if (device.status === "maintenance") return { label: t("device.maintenance", "Maintenance"), color: "bg-yellow-500/10 text-yellow-600 border-yellow-500/30", icon: RefreshCw };
     return { label: t("device.online"), color: "bg-green-500/10 text-green-600 border-green-500/30", icon: Wifi };
   };
 
@@ -51,7 +51,7 @@ export default function DeviceManagement() {
           <p className="text-sm text-muted-foreground mt-1">{devices.length} {t("device.registered", "appareils enregistrés")}</p>
         </div>
         <Button variant="outline" size="sm" onClick={load} className="gap-1.5">
-          <RefreshCw className="w-3.5 h-3.5" /> Actualiser
+          <RefreshCw className="w-3.5 h-3.5" /> {t("device.refresh", "Actualiser")}
         </Button>
       </div>
 
@@ -81,7 +81,7 @@ export default function DeviceManagement() {
               </div>
 
               <h3 className="font-heading font-semibold text-sm">{device.serial_number}</h3>
-              <p className="text-xs text-muted-foreground mt-0.5">{device.health_center_name || "Centre non assigné"}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{device.health_center_name || t("device.noCenter", "Centre non assigné")}</p>
 
               <div className="mt-4 space-y-2">
                 <div className="flex items-center justify-between text-xs">
@@ -107,7 +107,7 @@ export default function DeviceManagement() {
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-muted-foreground">{t("device.lastSync")}</span>
                   <span className="text-[10px]">
-                    {device.last_sync ? new Date(device.last_sync).toLocaleString("fr-FR") : "Jamais"}
+                    {device.last_sync ? new Date(device.last_sync).toLocaleString("fr-FR") : t("device.never", "Jamais")}
                   </span>
                 </div>
               </div>

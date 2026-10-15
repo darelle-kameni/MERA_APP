@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import { translate as t } from '@/lib/useTranslation';
 
 const fetchSignatureDataUrl = async (signatureUrl) => {
   try {
@@ -41,47 +42,47 @@ export const buildSignedDiagnosisPdf = async ({ session, doctor, status, note, r
   };
   const sep = () => { y += 2; doc.setDrawColor(220); doc.line(18, y, 192, y); y += 5; };
 
-  line('MERA — Compte-rendu médical validé', { size: 16, bold: true });
-  line(`Document généré le ${new Date().toLocaleString('fr-FR')}`, { size: 9, color: [120, 120, 120] });
+  line(t("report.title", "MERA — Compte-rendu médical validé"), { size: 16, bold: true });
+  line(`${t("report.generatedOn", "Document généré le")} ${new Date().toLocaleString('fr-FR')}`, { size: 9, color: [120, 120, 120] });
   sep();
 
-  line('Patient', { size: 12, bold: true });
-  line(`Nom : ${session.patient_name || '—'}`);
-  line(`Âge : ${session.patient_age ?? '—'} ans${session.patient_sex ? `   Sexe : ${session.patient_sex}` : ''}`);
+  line(t("report.patient", "Patient"), { size: 12, bold: true });
+  line(`${t("report.name", "Nom")} : ${session.patient_name || '—'}`);
+  line(`${t("report.age", "Âge")} : ${session.patient_age ?? '—'} ${t("common.years", "ans")}${session.patient_sex ? `   ${t("report.sex", "Sexe")} : ${session.patient_sex}` : ''}`);
   sep();
 
-  line('Consultation', { size: 12, bold: true });
-  line(`Date : ${new Date(session.session_date || session.created_date).toLocaleString('fr-FR')}`);
-  line(`Niveau d'urgence : ${session.urgency_level}`);
+  line(t("report.consultation", "Consultation"), { size: 12, bold: true });
+  line(`${t("report.date", "Date")} : ${new Date(session.session_date || session.created_date).toLocaleString('fr-FR')}`);
+  line(`${t("report.urgencyLevel", "Niveau d'urgence")} : ${session.urgency_level}`);
   sep();
 
   if (session.recommendations) {
-    line('Recommandations issues du moteur IA', { size: 12, bold: true });
+    line(t("report.aiRecommendations", "Recommandations issues du moteur IA"), { size: 12, bold: true });
     line(session.recommendations);
     sep();
   }
 
   if (session.vocal_transcript) {
-    line('Transcription vocale', { size: 12, bold: true });
+    line(t("report.vocalTranscript", "Transcription vocale"), { size: 12, bold: true });
     line(session.vocal_transcript);
     sep();
   }
 
-  line('Avis médical', { size: 12, bold: true });
-  line(`Statut : ${status === 'refere' ? 'Patient référé' : 'Diagnostic validé'}`);
-  if (status === 'refere' && referralHospital) line(`Hôpital de référence : ${referralHospital}`);
+  line(t("report.medicalAdvice", "Avis médical"), { size: 12, bold: true });
+  line(`${t("report.status", "Statut")} : ${status === 'refere' ? t("report.referred", "Patient référé") : t("report.validated", "Diagnostic validé")}`);
+  if (status === 'refere' && referralHospital) line(`${t("report.referralHospital", "Hôpital de référence")} : ${referralHospital}`);
   if (note) {
-    line('Note clinique :', { bold: true });
+    line(t("report.clinicalNote", "Note clinique :"), { bold: true });
     line(note);
   }
   sep();
 
   // Signature block
   y = Math.max(y, 230);
-  line('Validé électroniquement par', { size: 11, bold: true });
-  line(`Dr. ${doctor.full_name || doctor.email || 'Médecin'}`);
-  if (doctor.id_card) line(`ID Card : ${doctor.id_card}`);
-  line(`Le ${new Date().toLocaleString('fr-FR')}`, { color: [100, 100, 100] });
+  line(t("report.validatedBy", "Validé électroniquement par"), { size: 11, bold: true });
+  line(`Dr. ${doctor.full_name || doctor.email || t("report.doctor", "Médecin")}`);
+  if (doctor.id_card) line(`${t("report.idCard", "ID Card")} : ${doctor.id_card}`);
+  line(`${t("report.on", "Le")} ${new Date().toLocaleString('fr-FR')}`, { color: [100, 100, 100] });
 
   if (doctor.signature_url) {
     const dataUrl = await fetchSignatureDataUrl(doctor.signature_url);
@@ -97,7 +98,7 @@ export const buildSignedDiagnosisPdf = async ({ session, doctor, status, note, r
   doc.setFontSize(8);
   doc.setTextColor(140);
   doc.text(
-    'Document signé électroniquement via MERA. La validité de cette signature peut être vérifiée auprès du Club GIT — ENSP Douala.',
+    t("report.footer", "Document signé électroniquement via MERA. La validité de cette signature peut être vérifiée auprès du Club GIT — ENSP Douala."),
     18, 290, { maxWidth: 175 },
   );
 

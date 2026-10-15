@@ -40,7 +40,7 @@ export default function MedicalReview() {
     setSessions(prev => prev.filter(s => s.id !== session.id));
     setReviewNote("");
     setExpandedId(null);
-    toast.success("Diagnostic validé");
+    toast.success(t("medical.diagnosticValidated", "Diagnostic validé"));
   };
 
   const handleRefer = async (session) => {
@@ -56,7 +56,7 @@ export default function MedicalReview() {
     setSessions(prev => prev.filter(s => s.id !== session.id));
     setReviewNote("");
     setExpandedId(null);
-    toast.success("Patient référé à l'hôpital");
+    toast.success(t("medical.patientReferred", "Patient référé à l'hôpital"));
   };
 
   if (loading) {
@@ -100,7 +100,7 @@ export default function MedicalReview() {
                 <div className="text-left">
                   <p className="font-medium text-sm">{session.patient_name || t("common.anonymous", "Patient anonyme")}</p>
                   <p className="text-xs text-muted-foreground">
-                    {session.patient_age ? `${session.patient_age} ans` : ""} • {new Date(session.created_date).toLocaleDateString("fr-FR")}
+                    {session.patient_age ? `${session.patient_age} ${t("common.years", "ans")}` : ""} • {new Date(session.created_date).toLocaleDateString("fr-FR")}
                   </p>
                 </div>
               </div>

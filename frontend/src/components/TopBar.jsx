@@ -59,7 +59,7 @@ export default function TopBar({ onMenuToggle }) {
         <button
           onClick={onMenuToggle}
           className="lg:hidden p-2 hover:bg-muted rounded-lg transition-colors"
-          aria-label="Ouvrir le menu"
+          aria-label={t("topbar.openMenu", "Ouvrir le menu")}
         >
           <Menu className="w-5 h-5" />
         </button>
@@ -87,7 +87,7 @@ export default function TopBar({ onMenuToggle }) {
         <NotificationBell />
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="rounded-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background" aria-label="Menu utilisateur">
+          <DropdownMenuTrigger className="rounded-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background" aria-label={t("topbar.userMenu", "Menu utilisateur")}>
             <Avatar className="w-8 h-8">
               <AvatarFallback className="text-xs font-medium bg-primary text-primary-foreground">
                 {initials(user?.full_name || user?.email)}
@@ -97,7 +97,7 @@ export default function TopBar({ onMenuToggle }) {
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-0.5">
-                <p className="text-sm font-medium truncate">{user?.full_name || 'Utilisateur'}</p>
+                <p className="text-sm font-medium truncate">{user?.full_name || t("topbar.userFallback", "Utilisateur")}</p>
                 <p className="text-[11px] text-muted-foreground truncate">{user?.email}</p>
                 {user?.role && (
                   <p className="text-[10px] text-muted-foreground capitalize">{user.role}</p>
@@ -107,12 +107,12 @@ export default function TopBar({ onMenuToggle }) {
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link to="/settings" className="gap-2 cursor-pointer">
-                <SettingsIcon className="w-3.5 h-3.5" /> Paramètres
+                <SettingsIcon className="w-3.5 h-3.5" /> {t("nav.settings", "Paramètres")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => logout()} className="gap-2 text-destructive cursor-pointer focus:text-destructive">
-              <LogOut className="w-3.5 h-3.5" /> Déconnexion
+              <LogOut className="w-3.5 h-3.5" /> {t("topbar.logout", "Déconnexion")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

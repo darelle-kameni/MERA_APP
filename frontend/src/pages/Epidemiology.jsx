@@ -32,10 +32,10 @@ export default function Epidemiology() {
       <div>
         <h1 className="text-2xl font-heading font-bold flex items-center gap-3">
           <BarChart3 className="w-6 h-6 text-primary" />
-          Tableau de bord épidémiologique
+          {t("epidemiology.title", "Tableau de bord épidémiologique")}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Statistiques agrégées — {sessions.length} sessions analysées
+          {t("epidemiology.subtitle", "Statistiques agrégées — %s sessions analysées").replace("%s", sessions.length)}
         </p>
       </div>
 

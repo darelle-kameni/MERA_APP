@@ -24,7 +24,7 @@ export default function AISimulator() {
 
   const startSession = () => {
     const langGreeting = {
-      fr: "Bonjour ! Je suis MERA, votre assistant médical robotisé. Je suis là pour vous aider à évaluer votre état de santé. Comment vous sentez-vous aujourd'hui ?",
+      fr: t("simulator.greeting", "Bonjour ! Je suis MERA, votre assistant médical robotisé. Je suis là pour vous aider à évaluer votre état de santé. Comment vous sentez-vous aujourd'hui ?"),
       en: "Hello! I am MERA, your robotic medical assistant. I'm here to help assess your health. How are you feeling today?",
       ff: "Sannu! Mi woni MERA, ballo maa cellal. Mi wari wallude ma. Noy mbuurdi-ɗaa hannde?",
       ew: "Mbolo! Me ne MERA, nnom ngul evus bi si. Me ke dzing os a nyiñ. Wo waa ndigi ane?",

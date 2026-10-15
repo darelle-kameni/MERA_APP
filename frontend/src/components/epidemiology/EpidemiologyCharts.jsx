@@ -1,8 +1,10 @@
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, PieChart, Pie, Cell, LineChart, Line } from "recharts";
+import { useTranslation } from "@/lib/useTranslation";
 
 const COLORS = ["#1A3A5C", "#E74C3C", "#F5A623", "#27AE60", "#8E44AD", "#E67E22", "#2C3E50", "#16A085"];
 
 export default function EpidemiologyCharts({ sessions = [] }) {
+  const { t } = useTranslation();
   // Urgency distribution
   const urgencyCounts = sessions.reduce((acc, s) => {
     acc[s.urgency_level] = (acc[s.urgency_level] || 0) + 1;
@@ -25,27 +27,27 @@ export default function EpidemiologyCharts({ sessions = [] }) {
 
   // Monthly trend (simulated)
   const monthData = [
-    { month: "Jan", sessions: 12, critiques: 3 },
-    { month: "Fév", sessions: 18, critiques: 5 },
-    { month: "Mar", sessions: 22, critiques: 4 },
-    { month: "Avr", sessions: sessions.length || 15, critiques: sessions.filter(s => s.urgency_level === "CRITIQUE").length || 6 },
+    { month: t("epidemiology.monthJan", "Jan"), sessions: 12, critiques: 3 },
+    { month: t("epidemiology.monthFeb", "Fév"), sessions: 18, critiques: 5 },
+    { month: t("epidemiology.monthMar", "Mar"), sessions: 22, critiques: 4 },
+    { month: t("epidemiology.monthApr", "Avr"), sessions: sessions.length || 15, critiques: sessions.filter(s => s.urgency_level === "CRITIQUE").length || 6 },
   ];
 
   // Top diseases (simulated)
   const diseaseData = [
-    { name: "Paludisme", value: 35 },
-    { name: "Conjonctivite", value: 22 },
-    { name: "Anémie", value: 18 },
-    { name: "Typhoïde", value: 12 },
-    { name: "Trachome", value: 8 },
-    { name: "Myopie", value: 5 },
+    { name: "epidemiology.diseaseMalaria", fallback: "Paludisme", value: 35 },
+    { name: "epidemiology.diseaseConjunctivitis", fallback: "Conjonctivite", value: 22 },
+    { name: "epidemiology.diseaseAnemia", fallback: "Anémie", value: 18 },
+    { name: "epidemiology.diseaseTyphoid", fallback: "Typhoïde", value: 12 },
+    { name: "epidemiology.diseaseTrachoma", fallback: "Trachome", value: 8 },
+    { name: "epidemiology.diseaseMyopia", fallback: "Myopie", value: 5 },
   ];
 
   return (
     <div className="grid md:grid-cols-2 gap-6">
       {/* Urgency distribution */}
       <div className="bg-card rounded-xl border border-border p-5">
-        <h3 className="font-heading font-semibold text-sm mb-4">Répartition par niveau d'urgence</h3>
+        <h3 className="font-heading font-semibold text-sm mb-4">{t("epidemiology.byUrgency", "Répartition par niveau d'urgence")}</h3>
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -70,7 +72,7 @@ export default function EpidemiologyCharts({ sessions = [] }) {
 
       {/* Age groups */}
       <div className="bg-card rounded-xl border border-border p-5">
-        <h3 className="font-heading font-semibold text-sm mb-4">Répartition par tranche d'âge</h3>
+        <h3 className="font-heading font-semibold text-sm mb-4">{t("epidemiology.byAge", "Répartition par tranche d'âge")}</h3>
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={ageData}>
@@ -85,15 +87,15 @@ export default function EpidemiologyCharts({ sessions = [] }) {
 
       {/* Monthly trend */}
       <div className="bg-card rounded-xl border border-border p-5">
-        <h3 className="font-heading font-semibold text-sm mb-4">Tendance mensuelle</h3>
+        <h3 className="font-heading font-semibold text-sm mb-4">{t("epidemiology.monthlyTrend", "Tendance mensuelle")}</h3>
         <div className="h-48">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={monthData}>
               <XAxis dataKey="month" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} />
               <Tooltip />
-              <Line type="monotone" dataKey="sessions" stroke="#1A3A5C" strokeWidth={2} name="Sessions" />
-              <Line type="monotone" dataKey="critiques" stroke="#E74C3C" strokeWidth={2} name="Critiques" />
+              <Line type="monotone" dataKey="sessions" stroke="#1A3A5C" strokeWidth={2} name={t("epidemiology.sessionsLegend", "Sessions")} />
+              <Line type="monotone" dataKey="critiques" stroke="#E74C3C" strokeWidth={2} name={t("epidemiology.critiquesLegend", "Critiques")} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -101,11 +103,11 @@ export default function EpidemiologyCharts({ sessions = [] }) {
 
       {/* Top diseases */}
       <div className="bg-card rounded-xl border border-border p-5">
-        <h3 className="font-heading font-semibold text-sm mb-4">Top pathologies détectées</h3>
+        <h3 className="font-heading font-semibold text-sm mb-4">{t("epidemiology.topDiseases", "Top pathologies détectées")}</h3>
         <div className="space-y-2.5">
           {diseaseData.map((d, i) => (
             <div key={d.name} className="flex items-center gap-3">
-              <span className="text-xs text-muted-foreground w-24 truncate">{d.name}</span>
+              <span className="text-xs text-muted-foreground w-24 truncate">{t(d.name, d.fallback)}</span>
               <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
                 <div 
                   className="h-full rounded-full" 

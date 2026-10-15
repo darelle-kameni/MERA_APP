@@ -6,8 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/useTranslation";
 
 export default function ConversationPanel() {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [started, setStarted] = useState(false);
@@ -43,7 +45,7 @@ export default function ConversationPanel() {
       setMessages([botMsg]);
       speak(reply);
     } catch {
-      toast.error("Erreur au démarrage de la session");
+      toast.error(t("conversation.startError", "Erreur au démarrage de la session"));
     }
     setThinking(false);
   };
@@ -78,7 +80,7 @@ export default function ConversationPanel() {
       setMessages(prev => [...prev, botMsg]);
       speak(reply);
     } catch (err) {
-      toast.error(err.status === 503 ? "Service IA indisponible" : "Erreur LLM");
+      toast.error(err.status === 503 ? t("conversation.serviceUnavailable", "Service IA indisponible") : t("conversation.llmError", "Erreur LLM"));
     } finally {
       setThinking(false);
     }
@@ -95,9 +97,9 @@ export default function ConversationPanel() {
       await startRecording();
       setListening(true);
     } catch (err) {
-      if (err.message === 'MIC_NOT_SUPPORTED') toast.error('Microphone non supporté');
-      else if (err.name === 'NotAllowedError') toast.error("Autorisation microphone refusée");
-      else toast.error("Impossible d'accéder au microphone");
+      if (err.message === 'MIC_NOT_SUPPORTED') toast.error(t("conversation.micNotSupported", "Microphone non supporté"));
+      else if (err.name === 'NotAllowedError') toast.error(t("conversation.micDenied", "Autorisation microphone refusée"));
+      else toast.error(t("conversation.micAccess", "Impossible d'accéder au microphone"));
     }
   };
 
@@ -108,7 +110,7 @@ export default function ConversationPanel() {
       <div className="px-4 py-3 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Bot className="w-5 h-5 text-primary" />
-          <h3 className="font-heading font-semibold text-sm">Dialogue Robot — Patient</h3>
+          <h3 className="font-heading font-semibold text-sm">{t("conversation.title", "Dialogue Robot — Patient")}</h3>
         </div>
         {!started && (
           <Button
@@ -118,7 +120,7 @@ export default function ConversationPanel() {
             className="h-8 text-xs"
           >
             <Play className="w-3.5 h-3.5 mr-1" />
-            Démarrer
+            {t("conversation.start", "Démarrer")}
           </Button>
         )}
       </div>
@@ -127,14 +129,14 @@ export default function ConversationPanel() {
         {messages.length === 0 && !started && (
           <div className="text-center py-12">
             <Bot className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
-            <p className="text-sm text-muted-foreground">Cliquez sur "Démarrer" pour débuter la consultation</p>
-            <p className="text-xs text-muted-foreground/70 mt-1">MERA dialoguera avec le patient</p>
+            <p className="text-sm text-muted-foreground">{t("conversation.emptyHint", 'Cliquez sur "Démarrer" pour débuter la consultation')}</p>
+            <p className="text-xs text-muted-foreground/70 mt-1">{t("conversation.emptySubhint", "MERA dialoguera avec le patient")}</p>
           </div>
         )}
         {thinking && messages.length === 0 && (
           <div className="text-center py-12">
             <Loader2 className="w-8 h-8 mx-auto text-primary animate-spin mb-3" />
-            <p className="text-sm text-muted-foreground">Démarrage de la session...</p>
+            <p className="text-sm text-muted-foreground">{t("conversation.starting", "Démarrage de la session...")}</p>
           </div>
         )}
         {messages.map((msg) => (
@@ -163,7 +165,7 @@ export default function ConversationPanel() {
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "150ms" }} />
               <span className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: "300ms" }} />
             </div>
-            <span className="text-xs text-muted-foreground">MERA réfléchit...</span>
+            <span className="text-xs text-muted-foreground">{t("conversation.thinking", "MERA réfléchit...")}</span>
           </div>
         )}
       </div>
@@ -171,7 +173,7 @@ export default function ConversationPanel() {
       {started && (
         <div className="p-3 border-t border-border flex gap-2">
           <Input
-            placeholder="Répondre au robot..."
+            placeholder={t("conversation.inputPlaceholder", "Répondre au robot...")}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
@@ -182,7 +184,7 @@ export default function ConversationPanel() {
             <Button size="icon" onClick={toggleMic} disabled={thinking}
               variant={listening ? "destructive" : "outline"}
               className="h-10 w-10 flex-shrink-0 relative"
-              title={listening ? "Cliquer pour arrêter et transcrire" : "Enregistrer la voix"}>
+              title={listening ? t("conversation.micStop", "Cliquer pour arrêter et transcrire") : t("conversation.micRecord", "Enregistrer la voix")}>
               {listening ? (
                 <>
                   <MicOff className="w-4 h-4 animate-pulse" />

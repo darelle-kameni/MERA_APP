@@ -42,10 +42,10 @@ export default function PatientRegistration() {
         card_id: form.card_id.trim().toUpperCase(),
       });
       const { patient, credentials } = res;
-      const name = patient.full_name || form.full_name || "Nouvel enfant";
+      const name = patient.full_name || form.full_name || t("child.defaultName", "Nouvel enfant");
       setSaving(false);
       toast.success(`${name} ${t("child.registered")}`, {
-        description: `Carte: ${credentials.card_id} · PIN: ${credentials.pin}`,
+        description: `${t("child.cardLabel", "Carte:")} ${credentials.card_id} · PIN: ${credentials.pin}`,
         duration: 8000,
       });
       setTimeout(() => navigate(`/diagnostic?patient_id=${patient.id}`), 2500);
@@ -77,10 +77,10 @@ export default function PatientRegistration() {
         )}
 
         <div>
-          <Label htmlFor="name">{t("child.name", "Nom complet")} (optionnel)</Label>
+          <Label htmlFor="name">{t("child.name", "Nom complet")} {t("child.optional", "(optionnel)")}</Label>
           <Input
             id="name"
-            placeholder="Nom du patient"
+            placeholder={t("child.patientNamePlaceholder", "Nom du patient")}
             value={form.full_name}
             onChange={(e) => setForm({ ...form, full_name: e.target.value })}
             className="mt-1.5"
@@ -93,7 +93,7 @@ export default function PatientRegistration() {
             <Input
               id="age"
               type="number"
-              placeholder="Âge"
+              placeholder={t("child.agePlaceholder", "Âge")}
               required
               min="0"
               max="120"
@@ -106,7 +106,7 @@ export default function PatientRegistration() {
             <Label>{t("child.sex", "Sexe")} *</Label>
             <Select value={form.sex} onValueChange={(v) => setForm({ ...form, sex: v })} required>
               <SelectTrigger className="mt-1.5">
-                <SelectValue placeholder="Sexe" />
+                <SelectValue placeholder={t("child.sexPlaceholder", "Sexe")} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="M">{t("child.masculine", "Masculin")}</SelectItem>
@@ -120,7 +120,7 @@ export default function PatientRegistration() {
           <Label htmlFor="card_id">{t("child.cardId", "ID Carte RFID")} *</Label>
           <Input
             id="card_id"
-            placeholder="Numéro de la carte RFID"
+            placeholder={t("child.cardIdPlaceholder", "Numéro de la carte RFID")}
             required
             value={form.card_id}
             onChange={(e) => setForm({ ...form, card_id: e.target.value })}
@@ -132,7 +132,7 @@ export default function PatientRegistration() {
           <Label htmlFor="village">{t("child.village", "Village")}</Label>
           <Input
             id="village"
-            placeholder="Nom du village"
+            placeholder={t("child.villagePlaceholder", "Nom du village")}
             value={form.village}
             onChange={(e) => setForm({ ...form, village: e.target.value })}
             className="mt-1.5"
@@ -144,7 +144,7 @@ export default function PatientRegistration() {
           <Select value={form.health_center_id} onValueChange={(v) => setForm({ ...form, health_center_id: v })}
             disabled={centers.length === 0}>
             <SelectTrigger className="mt-1.5">
-              <SelectValue placeholder={centers.length === 0 ? "Aucun centre disponible" : t("child.selectCenter", "Sélectionner un centre")} />
+              <SelectValue placeholder={centers.length === 0 ? t("child.noCenter", "Aucun centre disponible") : t("child.selectCenter", "Sélectionner un centre")} />
             </SelectTrigger>
             <SelectContent>
               {centers.map((c) => (
@@ -165,7 +165,7 @@ export default function PatientRegistration() {
               </>
             )}
           </Button>
-          <Button type="button" variant="outline" className="h-12 w-12 flex-shrink-0" title="QR Code WiFi"
+          <Button type="button" variant="outline" className="h-12 w-12 flex-shrink-0" title={t("child.wifiQrTitle", "QR Code WiFi")}
             onClick={() => setWifiQrOpen(true)}>
             <Wifi className="w-5 h-5" />
           </Button>
@@ -173,7 +173,7 @@ export default function PatientRegistration() {
         <WiFiQrModal open={wifiQrOpen} onOpenChange={setWifiQrOpen} />
 
         <p className="text-[10px] text-muted-foreground text-center">
-          L'ID de carte RFID servira d'identifiant pour le patient
+          {t("child.cardIdHint", "L'ID de carte RFID servira d'identifiant pour le patient")}
         </p>
       </form>
     </div>

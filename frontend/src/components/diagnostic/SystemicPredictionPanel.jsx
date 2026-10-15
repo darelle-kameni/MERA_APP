@@ -8,21 +8,21 @@ import { THRESHOLDS } from "@/lib/thresholds";
 function buildVitalsSummary(vitals) {
   if (!vitals) return [];
   const findings = [];
-  if (vitals.temperature > 38.5) findings.push({ label: "Fièvre", value: `${vitals.temperature}°C`, severity: "high" });
-  else if (vitals.temperature > 37.5) findings.push({ label: "Température élevée", value: `${vitals.temperature}°C`, severity: "medium" });
-  if (vitals.spo2 < 94) findings.push({ label: "Désaturation", value: `${vitals.spo2}%`, severity: "high" });
-  else if (vitals.spo2 < 96) findings.push({ label: "SpO2 limite", value: `${vitals.spo2}%`, severity: "medium" });
-  if (vitals.heart_rate > THRESHOLDS.HR_CRITICAL) findings.push({ label: "Tachycardie", value: `${vitals.heart_rate} bpm`, severity: "high" });
-  else if (vitals.heart_rate < THRESHOLDS.HR_LOW) findings.push({ label: "Bradycardie", value: `${vitals.heart_rate} bpm`, severity: "high" });
-  else if (vitals.heart_rate > THRESHOLDS.HR_MEDIUM) findings.push({ label: "Pouls élevé", value: `${vitals.heart_rate} bpm`, severity: "medium" });
+  if (vitals.temperature > 38.5) findings.push({ labelKey: "prediction.fever", value: `${vitals.temperature}°C`, severity: "high" });
+  else if (vitals.temperature > 37.5) findings.push({ labelKey: "prediction.highTemp", value: `${vitals.temperature}°C`, severity: "medium" });
+  if (vitals.spo2 < 94) findings.push({ labelKey: "prediction.desaturation", value: `${vitals.spo2}%`, severity: "high" });
+  else if (vitals.spo2 < 96) findings.push({ labelKey: "prediction.spo2Borderline", value: `${vitals.spo2}%`, severity: "medium" });
+  if (vitals.heart_rate > THRESHOLDS.HR_CRITICAL) findings.push({ labelKey: "prediction.tachycardia", value: `${vitals.heart_rate} bpm`, severity: "high" });
+  else if (vitals.heart_rate < THRESHOLDS.HR_LOW) findings.push({ labelKey: "prediction.bradycardia", value: `${vitals.heart_rate} bpm`, severity: "high" });
+  else if (vitals.heart_rate > THRESHOLDS.HR_MEDIUM) findings.push({ labelKey: "prediction.highPulse", value: `${vitals.heart_rate} bpm`, severity: "medium" });
   if (vitals.bp_systolic != null && vitals.bp_diastolic != null) {
     const bp = `${vitals.bp_systolic}/${vitals.bp_diastolic} mmHg`;
     if (vitals.bp_systolic >= THRESHOLDS.BP_SYS_CRITICAL || vitals.bp_diastolic >= THRESHOLDS.BP_DIA_CRITICAL) {
-      findings.push({ label: "Crise hypertensive", value: bp, severity: "high" });
+      findings.push({ labelKey: "prediction.hypertensiveCrisis", value: bp, severity: "high" });
     } else if (vitals.bp_systolic >= THRESHOLDS.BP_SYS_HIGH || vitals.bp_diastolic >= THRESHOLDS.BP_DIA_HIGH) {
-      findings.push({ label: "Tension élevée", value: bp, severity: "medium" });
+      findings.push({ labelKey: "prediction.highBloodPressure", value: bp, severity: "medium" });
     } else if (vitals.bp_systolic < THRESHOLDS.BP_SYS_LOW || vitals.bp_diastolic < THRESHOLDS.BP_DIA_LOW) {
-      findings.push({ label: "Hypotension", value: bp, severity: "high" });
+      findings.push({ labelKey: "prediction.hypotension", value: bp, severity: "high" });
     }
   }
   return findings;
@@ -33,9 +33,9 @@ function buildEyeSummary(eyeData) {
   const findings = [];
   const left = eyeData.eye_left;
   const right = eyeData.eye_right;
-  if (left && left.diagnosis && left.diagnosis !== "Sain") findings.push({ label: `OD: ${left.diagnosis}`, value: `${Math.round(left.confidence * 100)}%`, severity: left.confidence > 0.8 ? "high" : "medium" });
-  if (right && right.diagnosis && right.diagnosis !== "Sain") findings.push({ label: `OG: ${right.diagnosis}`, value: `${Math.round(right.confidence * 100)}%`, severity: right.confidence > 0.8 ? "high" : "medium" });
-  if (eyeData.alerte) findings.push({ label: "Alerte ophtalmique", value: "Active", severity: "high" });
+  if (left && left.diagnosis && left.diagnosis !== "Sain") findings.push({ labelKey: "prediction.eyeOD", labelArg: left.diagnosis, value: `${Math.round(left.confidence * 100)}%`, severity: left.confidence > 0.8 ? "high" : "medium" });
+  if (right && right.diagnosis && right.diagnosis !== "Sain") findings.push({ labelKey: "prediction.eyeOG", labelArg: right.diagnosis, value: `${Math.round(right.confidence * 100)}%`, severity: right.confidence > 0.8 ? "high" : "medium" });
+  if (eyeData.alerte) findings.push({ labelKey: "prediction.eyeAlert", value: "prediction.active", severity: "high" });
   return findings;
 }
 
@@ -106,12 +106,18 @@ export default function SystemicPredictionPanel({ vitals: vitalsProp, eyeResults
     run();
   }, [vitalsProp, eyeProp, urgency]);
 
+  const renderFindingLabel = (f) => {
+    const label = t(f.labelKey);
+    return f.labelArg ? `${label} ${f.labelArg}` : label;
+  };
+  const renderFindingValue = (f) => (f.value.startsWith("prediction.") ? t(f.value) : f.value);
+
   if (!vitalsProp && !eyeProp) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
         <Activity className="w-12 h-12 text-muted-foreground/30 mb-3" />
-        <p className="text-sm">Mesures non disponibles</p>
-        <p className="text-xs mt-1">Les signes vitaux et l'analyse oculaire doivent être complétés d'abord</p>
+        <p className="text-sm">{t("prediction.unavailableTitle")}</p>
+        <p className="text-xs mt-1">{t("prediction.unavailableHint")}</p>
       </div>
     );
   }
@@ -125,24 +131,24 @@ export default function SystemicPredictionPanel({ vitals: vitalsProp, eyeResults
       {loading && (
         <div className="bg-card rounded-xl border border-border p-5 text-center">
           <div className="w-7 h-7 mx-auto mb-3 border-3 border-primary/20 border-t-primary rounded-full animate-spin" />
-          <p className="text-sm text-muted-foreground">Analyse des données en cours...</p>
+          <p className="text-sm text-muted-foreground">{t("prediction.analyzing")}</p>
         </div>
       )}
 
       {(analysis || error) && !loading && (
         <div className="bg-card rounded-xl border border-border p-5">
           <h3 className="text-xs font-heading font-semibold text-muted-foreground uppercase tracking-wider mb-3">
-            Avis clinique
+            {t("prediction.clinicalAdvice")}
           </h3>
           {analysis ? (
             <p className="text-sm leading-relaxed whitespace-pre-wrap">{analysis}</p>
           ) : (
             <p className="text-sm text-muted-foreground italic">
               {vitalsProp && eyeProp
-                ? "Analyse IA non disponible — patient examiné, paramètres enregistrés."
+                ? t("prediction.aiBothFallback")
                 : vitalsProp
-                  ? "Seuls les signes vitaux sont disponibles. Complétez l'analyse oculaire."
-                  : "Seule l'analyse oculaire est disponible. Complétez les signes vitaux."}
+                  ? t("prediction.aiVitalsFallback")
+                  : t("prediction.aiEyeFallback")}
             </p>
           )}
         </div>
@@ -167,9 +173,9 @@ export default function SystemicPredictionPanel({ vitals: vitalsProp, eyeResults
             foundUrgent ? "text-destructive" :
             isHealthy ? "text-success" : "text-muted-foreground"
           )}>
-            {foundUrgent ? "Point d'attention détecté — revoir les paramètres" :
-             isHealthy ? "Tous les paramètres sont dans les normes" :
-             "Surveillance recommandée"}
+            {foundUrgent ? t("prediction.statusAttention") :
+             isHealthy ? t("prediction.statusHealthy") :
+             t("prediction.statusWatch")}
           </span>
         </div>
       )}
@@ -179,18 +185,18 @@ export default function SystemicPredictionPanel({ vitals: vitalsProp, eyeResults
         <div className="bg-card rounded-xl border border-border overflow-hidden">
           <div className="px-4 py-2.5 border-b border-border">
             <h3 className="text-xs font-heading font-semibold text-muted-foreground uppercase tracking-wider">
-              Points d'attention
+              {t("prediction.attentionPoints")}
             </h3>
           </div>
           <div className="divide-y divide-border">
             {allFindings.map((f, i) => (
               <div key={i} className="flex items-center justify-between px-4 py-2.5 text-sm">
-                <span className="font-medium">{f.label}</span>
+                <span className="font-medium">{renderFindingLabel(f)}</span>
                 <span className={cn(
                   "text-xs font-semibold",
                   f.severity === "high" ? "text-destructive" :
                   f.severity === "medium" ? "text-warning" : "text-success"
-                )}>{f.value}</span>
+                )}>{renderFindingValue(f)}</span>
               </div>
             ))}
           </div>

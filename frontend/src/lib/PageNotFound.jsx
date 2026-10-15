@@ -2,10 +2,12 @@ import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/lib/AuthContext';
 import { Home, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from '@/lib/useTranslation';
 
 export default function PageNotFound() {
   const location = useLocation();
   const { user } = useAuth();
+  const { t } = useTranslation();
   const pageName = location.pathname.substring(1);
 
   return (
@@ -18,19 +20,19 @@ export default function PageNotFound() {
           <h1 className="text-5xl font-light text-muted-foreground/50">404</h1>
         </div>
         <div className="space-y-1">
-          <h2 className="text-xl font-heading font-semibold">Page introuvable</h2>
+          <h2 className="text-xl font-heading font-semibold">{t("error.pageNotFound", "Page introuvable")}</h2>
           <p className="text-sm text-muted-foreground">
-            La page <span className="font-medium text-foreground">"{pageName}"</span> n'existe pas.
+            {t("error.pageMissingStart", "La page ")}<span className="font-medium text-foreground">"{pageName}"</span>{t("error.pageMissingEnd", " n'existe pas.")}
           </p>
         </div>
         {user?.role === 'admin' && (
           <p className="text-xs text-muted-foreground bg-muted/50 rounded-lg px-3 py-2">
-            <span className="font-medium">Note admin :</span> cette route n'est pas montée dans <code>App.jsx</code>.
+            <span className="font-medium">{t("error.noteAdmin", "Note admin :")}</span>{t("error.routeNotMounted", " cette route n'est pas montée dans ")}<code>App.jsx</code>.
           </p>
         )}
         <Button asChild>
           <Link to="/" className="gap-1.5">
-            <Home className="w-4 h-4" /> Retour au tableau de bord
+            <Home className="w-4 h-4" /> {t("patient.backToDashboard", "Retour au tableau de bord")}
           </Link>
         </Button>
       </div>

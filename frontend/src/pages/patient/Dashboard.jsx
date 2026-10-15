@@ -23,8 +23,8 @@ export default function PatientDashboard() {
       const data = await base44.patient.sessions();
       setSessions(data);
     } catch (err) {
-      setError(err.message || 'Erreur réseau');
-      toast.error('Impossible de charger votre dossier');
+      setError(err.message || t('common.networkError', 'Erreur réseau'));
+      toast.error(t('patient.loadFolderError', 'Impossible de charger votre dossier'));
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ export default function PatientDashboard() {
                     {hasReview && lastReview.referral_needed && (
                       <div className="mt-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-600 text-[10px] font-medium">
                         <AlertTriangle className="w-3 h-3" />
-                        Référé en hôpital
+                        {t('patient.referred', 'Référé en hôpital')}
                       </div>
                     )}
                   </div>

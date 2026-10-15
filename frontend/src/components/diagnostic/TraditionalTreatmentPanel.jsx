@@ -10,6 +10,7 @@ const URGENCY_LABELS = { critique: "Critique", eleve: "Urgent", modere: "Modér�
 const URGENCY_COLORS = { critique: "bg-destructive/10 text-destructive", eleve: "bg-destructive/10 text-destructive", modere: "bg-warning/10 text-warning", faible: "bg-muted text-muted-foreground" };
 const EVIDENCE_ORDER = { OMS: 4, clinique: 3, traditionnel_avéré: 2, traditionnel_rapporté: 1 };
 const EVIDENCE_LABELS = { OMS: "OMS", clinique: "Clinique", traditionnel_avéré: "Trad. avéré", traditionnel_rapporté: "Trad. rapporté" };
+const EVIDENCE_KEYS = { OMS: "oms", clinique: "clinique", traditionnel_avéré: "tradAvere", traditionnel_rapporté: "tradRapporte" };
 const EVIDENCE_COLORS = { OMS: "bg-success/10 text-success border-success/20", clinique: "bg-info/10 text-info border-info/20", traditionnel_avéré: "bg-warning/10 text-warning border-warning/20", traditionnel_rapporté: "bg-muted text-muted-foreground border-border" };
 
 const MIN_PROBABILITY = 0.5;
@@ -342,7 +343,7 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
           setData({
             treatments: [],
             emptyKind: "healthy",
-            notes: "Aucune anomalie détectée au-dessus des seuils. Continuer le suivi standard.",
+            notes: t("treatment.notesHealthy", "Aucune anomalie détectée au-dessus des seuils. Continuer le suivi standard."),
           });
           setSource("none");
           setLoading(false);
@@ -356,7 +357,7 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
           setData({
             treatments: [],
             emptyKind: "none",
-            notes: "Notre base ne couvre pas ce tableau clinique. Ces propositions sont générées par IA et n'ont pas été validées.",
+            notes: t("treatment.notesNoMatch", "Notre base ne couvre pas ce tableau clinique. Ces propositions sont générées par IA et n'ont pas été validées."),
           });
           setSource("none");
 
@@ -366,7 +367,7 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
           return;
         }
 
-        setData({ treatments: grouped, notes: "Traitements issus de la pharmacopée traditionnelle" });
+        setData({ treatments: grouped, notes: t("treatment.notesPharmacy", "Traitements issus de la pharmacopée traditionnelle") });
         setSource("db");
 
         const covered = grouped.map((g) => g.condition);
@@ -384,8 +385,8 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
     return (
       <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
         <Leaf className="w-12 h-12 text-muted-foreground/30 mb-3" />
-        <p className="text-sm">Données non disponibles</p>
-        <p className="text-xs mt-1">Les signes vitaux et l'analyse oculaire doivent être complétés d'abord</p>
+        <p className="text-sm">{t("treatment.noData", "Données non disponibles")}</p>
+        <p className="text-xs mt-1">{t("treatment.noDataHint", "Les signes vitaux et l'analyse oculaire doivent être complétés d'abord")}</p>
       </div>
     );
   }
@@ -397,12 +398,11 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
           <Baby className="w-4 h-4 text-warning flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-semibold text-warning">
-              Patient de {patientAge} ans — lecture pédiatrique
+              {t("treatment.pediatricTitle", `Patient de ${patientAge} ans — lecture pédiatrique`)}
             </p>
             <p className="text-xs text-muted-foreground mt-0.5">
-              Les posologies enfant et les contre-indications pédiatriques sont signalées ci-dessous.
-              Une posologie marquée « Non établi » ne doit jamais être administrée sans avis médical.
-              {weight != null ? ` Poids de référence : ${weight} kg.` : ""}
+              {t("treatment.pediatricNotes", "Les posologies enfant et les contre-indications pédiatriques sont signalées ci-dessous. Une posologie marquée « Non établi » ne doit jamais être administrée sans avis médical.")}
+              {weight != null ? t("treatment.referenceWeight", ` Poids de référence : ${weight} kg.`) : ""}
             </p>
           </div>
         </div>
@@ -410,7 +410,7 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
       {loading && (
         <div className="bg-card rounded-xl border border-border p-5 text-center">
           <div className="w-7 h-7 mx-auto mb-3 border-3 border-primary/20 border-t-primary rounded-full animate-spin" />
-          <p className="text-sm text-muted-foreground">Consultation de la pharmacopée...</p>
+          <p className="text-sm text-muted-foreground">{t("treatment.loading", "Consultation de la pharmacopée...")}</p>
         </div>
       )}
 
@@ -419,13 +419,13 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
           {data.emptyKind === "healthy" ? (
             <>
               <CheckCircle2 className="w-8 h-8 mx-auto text-success mb-2" />
-              <p className="text-sm font-medium text-success">Aucune anomalie détectée</p>
-              <p className="text-xs text-muted-foreground mt-1">{data.notes || "Continuer le suivi standard."}</p>
+              <p className="text-sm font-medium text-success">{t("treatment.emptyHealthy", "Aucune anomalie détectée")}</p>
+              <p className="text-xs text-muted-foreground mt-1">{data.notes || t("treatment.continueStandard", "Continuer le suivi standard.")}</p>
             </>
           ) : (
             <>
               <AlertTriangle className="w-8 h-8 mx-auto text-muted-foreground mb-2" />
-              <p className="text-sm font-medium">Aucun remède de la base ne correspond</p>
+              <p className="text-sm font-medium">{t("treatment.emptyNoMatch", "Aucun remède de la base ne correspond")}</p>
               <p className="text-xs text-muted-foreground mt-1">{data.notes}</p>
             </>
           )}
@@ -437,11 +437,11 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium">Recommandations non disponibles</p>
+              <p className="text-sm font-medium">{t("treatment.recoUnavailable", "Recommandations non disponibles")}</p>
               <p className="text-xs text-muted-foreground mt-1">
                 {vitals && eyeResults
-                  ? "Patient examiné. Consultez un spécialiste pour un traitement adapté."
-                  : "Données insuffisantes pour générer des recommandations."}
+                  ? t("treatment.recoExamined", "Patient examiné. Consultez un spécialiste pour un traitement adapté.")
+                  : t("treatment.recoInsufficient", "Données insuffisantes pour générer des recommandations.")}
               </p>
             </div>
           </div>
@@ -459,7 +459,7 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
                 <span className="text-sm font-semibold">{treatment.condition}</span>
                 {treatment.evidence_level && (
                   <span className={cn("text-[10px] px-1.5 py-0.5 rounded-full font-medium border hidden sm:inline-block", EVIDENCE_COLORS[treatment.evidence_level])}>
-                    {EVIDENCE_LABELS[treatment.evidence_level]}
+                    {EVIDENCE_KEYS[treatment.evidence_level] && t(`treatment.evidence.${EVIDENCE_KEYS[treatment.evidence_level]}`, EVIDENCE_LABELS[treatment.evidence_level])}
                   </span>
                 )}
               </div>
@@ -467,7 +467,7 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
                 "text-[10px] px-2 py-0.5 rounded-full font-medium",
                 URGENCY_COLORS[urgency] || "bg-muted text-muted-foreground"
               )}>
-                {URGENCY_LABELS[urgency] || urgency}
+                {t(`treatment.urgency.${urgency}`, URGENCY_LABELS[urgency] || urgency)}
               </span>
             </div>
 
@@ -477,10 +477,10 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
                   <AlertTriangle className="w-4 h-4 text-destructive flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-semibold text-destructive">
-                      Ce cas nécessite une prise en charge médicale urgente
+                      {t("treatment.urgentCase", "Ce cas nécessite une prise en charge médicale urgente")}
                     </p>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      Le traitement traditionnel seul est insuffisant. Consultez un centre de santé.
+                      {t("treatment.urgentAdvice", "Le traitement traditionnel seul est insuffisant. Consultez un centre de santé.")}
                     </p>
                   </div>
                 </div>
@@ -504,23 +504,23 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
 
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Droplets className="w-3 h-3" />
-                    <span>Partie utilisée: <strong className="text-foreground">{plant.part_used}</strong></span>
+                    <span>{t("treatment.partUsed", "Partie utilisée:")} <strong className="text-foreground">{plant.part_used}</strong></span>
                   </div>
 
                   <div>
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5">Préparation</p>
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-0.5">{t("treatment.preparation", "Préparation")}</p>
                     <p className="text-xs leading-relaxed">{plant.preparation}</p>
                   </div>
 
                   <div className="grid grid-cols-2 gap-2">
                     <div className="p-2 rounded-lg bg-muted">
-                      <p className="text-[10px] text-muted-foreground">Dosage adulte</p>
+                      <p className="text-[10px] text-muted-foreground">{t("treatment.dosageAdult", "Dosage adulte")}</p>
                       <p className="text-xs font-medium">{plant.dosage_adult}</p>
                     </div>
                     <div className={cn("p-2 rounded-lg", missingChildDose ? "bg-destructive/5 border border-destructive/30" : "bg-muted")}>
-                      <p className={cn("text-[10px]", missingChildDose ? "text-destructive font-medium" : "text-muted-foreground")}>Dosage enfant</p>
+                      <p className={cn("text-[10px]", missingChildDose ? "text-destructive font-medium" : "text-muted-foreground")}>{t("treatment.dosageChild", "Dosage enfant")}</p>
                       <p className={cn("text-xs font-medium", missingChildDose && "text-destructive")}>
-                        {childDoseMissing(plant.dosage_child) ? "Non établi" : plant.dosage_child}
+                        {childDoseMissing(plant.dosage_child) ? t("treatment.notEstablished", "Non établi") : plant.dosage_child}
                       </p>
                     </div>
                   </div>
@@ -529,20 +529,20 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
                     <div className="flex items-start gap-2 p-2.5 rounded-lg bg-destructive/5 border border-destructive/30">
                       <AlertTriangle className="w-3.5 h-3.5 text-destructive flex-shrink-0 mt-0.5" />
                       <p className="text-[11px] text-destructive font-medium">
-                        Posologie enfant non établie pour un patient de {patientAge} ans : ne pas administrer sans avis médical.
+                        {t("treatment.pediatricDoseMissing", `Posologie enfant non établie pour un patient de ${patientAge} ans : ne pas administrer sans avis médical.`)}
                       </p>
                     </div>
                   )}
 
                   {pediatric && !missingChildDose && weight != null && (
                     <p className="text-[10px] text-muted-foreground">
-                      Posologie enfant à vérifier selon le poids de l'enfant ({weight} kg).
+                      {t("treatment.pediatricDoseWeight", `Posologie enfant à vérifier selon le poids de l'enfant (${weight} kg).`)}
                     </p>
                   )}
 
                   {plant.precautions && (
                     <div className="p-2.5 rounded-lg bg-muted border border-border">
-                      <p className="text-[10px] font-medium text-muted-foreground">Précautions</p>
+                      <p className="text-[10px] font-medium text-muted-foreground">{t("treatment.precautions", "Précautions")}</p>
                       <p className="text-[11px] text-foreground mt-0.5 whitespace-pre-wrap">{plant.precautions}</p>
                     </div>
                   )}
@@ -551,8 +551,7 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
                     <div className="flex items-start gap-2 p-2.5 rounded-lg bg-destructive/5 border border-destructive/30">
                       <AlertTriangle className="w-3.5 h-3.5 text-destructive flex-shrink-0 mt-0.5" />
                       <p className="text-[11px] text-destructive font-medium">
-                        Contre-indication pédiatrique : ce remède est signalé contre-indiqué ou déconseillé
-                        chez l'enfant (patient de {patientAge} ans). Avis médical requis avant toute administration.
+                        {t("treatment.pediatricContraindication", `Contre-indication pédiatrique : ce remède est signalé contre-indiqué ou déconseillé chez l'enfant (patient de ${patientAge} ans). Avis médical requis avant toute administration.`)}
                       </p>
                     </div>
                   )}
@@ -566,7 +565,7 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
                         "text-[10px] font-medium",
                         highRisk ? "text-destructive" : "text-muted-foreground"
                       )}>
-                        Contre-indications
+                        {t("treatment.contraindications", "Contre-indications")}
                       </p>
                       <p className="text-[11px] text-foreground mt-0.5 whitespace-pre-wrap">
                         {plant.contre_indications}
@@ -584,8 +583,8 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
                       <ExternalLink className="w-3 h-3" />
                       <span>
                         {isVerifiedSource(plant.source_url)
-                          ? "Référence PubMed (article identifié)"
-                          : "Recherche PubMed (référence non vérifiée)"}
+                          ? t("treatment.pubmedVerified", "Référence PubMed (article identifié)")
+                          : t("treatment.pubmedSearch", "Recherche PubMed (référence non vérifiée)")}
                       </span>
                     </a>
                   )}
@@ -610,14 +609,14 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
             <div className="px-4 py-2 border-b border-border/60 flex items-center gap-2">
               <Sparkles className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
               <span className="text-xs font-medium text-muted-foreground">
-                {isStandalone ? "Propositions IA non vérifiées" : "Compléments IA non vérifiés"}
+                {isStandalone ? t("treatment.aiStandaloneTitle", "Propositions IA non vérifiées") : t("treatment.aiComplementTitle", "Compléments IA non vérifiés")}
               </span>
             </div>
             <div className="p-3.5 space-y-2.5">
               <p className="text-[11px] text-muted-foreground leading-relaxed">
                 {isStandalone
-                  ? "Aucun remède de la base pharmacopée n'a été trouvé pour ce tableau clinique. Ces propositions viennent d'un modèle d'IA : ni les plantes ni les posologies n'ont pas été validées. À ne pas administrer sans validation par un professionnel de santé."
-                  : "Ces propositions s'ajoutent aux traitements de la base ci-dessus pour les mêmes pathologies. Elles viennent d'un modèle d'IA : ni les plantes ni les posologies n'ont pas été validées. À ne pas administrer sans validation par un professionnel de santé."}
+                  ? t("treatment.aiStandaloneDisclaimer", "Aucun remède de la base pharmacopée n'a été trouvé pour ce tableau clinique. Ces propositions viennent d'un modèle d'IA : ni les plantes ni les posologies n'ont pas été validées. À ne pas administrer sans validation par un professionnel de santé.")
+                  : t("treatment.aiComplementDisclaimer", "Ces propositions s'ajoutent aux traitements de la base ci-dessus pour les mêmes pathologies. Elles viennent d'un modèle d'IA : ni les plantes ni les posologies n'ont pas été validées. À ne pas administrer sans validation par un professionnel de santé.")}
               </p>
               {data.complement.map((treatment, tidx) => {
                 const urgency = normalizeUrgency(treatment.urgency);
@@ -628,7 +627,7 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
                       <span className="text-xs font-medium text-muted-foreground">{treatment.condition}</span>
                       {isUrgent ? (
                         <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-destructive/10 text-destructive font-medium shrink-0">
-                          {URGENCY_LABELS[urgency]}
+                          {t(`treatment.urgency.${urgency}`, URGENCY_LABELS[urgency])}
                         </span>
                       ) : null}
                     </div>
@@ -638,18 +637,18 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
                         <p className="text-foreground">
                           {plant.scientific_name}
                         </p>
-                        {plant.part_used && <p>Partie utilisée: {plant.part_used}</p>}
+                        {plant.part_used && <p>{t("treatment.partUsed", "Partie utilisée:")} {plant.part_used}</p>}
                         {plant.preparation && <p className="text-foreground/80">{plant.preparation}</p>}
                         <p>
-                          Adulte: {plant.dosage_adult || "Non établi"}
-                          {plant.dosage_child ? ` · Enfant: ${plant.dosage_child}` : ""}
+                          {t("treatment.adulteLabel", "Adulte:")} {plant.dosage_adult || t("treatment.notEstablished", "Non établi")}
+                          {plant.dosage_child ? ` · ${t("treatment.enfantLabel", "Enfant:")} ${plant.dosage_child}` : ""}
                         </p>
                         {pediatric && childDoseMissing(plant.dosage_child) && (
                           <p className="text-destructive font-medium">
-                            Posologie enfant non établie ({patientAge} ans) — ne pas administrer sans avis médical.
+                            {t("treatment.pediatricDoseMissingShort", `Posologie enfant non établie (${patientAge} ans) — ne pas administrer sans avis médical.`)}
                           </p>
                         )}
-                        {plant.precautions && <p className="whitespace-pre-wrap">Précautions: {plant.precautions}</p>}
+                        {plant.precautions && <p className="whitespace-pre-wrap">{t("treatment.precautions", "Précautions")}: {plant.precautions}</p>}
                       </div>
                     ))}
                   </div>
@@ -666,15 +665,14 @@ export default function TraditionalTreatmentPanel({ vitals, eyeResults, patientA
         const pending = plants.length - verified;
         return (
           <p className="text-[10px] text-muted-foreground italic text-center">
-            Traitements issus de la pharmacopée traditionnelle — {verified} référence(s) PubMed identifiée(s)
-            sur {plants.length} plante(s)
-            {pending > 0 ? ` ; ${pending} sans article identifié (simple lien de recherche PubMed)` : ""}
+            {t("treatment.sourceSummary", `Traitements issus de la pharmacopée traditionnelle — ${verified} référence(s) PubMed identifiée(s) sur ${plants.length} plante(s)`)}
+            {pending > 0 ? t("treatment.pendingSources", ` ; ${pending} sans article identifié (simple lien de recherche PubMed)`) : ""}
           </p>
         );
       })()}
       {data?.treatments?.length > 0 && (
         <p className="text-[10px] text-muted-foreground italic text-center">
-          Ces traitements sont complémentaires — consulter un médecin si pas d'amélioration sous 48h
+          {t("treatment.complementaryNotice", "Ces traitements sont complémentaires — consulter un médecin si pas d'amélioration sous 48h")}
         </p>
       )}
     </div>

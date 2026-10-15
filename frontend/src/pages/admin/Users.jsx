@@ -46,7 +46,7 @@ const CreateUserDialog = ({ open, onClose, onCreated }) => {
   const [creds, setCreds] = useState(null);
 
   const update = (k) => (e) => setForm((f) => ({ ...f, [k]: e?.target ? e.target.value : e }));
-  const copy = (val) => navigator.clipboard.writeText(val).then(() => toast.success('Copié'));
+  const copy = (val) => navigator.clipboard.writeText(val).then(() => toast.success(t("common.copied", "Copié")));
 
   const submit = async (e) => {
     e.preventDefault();
@@ -59,9 +59,9 @@ const CreateUserDialog = ({ open, onClose, onCreated }) => {
       const result = await base44.admin.createUser(payload);
       setCreds(result.credentials);
       onCreated();
-      toast.success('Compte créé');
+      toast.success(t("admin.accountCreated", "Compte créé"));
     } catch (err) {
-      const msg = err.status === 409 ? (err.data?.error === 'id_card_taken' ? 'ID de carte déjà utilisé' : 'Email déjà utilisé') : err.message || 'Erreur';
+      const msg = err.status === 409 ? (err.data?.error === 'id_card_taken' ? t("admin.idCardTaken", "ID de carte déjà utilisé") : t("admin.emailTaken", "Email déjà utilisé")) : err.message || t("common.error", "Erreur");
       toast.error(msg);
     } finally {
       setSubmitting(false);
@@ -81,12 +81,12 @@ const CreateUserDialog = ({ open, onClose, onCreated }) => {
             <DialogHeader>
               <DialogTitle>{t("admin.accountCreated")}</DialogTitle>
               <DialogDescription>
-                Communiquez ces identifiants à l'utilisateur. <strong>Le mot de passe ne sera plus affiché.</strong>
+                {t("admin.shareCredentials", "Communiquez ces identifiants à l'utilisateur.")} <strong>{t("admin.passwordOnce", "Le mot de passe ne sera plus affiché.")}</strong>
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-2 py-2">
-              <CredentialsCard label="ID Card" value={creds.id_card} onCopy={() => copy(creds.id_card)} />
-              <CredentialsCard label="Mot de passe" value={creds.password} onCopy={() => copy(creds.password)} />
+              <CredentialsCard label={t("admin.idCard", "ID Card")} value={creds.id_card} onCopy={() => copy(creds.id_card)} />
+              <CredentialsCard label={t("login.password", "Mot de passe")} value={creds.password} onCopy={() => copy(creds.password)} />
             </div>
             <DialogFooter>
               <Button onClick={() => { reset(); onClose(); }} className="w-full">{t("common.close")}</Button>
@@ -96,7 +96,7 @@ const CreateUserDialog = ({ open, onClose, onCreated }) => {
           <>
             <DialogHeader>
               <DialogTitle>{t("admin.createUser")}</DialogTitle>
-              <DialogDescription>Le compte sera actif immédiatement, sans demande préalable.</DialogDescription>
+              <DialogDescription>{t("admin.accountImmediate", "Le compte sera actif immédiatement, sans demande préalable.")}</DialogDescription>
             </DialogHeader>
             <form onSubmit={submit} className="space-y-3">
               <div>
@@ -108,7 +108,7 @@ const CreateUserDialog = ({ open, onClose, onCreated }) => {
                 <Input id="cu-email" type="email" required value={form.email} onChange={update('email')} className="mt-1.5" />
               </div>
               <div>
-                <Label>Rôle</Label>
+                <Label>{t("admin.role", "Rôle")}</Label>
                 <Select value={form.role} onValueChange={update('role')}>
                   <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
                   <SelectContent>
@@ -126,11 +126,11 @@ const CreateUserDialog = ({ open, onClose, onCreated }) => {
               <div>
                 <Label htmlFor="cu-pwd">{t("login.password")}</Label>
                 <Input id="cu-pwd" type="text" minLength={6} value={form.password} onChange={update('password')}
-                  placeholder="Vide = généré automatiquement" className="mt-1.5" />
+                  placeholder={t("admin.passwordAuto", "Vide = généré automatiquement")} className="mt-1.5" />
               </div>
               <DialogFooter>
                 <Button type="submit" disabled={submitting} className="w-full">
-                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Créer le compte'}
+                  {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : t("admin.createAccount", "Créer le compte")}
                 </Button>
               </DialogFooter>
             </form>
@@ -162,14 +162,14 @@ const EditUserDialog = ({ user, onClose, onUpdated }) => {
       const payload = { ...form };
       if (!payload.id_card) delete payload.id_card;
       await base44.admin.updateUser(user.id, payload);
-      toast.success('Utilisateur mis à jour');
+      toast.success(t("admin.userUpdated", "Utilisateur mis à jour"));
       onUpdated();
       onClose();
     } catch (err) {
-      const msg = err.data?.error === 'cannot_demote_self' ? 'Vous ne pouvez pas vous rétrograder vous-même'
-        : err.data?.error === 'cannot_suspend_self' ? 'Vous ne pouvez pas vous suspendre vous-même'
-        : err.data?.error === 'id_card_taken' ? 'Cet ID de carte est déjà utilisé'
-        : err.message || 'Erreur';
+      const msg = err.data?.error === 'cannot_demote_self' ? t("admin.cannotDemoteSelf", "Vous ne pouvez pas vous rétrograder vous-même")
+        : err.data?.error === 'cannot_suspend_self' ? t("admin.cannotSuspendSelf", "Vous ne pouvez pas vous suspendre vous-même")
+        : err.data?.error === 'id_card_taken' ? t("child.cardUsed", "Cet ID de carte est déjà utilisé")
+        : err.message || t("common.error", "Erreur");
       toast.error(msg);
     } finally { setSubmitting(false); }
   };
@@ -189,7 +189,7 @@ const EditUserDialog = ({ user, onClose, onUpdated }) => {
               onChange={(e) => setForm({ ...form, full_name: e.target.value })} className="mt-1.5" />
           </div>
           <div>
-            <Label>Rôle</Label>
+            <Label>{t("admin.role", "Rôle")}</Label>
             <Select value={form.role} onValueChange={(v) => setForm({ ...form, role: v })}>
               <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -205,12 +205,12 @@ const EditUserDialog = ({ user, onClose, onUpdated }) => {
               onChange={(e) => setForm({ ...form, id_card: e.target.value })} className="mt-1.5" />
           </div>
           <div>
-            <Label>Statut</Label>
+            <Label>{t("admin.status", "Statut")}</Label>
             <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v })}>
               <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="active">Actif</SelectItem>
-                <SelectItem value="suspended">Suspendu</SelectItem>
+                <SelectItem value="active">{t("admin.active", "Actif")}</SelectItem>
+                <SelectItem value="suspended">{t("admin.suspended", "Suspendu")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -232,10 +232,10 @@ const ResultDialog = ({ open, title, value, label, onClose }) => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>Ne sera plus affiché par la suite. Copiez-le maintenant.</DialogDescription>
+          <DialogDescription>{t("admin.notShownAgain", "Ne sera plus affiché par la suite. Copiez-le maintenant.")}</DialogDescription>
         </DialogHeader>
         <CredentialsCard label={label} value={value || ''}
-          onCopy={() => navigator.clipboard.writeText(value).then(() => toast.success('Copié'))} />
+          onCopy={() => navigator.clipboard.writeText(value).then(() => toast.success(t("common.copied", "Copié")))} />
         <DialogFooter>
           <Button onClick={onClose} className="w-full">{t("common.close")}</Button>
         </DialogFooter>
@@ -283,7 +283,7 @@ export default function AdminUsers() {
     setLoading(true);
     setError(null);
     try { setUsers(await base44.admin.listUsers()); }
-    catch (err) { setError(err.message || 'Erreur réseau'); }
+    catch (err) { setError(err.message || t("common.networkError", "Erreur réseau")); }
     finally { setLoading(false); }
   }, []);
 
@@ -292,48 +292,48 @@ export default function AdminUsers() {
   const toggleStatus = (u) => {
     const nextStatus = u.status === 'active' ? 'suspended' : 'active';
     setConfirm({
-      title: nextStatus === 'suspended' ? 'Suspendre cet utilisateur ?' : 'Réactiver cet utilisateur ?',
+      title: nextStatus === 'suspended' ? t("admin.confirmSuspend", "Suspendre cet utilisateur ?") : t("admin.confirmReactivate", "Réactiver cet utilisateur ?"),
       message: nextStatus === 'suspended'
-        ? `${u.full_name || u.email} ne pourra plus se connecter.`
-        : `${u.full_name || u.email} pourra à nouveau se connecter.`,
+        ? t("admin.suspendMsg", "%s ne pourra plus se connecter.").replace("%s", u.full_name || u.email)
+        : t("admin.reactivateMsg", "%s pourra à nouveau se connecter.").replace("%s", u.full_name || u.email),
       danger: nextStatus === 'suspended',
-      confirmLabel: nextStatus === 'suspended' ? 'Suspendre' : 'Réactiver',
+      confirmLabel: nextStatus === 'suspended' ? t("admin.suspend", "Suspendre") : t("admin.reactivate", "Réactiver"),
       action: async () => {
         try {
           await base44.admin.updateUser(u.id, { status: nextStatus });
-          toast.success(nextStatus === 'suspended' ? 'Utilisateur suspendu' : 'Utilisateur réactivé');
+          toast.success(nextStatus === 'suspended' ? t("admin.userSuspended", "Utilisateur suspendu") : t("admin.userReactivated", "Utilisateur réactivé"));
           await load();
         } catch (err) {
-          toast.error(err.data?.error === 'cannot_suspend_self' ? 'Vous ne pouvez pas vous suspendre vous-même' : err.message);
+          toast.error(err.data?.error === 'cannot_suspend_self' ? t("admin.cannotSuspendSelf", "Vous ne pouvez pas vous suspendre vous-même") : err.message);
         }
       },
     });
   };
 
   const resetPassword = (u) => setConfirm({
-    title: `Réinitialiser le mot de passe de ${u.full_name || u.email} ?`,
-    message: 'Un nouveau mot de passe sera généré et affiché une seule fois.',
-    confirmLabel: 'Réinitialiser',
+    title: t("admin.resetPasswordTitle", "Réinitialiser le mot de passe de %s ?").replace("%s", u.full_name || u.email),
+    message: t("admin.resetPasswordMsg", "Un nouveau mot de passe sera généré et affiché une seule fois."),
+    confirmLabel: t("admin.reset", "Réinitialiser"),
     action: async () => {
       try {
         const { password } = await base44.admin.resetPassword(u.id);
-        setResult({ title: 'Nouveau mot de passe', label: 'Mot de passe', value: password });
-      } catch (err) { toast.error(err.message || 'Erreur'); }
+        setResult({ title: t("admin.newPassword", "Nouveau mot de passe"), label: t("login.password", "Mot de passe"), value: password });
+      } catch (err) { toast.error(err.message || t("common.error", "Erreur")); }
     },
   });
 
   const deleteUser = (u) => setConfirm({
-    title: `Supprimer ${u.full_name || u.email} ?`,
-    message: 'Cette action est irréversible. Tous les enfants rattachés perdront leur tuteur.',
+    title: t("admin.confirmDeleteUser", "Supprimer %s ?").replace("%s", u.full_name || u.email),
+    message: t("admin.deleteUserMsg", "Cette action est irréversible. Tous les enfants rattachés perdront leur tuteur."),
     danger: true,
-    confirmLabel: 'Supprimer définitivement',
+    confirmLabel: t("admin.deletePermanently", "Supprimer définitivement"),
     action: async () => {
       try {
         await base44.admin.deleteUser(u.id);
-        toast.success('Utilisateur supprimé');
+        toast.success(t("admin.userDeleted", "Utilisateur supprimé"));
         await load();
       } catch (err) {
-        toast.error(err.data?.error === 'cannot_delete_self' ? 'Vous ne pouvez pas vous supprimer vous-même' : err.message);
+        toast.error(err.data?.error === 'cannot_delete_self' ? t("admin.cannotDeleteSelf", "Vous ne pouvez pas vous supprimer vous-même") : err.message);
       }
     },
   });
@@ -356,7 +356,7 @@ export default function AdminUsers() {
             <Users className="w-6 h-6 text-primary" />
             {t("admin.users")}
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">{users.length} comptes enregistrés</p>
+          <p className="text-sm text-muted-foreground mt-1">{t("admin.accountsCount", "%s comptes enregistrés").replace("%s", users.length)}</p>
         </div>
         <Button onClick={() => setCreateOpen(true)} className="gap-1.5">
           <UserPlus className="w-4 h-4" /> {t("admin.createUser")}
@@ -366,13 +366,13 @@ export default function AdminUsers() {
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input placeholder="Rechercher nom, email, ID Card..." value={search}
+          <Input placeholder={t("admin.searchUsers", "Rechercher nom, email, ID Card...")} value={search}
             onChange={(e) => setSearch(e.target.value)} className="pl-9" />
         </div>
         <Select value={roleFilter} onValueChange={setRoleFilter}>
           <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tous les rôles</SelectItem>
+            <SelectItem value="all">{t("admin.allRoles", "Tous les rôles")}</SelectItem>
             <SelectItem value="admin">{t("dashboard.admins")}</SelectItem>
             <SelectItem value="medecin">{t("dashboard.medecins")}</SelectItem>
             <SelectItem value="encadreur">{t("dashboard.encadreurs")}</SelectItem>
@@ -393,7 +393,7 @@ export default function AdminUsers() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <p className="font-medium text-sm truncate">{u.full_name || u.email}</p>
                   <Badge variant="outline" className="text-[10px]">{ROLE_LABEL[u.role]}</Badge>
-                  {isMe && <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/30">vous</Badge>}
+                  {isMe && <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/30">{t("admin.you", "vous")}</Badge>}
                 </div>
                 <p className="text-xs text-muted-foreground truncate">
                   {u.email} · <code className="font-mono text-[10px]">{u.id_card || '—'}</code>
@@ -411,11 +411,11 @@ export default function AdminUsers() {
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => toggleStatus(u)} disabled={isMe && u.status === 'active'} className="gap-2">
                     {u.status === 'active'
-                      ? <><PauseCircle className="w-3.5 h-3.5" /> Suspendre</>
-                      : <><PlayCircle className="w-3.5 h-3.5" /> Réactiver</>}
+                      ? <><PauseCircle className="w-3.5 h-3.5" /> {t("admin.suspend", "Suspendre")}</>
+                      : <><PlayCircle className="w-3.5 h-3.5" /> {t("admin.reactivate", "Réactiver")}</>}
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => resetPassword(u)} className="gap-2">
-                    <Key className="w-3.5 h-3.5" /> Réinitialiser mot de passe
+                    <Key className="w-3.5 h-3.5" /> {t("admin.resetPassword", "Réinitialiser mot de passe")}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => deleteUser(u)} disabled={isMe}
@@ -428,7 +428,7 @@ export default function AdminUsers() {
           );
         })}
         {filtered.length === 0 && (
-          <div className="text-center py-12 text-sm text-muted-foreground">Aucun utilisateur ne correspond</div>
+          <div className="text-center py-12 text-sm text-muted-foreground">{t("admin.noUsersMatch", "Aucun utilisateur ne correspond")}</div>
         )}
       </div>
 

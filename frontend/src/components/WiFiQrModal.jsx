@@ -6,8 +6,10 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useTranslation } from "@/lib/useTranslation";
 
 export default function WiFiQrModal({ open, onOpenChange }) {
+  const { t } = useTranslation();
   const canvasRef = useRef(null);
   const ssid = localStorage.getItem("mera_wifi_ssid") || "";
   const pass = localStorage.getItem("mera_wifi_password") || "";
@@ -35,7 +37,7 @@ export default function WiFiQrModal({ open, onOpenChange }) {
     link.download = `wifi-${ssid.replace(/\s+/g, "-")}.png`;
     link.href = canvas.toDataURL("image/png");
     link.click();
-    toast.success("QR code téléchargé");
+    toast.success(t("settings.qrDownloaded", "QR code téléchargé"));
   };
 
   if (!ssid) {
@@ -44,14 +46,14 @@ export default function WiFiQrModal({ open, onOpenChange }) {
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Wifi className="w-5 h-5 text-primary" /> WiFi non configuré
+              <Wifi className="w-5 h-5 text-primary" /> {t("settings.wifiNotConfigured", "WiFi non configuré")}
             </DialogTitle>
             <DialogDescription>
-              Aucun réseau WiFi configuré. Allez dans <strong>Paramètres</strong> pour définir le SSID et le mot de passe.
+              {t("settings.wifiNotConfiguredDesc1", "Aucun réseau WiFi configuré. Allez dans ")}<strong>{t("settings.title", "Paramètres")}</strong>{t("settings.wifiNotConfiguredDesc2", " pour définir le SSID et le mot de passe.")}
             </DialogDescription>
           </DialogHeader>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
-            Fermer
+            {t("common.close", "Fermer")}
           </Button>
         </DialogContent>
       </Dialog>
@@ -66,7 +68,7 @@ export default function WiFiQrModal({ open, onOpenChange }) {
             <Wifi className="w-5 h-5 text-primary" /> WiFi — {ssid}
           </DialogTitle>
           <DialogDescription>
-            Scannez ce QR code avec votre téléphone pour vous connecter au réseau.
+            {t("settings.scanQr", "Scannez ce QR code avec votre téléphone pour vous connecter au réseau.")}
           </DialogDescription>
         </DialogHeader>
 
@@ -78,15 +80,15 @@ export default function WiFiQrModal({ open, onOpenChange }) {
 
         <div className="flex items-center gap-2 text-xs text-muted-foreground justify-center">
           <Smartphone className="w-3.5 h-3.5" />
-          Ouvrez l'appareil photo ou un lecteur QR code
+          {t("settings.openCamera", "Ouvrez l'appareil photo ou un lecteur QR code")}
         </div>
 
         <div className="flex gap-2">
           <Button variant="outline" className="flex-1" onClick={() => onOpenChange(false)}>
-            Fermer
+            {t("common.close", "Fermer")}
           </Button>
           <Button className="flex-1" onClick={handleDownload}>
-            Télécharger
+            {t("settings.download", "Télécharger")}
           </Button>
         </div>
       </DialogContent>

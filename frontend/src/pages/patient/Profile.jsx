@@ -23,9 +23,9 @@ export default function PatientProfile() {
     setSubmitting(true);
     try {
       await updateMe(form);
-      toast.success('Informations mises à jour');
+      toast.success(t('patient.infoUpdated', 'Informations mises à jour'));
     } catch (err) {
-      toast.error(err.message || 'Erreur lors de la mise à jour');
+      toast.error(err.message || t('patient.updateError', 'Erreur lors de la mise à jour'));
     } finally {
       setSubmitting(false);
     }
@@ -55,7 +55,7 @@ export default function PatientProfile() {
           </div>
           <div>
             <p className="text-xs text-muted-foreground">{t("child.age")}</p>
-            <p className="font-medium">{patient.age} ans</p>
+            <p className="font-medium">{patient.age} {t('common.years', 'ans')}</p>
           </div>
           <div>
             <p className="text-xs text-muted-foreground">{t("child.sex")}</p>
@@ -94,7 +94,7 @@ export default function PatientProfile() {
           <Label htmlFor="village" className="flex items-center gap-1.5">
             <MapPin className="w-3.5 h-3.5" /> {t("child.village")}
           </Label>
-          <Input id="village" placeholder="Nom de votre village" value={form.village}
+          <Input id="village" placeholder={t('patient.villagePlaceholder', 'Nom de votre village')} value={form.village}
             onChange={(e) => setForm((f) => ({ ...f, village: e.target.value }))} />
         </div>
 

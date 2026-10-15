@@ -25,7 +25,7 @@ export default function PatientChat() {
   }, [messages]);
 
   useEffect(() => {
-    const greeting = `Bonjour${patient?.full_name ? ' ' + patient.full_name.split(' ')[0] : ''} ! Je suis MERA. Comment puis-je vous aider aujourd'hui ? Décrivez-moi vos symptômes ou posez-moi une question.`;
+    const greeting = t('patient.chatGreeting', "Bonjour%s ! Je suis MERA. Comment puis-je vous aider aujourd'hui ? Décrivez-moi vos symptômes ou posez-moi une question.").replace('%s', patient?.full_name ? ' ' + patient.full_name.split(' ')[0] : '');
     setMessages([{
       id: 0, role: 'assistant', content: greeting,
       time: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
@@ -64,8 +64,8 @@ Réponds en tant que MERA, en français, de façon concise (max 3 phrases).`,
       if (voiceOn) speak(response);
     } catch (err) {
       const msg = err.status === 503
-        ? "Le service de discussion n'est pas configuré pour le moment."
-        : "Une erreur s'est produite. Réessayez.";
+        ? t('patient.chatNotConfigured', "Le service de discussion n'est pas configuré pour le moment.")
+        : t('patient.chatError', "Une erreur s'est produite. Réessayez.");
       toast.error(msg);
       setMessages((prev) => prev.slice(0, -1));
       setInput(text);
@@ -83,7 +83,7 @@ Réponds en tant que MERA, en français, de façon concise (max 3 phrases).`,
       }
     } catch (err) {
       if (err.message !== "SPEECH_NOT_SUPPORTED" && err.message !== "aborted") {
-        toast.error("Impossible d'accéder au microphone");
+        toast.error(t('patient.micError', "Impossible d'accéder au microphone"));
       }
     } finally {
       setListening(false);
@@ -95,7 +95,7 @@ Réponds en tant que MERA, en français, de façon concise (max 3 phrases).`,
       <div className="flex items-start justify-between gap-2">
         <div>
           <h1 className="text-2xl font-heading font-bold flex items-center gap-2">
-            <Bot className="w-6 h-6 text-primary" /> Assistant MERA
+            <Bot className="w-6 h-6 text-primary" /> {t('patient.assistant', 'Assistant MERA')}
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             {t("patient.chatPrompt", "Posez vos questions de santé en toute confiance")}

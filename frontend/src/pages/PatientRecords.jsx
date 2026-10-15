@@ -90,11 +90,11 @@ export default function PatientRecords() {
         await base44.patient.regeneratePin(editing.id, { pin: newPin });
         toast.success(t("child.pinUpdated"), { duration: 4000 });
       }
-      toast.success(`Enfant ${t("child.modified")}`, { duration: 4000 });
+      toast.success(`${t("child.childNoun", "Enfant")} ${t("child.modified")}`, { duration: 4000 });
       setEditing(null);
       load();
     } catch (err) {
-      toast.error(err.message || "Erreur lors de la modification");
+      toast.error(err.message || t("child.editError", "Erreur lors de la modification"));
     }
     setSaving(false);
   };
@@ -104,11 +104,11 @@ export default function PatientRecords() {
     setDeletingId(deleting.id);
     try {
       await base44.entities.Patient.delete(deleting.id);
-      toast.success(`${deleting.full_name || "Enfant"} ${t("child.deleted")}`);
+      toast.success(`${deleting.full_name || t("child.childNoun", "Enfant")} ${t("child.deleted")}`);
       setDeleting(null);
       load();
     } catch (err) {
-      toast.error(err.message || "Erreur lors de la suppression");
+      toast.error(err.message || t("child.deleteError", "Erreur lors de la suppression"));
     }
     setDeletingId(null);
   };
@@ -181,10 +181,10 @@ export default function PatientRecords() {
                 </div>
                 <div className="min-w-0">
                   <p className="font-medium text-sm truncate">
-                    {patient.full_name || "Anonyme"}
+                    {patient.full_name || t("child.anonymous", "Anonyme")}
                   </p>
                   <p className="text-xs text-muted-foreground flex items-center gap-2">
-                    <span>{patient.age ? `${patient.age} ans` : ""}</span>
+                    <span>{patient.age ? `${patient.age} ${t("common.years", "ans")}` : ""}</span>
                     {patient.sex && <span>&middot; {patient.sex === "M" ? t("child.boy") : t("child.girl")}</span>}
                     {patient.village && <span>&middot; {patient.village}</span>}
                     {patient.card_id && <span>&middot; <span className="font-mono">{patient.card_id}</span></span>}
@@ -279,7 +279,7 @@ export default function PatientRecords() {
           <AlertDialogHeader>
             <AlertDialogTitle>{t("child.confirmDelete")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {deleting?.full_name || "Cet enfant"} {t("child.confirmDeleteMsg")} Cette action est irréversible.
+              {deleting?.full_name || t("child.thisChild", "Cet enfant")} {t("child.confirmDeleteMsg")} {t("child.irreversible", "Cette action est irréversible.")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

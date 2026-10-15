@@ -17,14 +17,14 @@ const KIND_META = {
   assignment_created:    { Icon: Link2,          color: 'text-cyan-600 bg-cyan-500/10' },
 };
 
-const formatTime = (iso) => {
+const formatTime = (iso, t) => {
   const d = new Date(iso);
   const now = Date.now();
   const diff = (now - d.getTime()) / 1000;
-  if (diff < 60) return 'à l\'instant';
-  if (diff < 3600) return `il y a ${Math.floor(diff / 60)} min`;
-  if (diff < 86400) return `il y a ${Math.floor(diff / 3600)} h`;
-  if (diff < 7 * 86400) return `il y a ${Math.floor(diff / 86400)} j`;
+  if (diff < 60) return t("notif.moments", "à l'instant");
+  if (diff < 3600) return t("notif.minutesAgo", "il y a %s min").replace("%s", Math.floor(diff / 60));
+  if (diff < 86400) return t("notif.hoursAgo", "il y a %s h").replace("%s", Math.floor(diff / 3600));
+  if (diff < 7 * 86400) return t("notif.daysAgo", "il y a %s j").replace("%s", Math.floor(diff / 86400));
   return d.toLocaleDateString('fr-FR');
 };
 
@@ -76,7 +76,7 @@ export default function NotificationBell() {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger className="relative p-2 rounded-lg hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
-        aria-label={`Notifications${unread > 0 ? ` (${unread} non lue${unread > 1 ? 's' : ''})` : ''}`}>
+        aria-label={`${t("notif.ariaLabel", "Notifications")}${unread > 0 ? (unread > 1 ? t("notif.unreadMany", " (%s non lues)").replace("%s", unread) : t("notif.unreadOne", " (%s non lue)").replace("%s", unread)) : ''}`}>
         <Icon className={cn("w-4 h-4", unread > 0 && "text-primary")} />
         {unread > 0 && (
           <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-destructive text-white text-[10px] font-bold flex items-center justify-center">
@@ -86,10 +86,10 @@ export default function NotificationBell() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-80 p-0">
         <div className="flex items-center justify-between px-3 py-2 border-b border-border">
-          <p className="text-sm font-heading font-semibold">Notifications</p>
+          <p className="text-sm font-heading font-semibold">{t("notif.title", "Notifications")}</p>
           {unread > 0 && (
             <button onClick={markAll} className="text-[11px] text-primary hover:underline">
-              Tout marquer comme lu
+              {t("notif.markAllRead", "Tout marquer comme lu")}
             </button>
           )}
         </div>
@@ -97,7 +97,7 @@ export default function NotificationBell() {
         <div className="max-h-96 overflow-y-auto">
           {items.length === 0 && (
             <div className="px-4 py-8 text-center text-xs text-muted-foreground">
-              {loading ? t("common.loading") : 'Aucune notification'}
+              {loading ? t("common.loading") : t("notif.empty", "Aucune notification")}
             </div>
           )}
           {items.map((n) => {
@@ -117,7 +117,7 @@ export default function NotificationBell() {
                     {!n.read_at && <span className="w-2 h-2 rounded-full bg-primary flex-shrink-0 mt-1.5" />}
                   </div>
                   {n.body && <p className="text-xs text-muted-foreground line-clamp-2">{n.body}</p>}
-                  <p className="text-[10px] text-muted-foreground mt-0.5">{formatTime(n.created_date)}</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">{formatTime(n.created_date, t)}</p>
                 </div>
               </button>
             );
@@ -126,7 +126,7 @@ export default function NotificationBell() {
 
         {items.length > 0 && unread === 0 && (
           <div className="px-3 py-2 border-t border-border text-[11px] text-center text-muted-foreground flex items-center justify-center gap-1">
-            <Check className="w-3 h-3" /> Tout est à jour
+            <Check className="w-3 h-3" /> {t("notif.allUpToDate", "Tout est à jour")}
           </div>
         )}
       </DropdownMenuContent>

@@ -27,15 +27,15 @@ export default function Login() {
     setErrMessage(null);
     try {
       await login(identifier.trim(), password);
-      toast.success('Connexion réussie');
+      toast.success(t("login.success", "Connexion réussie"));
       navigate(next, { replace: true });
     } catch (err) {
       if (err.status === 403 && err.data?.error === 'account_inactive') {
-        setErrMessage(err.data.message || 'Compte non actif');
+        setErrMessage(err.data.message || t("login.accountInactive", "Compte non actif"));
       } else {
         setErrMessage(err.status === 401
-          ? 'Identifiant ou mot de passe incorrect'
-          : 'Erreur de connexion');
+          ? t("login.incorrectCredentials", "Identifiant ou mot de passe incorrect")
+          : t("login.error", "Erreur de connexion"));
       }
     } finally {
       setSubmitting(false);
@@ -50,7 +50,7 @@ export default function Login() {
             <Stethoscope className="w-6 h-6 text-primary" />
           </div>
           <h1 className="text-xl font-heading font-bold">MERA</h1>
-          <p className="text-xs text-muted-foreground">Médical  Evaluation  Robotique  Assistant</p>
+          <p className="text-xs text-muted-foreground">{t("login.tagline", "Médical  Evaluation  Robotique  Assistant")}</p>
         </div>
 
         {errMessage && (
@@ -64,7 +64,7 @@ export default function Login() {
           <div className="space-y-1.5">
             <Label htmlFor="identifier">{t("login.identifier", "Email ou ID Card")}</Label>
             <Input id="identifier" type="text" autoComplete="username" value={identifier}
-              placeholder="vous@example.com ou EN-XXXX-XXXX"
+              placeholder={t("login.identifierPlaceholder", "vous@example.com ou EN-XXXX-XXXX")}
               onChange={(e) => setIdentifier(e.target.value)} required />
           </div>
           <div className="space-y-1.5">

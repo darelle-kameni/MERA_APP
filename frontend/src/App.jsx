@@ -9,6 +9,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import LoadingScreen from '@/components/LoadingScreen';
 import Layout from './components/Layout';
 import PatientLayout from './components/patient/PatientLayout';
+import { useTranslation } from '@/lib/useTranslation';
 
 // Staff pages
 const Dashboard = lazy(() => import('./pages/Dashboard'));
@@ -39,9 +40,10 @@ const PatientChat = lazy(() => import('./pages/patient/Chat'));
 
 // ─── Staff guards ───────────────────────────────────────────
 const RequireStaff = ({ children }) => {
+  const { t } = useTranslation();
   const { isAuthenticated, isLoadingAuth } = useAuth();
   const location = useLocation();
-  if (isLoadingAuth) return <LoadingScreen label="Vérification de la session" />;
+  if (isLoadingAuth) return <LoadingScreen label={t("common.verifyingSession", "Vérification de la session")} />;
   if (!isAuthenticated) {
     const next = encodeURIComponent(location.pathname + location.search);
     return <Navigate to={`/login?next=${next}`} replace />;
@@ -50,25 +52,28 @@ const RequireStaff = ({ children }) => {
 };
 
 const RequireAdmin = ({ children }) => {
+  const { t } = useTranslation();
   const { user, isAuthenticated, isLoadingAuth } = useAuth();
-  if (isLoadingAuth) return <LoadingScreen label="Vérification" />;
+  if (isLoadingAuth) return <LoadingScreen label={t("common.verifying", "Vérification")} />;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   if (user?.role !== 'admin') return <Navigate to="/" replace />;
   return children;
 };
 
 const RedirectIfStaffAuthed = ({ children }) => {
+  const { t } = useTranslation();
   const { isAuthenticated, isLoadingAuth } = useAuth();
-  if (isLoadingAuth) return <LoadingScreen label="Vérification de la session" />;
+  if (isLoadingAuth) return <LoadingScreen label={t("common.verifyingSession", "Vérification de la session")} />;
   if (isAuthenticated) return <Navigate to="/" replace />;
   return children;
 };
 
 // ─── Patient guards ─────────────────────────────────────────
 const RequirePatient = ({ children }) => {
+  const { t } = useTranslation();
   const { isAuthenticated, isLoadingAuth } = usePatientAuth();
   const location = useLocation();
-  if (isLoadingAuth) return <LoadingScreen label="Vérification de la session" />;
+  if (isLoadingAuth) return <LoadingScreen label={t("common.verifyingSession", "Vérification de la session")} />;
   if (!isAuthenticated) {
     const next = encodeURIComponent(location.pathname + location.search);
     return <Navigate to={`/patient/login?next=${next}`} replace />;
@@ -77,8 +82,9 @@ const RequirePatient = ({ children }) => {
 };
 
 const RedirectIfPatientAuthed = ({ children }) => {
+  const { t } = useTranslation();
   const { isAuthenticated, isLoadingAuth } = usePatientAuth();
-  if (isLoadingAuth) return <LoadingScreen label="Vérification de la session" />;
+  if (isLoadingAuth) return <LoadingScreen label={t("common.verifyingSession", "Vérification de la session")} />;
   if (isAuthenticated) return <Navigate to="/patient" replace />;
   return children;
 };

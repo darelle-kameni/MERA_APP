@@ -57,8 +57,8 @@ export default function Register() {
       await base44.auth.requestRegistration(fd);
       setSent(true);
     } catch (e) {
-      if (e.status === 409) setErr(e.data?.message || 'Un compte ou une demande existe déjà avec cet email');
-      else setErr(e.message || 'Erreur lors de l\'envoi de la demande');
+      if (e.status === 409) setErr(e.data?.message || t("register.duplicateAccount", "Un compte ou une demande existe déjà avec cet email"));
+      else setErr(e.message || t("register.submitError", "Erreur lors de l'envoi de la demande"));
     } finally {
       setSubmitting(false);
     }

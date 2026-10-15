@@ -25,10 +25,10 @@ export default function PatientLogin() {
     setSubmitting(true);
     try {
       await login(cardId.trim(), pin);
-      toast.success('Bienvenue');
+      toast.success(t('patient.welcome', 'Bienvenue'));
       navigate(next, { replace: true });
     } catch (err) {
-      toast.error(err.status === 401 ? 'ID de carte ou PIN incorrect' : 'Erreur de connexion');
+      toast.error(err.status === 401 ? t('patient.incorrectIdPin', 'ID de carte ou PIN incorrect') : t('patient.loginError', 'Erreur de connexion'));
     } finally {
       setSubmitting(false);
     }
@@ -50,7 +50,7 @@ export default function PatientLogin() {
             <Label htmlFor="card_id" className="flex items-center gap-1.5">
               <CreditCard className="w-3.5 h-3.5" /> {t("login.cardId", "ID Carte")}
             </Label>
-            <Input id="card_id" placeholder="Numéro de la carte RFID" autoComplete="off"
+            <Input id="card_id" placeholder={t('patient.cardIdPlaceholder', 'Numéro de la carte RFID')} autoComplete="off"
               value={cardId} onChange={(e) => setCardId(e.target.value)}
               className="font-mono text-sm" required />
             <p className="text-[10px] text-muted-foreground">{t("login.cardId")}</p>

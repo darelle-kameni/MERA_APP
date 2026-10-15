@@ -22,13 +22,13 @@ const baseNavItems = [
 ];
 
 const adminItems = [
-  { path: "/admin/requests",    icon: Inbox,     label: "Demandes",     end: true },
-  { path: "/admin/users",       icon: UsersIcon, label: "Utilisateurs", end: true },
-  { path: "/admin/assignments", icon: Link2,     label: "Associations", end: true },
-  { path: "/admin/pharmacopee", icon: Leaf,      label: "Pharmacopée",   end: true },
+  { path: "/admin/requests",    icon: Inbox,     labelKey: "nav.requests",    label: "Demandes",     end: true },
+  { path: "/admin/users",       icon: UsersIcon, labelKey: "nav.users",       label: "Utilisateurs", end: true },
+  { path: "/admin/assignments", icon: Link2,     labelKey: "nav.assignments", label: "Associations", end: true },
+  { path: "/admin/pharmacopee", icon: Leaf,      labelKey: "nav.pharmacopee", label: "Pharmacopée",   end: true },
 ];
 
-const settingsItem = { path: "/settings", icon: Settings, label: "Paramètres", end: true };
+const settingsItem = { path: "/settings", icon: Settings, labelKey: "nav.settings", label: "Paramètres", end: true };
 
 const NavItem = ({ item, onClose }) => (
   <NavLink
@@ -52,6 +52,8 @@ export default function Sidebar({ open, onClose }) {
   const canSee = (item) => !item.roles || item.roles.includes(role);
   const navItems = baseNavItems.map((item) => ({ ...item, label: t(item.labelKey, item.labelKey) }));
   const mainNav = navItems.filter(canSee);
+  const adminNav = adminItems.map((item) => ({ ...item, label: t(item.labelKey, item.label) }));
+  const settingsNav = { ...settingsItem, label: t(settingsItem.labelKey, settingsItem.label) };
 
   return (
     <>
@@ -68,7 +70,7 @@ export default function Sidebar({ open, onClose }) {
             <div>
               <h1 className="font-heading font-bold text-lg text-white">MERA</h1>
               <p className="text-[10px] text-sidebar-foreground/60 uppercase tracking-widest">
-                {role === 'admin' ? 'Administration' : role === 'medecin' ? 'Médecin' : 'Encadreur'}
+                {role === 'admin' ? t("nav.admin", "Administration") : role === 'medecin' ? t("nav.medecin", "Médecin") : t("nav.encadreur", "Encadreur")}
               </p>
             </div>
           </div>
@@ -85,16 +87,16 @@ export default function Sidebar({ open, onClose }) {
           {role === 'admin' && (
             <div className="pt-4">
               <p className="px-3 mb-2 text-[10px] uppercase tracking-widest text-sidebar-foreground/40 flex items-center gap-1.5">
-                <Shield className="w-3 h-3" /> Administration
+                <Shield className="w-3 h-3" /> {t("nav.admin", "Administration")}
               </p>
-              {adminItems.map((item) => (
+              {adminNav.map((item) => (
                 <NavItem key={item.path} item={item} onClose={onClose} />
               ))}
             </div>
           )}
 
           <div className="pt-4">
-            <NavItem item={settingsItem} onClose={onClose} />
+            <NavItem item={settingsNav} onClose={onClose} />
           </div>
         </nav>
 

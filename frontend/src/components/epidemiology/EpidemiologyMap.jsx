@@ -1,4 +1,5 @@
 import { MapPin } from "lucide-react";
+import { useTranslation } from "@/lib/useTranslation";
 
 const REGIONS = [
   { name: "Douala", cases: 0, lat: 4.05, lng: 9.7, color: "#27AE60" },
@@ -9,6 +10,7 @@ const REGIONS = [
 ];
 
 export default function EpidemiologyMap({ sessions = [] }) {
+  const { t } = useTranslation();
   // Count sessions per region/center
   const regionCounts = {};
   sessions.forEach(s => {
@@ -27,7 +29,7 @@ export default function EpidemiologyMap({ sessions = [] }) {
     <div className="bg-card rounded-xl border border-border p-6">
       <h3 className="font-heading font-semibold mb-4 flex items-center gap-2">
         <MapPin className="w-5 h-5 text-primary" />
-        Carte des cas par région — Cameroun
+        {t("epidemiology.mapTitle", "Carte des cas par région — Cameroun")}
       </h3>
       
       <div className="relative bg-gradient-to-b from-green-50 to-green-100 rounded-xl p-8 min-h-[300px]">
@@ -77,7 +79,7 @@ export default function EpidemiologyMap({ sessions = [] }) {
                   textAnchor="middle" 
                   className="text-[10px] fill-current opacity-60"
                 >
-                  {region.cases} cas
+                  {t("epidemiology.casesCount", "%s cas").replace("%s", region.cases)}
                 </text>
               </g>
             );

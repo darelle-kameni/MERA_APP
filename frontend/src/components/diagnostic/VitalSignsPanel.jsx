@@ -88,19 +88,19 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false,
 
         if (isFirstTick.current) {
           isFirstTick.current = false;
-          speak(`Mesures enregistrées. Température : ${vitals.temperature} degrés. Saturation oxygène : ${vitals.spo2} pourcent. Fréquence cardiaque : ${vitals.heart_rate} battements par minute. Poids : ${vitals.weight} kilogrammes.`);
+          speak(t("vitals.spokenMeasurements", `Mesures enregistrées. Température : ${vitals.temperature} degrés. Saturation oxygène : ${vitals.spo2} pourcent. Fréquence cardiaque : ${vitals.heart_rate} battements par minute. Poids : ${vitals.weight} kilogrammes.`));
         }
         if (highTemp && !prevAlerts.current.temp) {
-          setTimeout(() => speak(`Alerte ! Température élevée détectée : ${vitals.temperature} degrés.`), 4000);
+          setTimeout(() => speak(t("vitals.spokenTempAlert", `Alerte ! Température élevée détectée : ${vitals.temperature} degrés.`)), 4000);
         }
         if (lowSpo2 && !prevAlerts.current.spo2) {
-          setTimeout(() => speak(`Alerte ! Saturation en oxygène faible : ${vitals.spo2} pourcent.`), 5000);
+          setTimeout(() => speak(t("vitals.spokenSpo2Alert", `Alerte ! Saturation en oxygène faible : ${vitals.spo2} pourcent.`)), 5000);
         }
         if (abnormalHR && !prevAlerts.current.hr) {
-          setTimeout(() => speak(`Alerte ! Fréquence cardiaque anormale : ${vitals.heart_rate} battements par minute.`), 6000);
+          setTimeout(() => speak(t("vitals.spokenHrAlert", `Alerte ! Fréquence cardiaque anormale : ${vitals.heart_rate} battements par minute.`)), 6000);
         }
         if (abnormalBP && !prevAlerts.current.bp) {
-          setTimeout(() => speak(`Alerte ! Tension artérielle anormale : ${vitals.bp_systolic} sur ${vitals.bp_diastolic}.`), 7000);
+          setTimeout(() => speak(t("vitals.spokenBpAlert", `Alerte ! Tension artérielle anormale : ${vitals.bp_systolic} sur ${vitals.bp_diastolic}.`)), 7000);
         }
         prevAlerts.current = { temp: highTemp, spo2: lowSpo2, hr: abnormalHR, bp: abnormalBP };
 

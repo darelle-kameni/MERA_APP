@@ -25,7 +25,7 @@ export default function AdminAssignments() {
       setUsers(u);
       setAssignments(a);
     } catch (err) {
-      setError(err.message || 'Erreur réseau');
+      setError(err.message || t("common.networkError", "Erreur réseau"));
     } finally {
       setLoading(false);
     }
@@ -41,11 +41,11 @@ export default function AdminAssignments() {
     setSubmitting(true);
     try {
       await base44.admin.createAssignment(doctor, encadreur);
-      toast.success('Association créée');
+      toast.success(t("admin.associationCreated", "Association créée"));
       setDoctor(''); setEncadreur('');
       await load();
     } catch (err) {
-      toast.error(err.message || 'Échec de l\'association');
+      toast.error(err.message || t("admin.associationFailed", "Échec de l'association"));
     } finally {
       setSubmitting(false);
     }
@@ -54,10 +54,10 @@ export default function AdminAssignments() {
   const remove = async (id) => {
     try {
       await base44.admin.deleteAssignment(id);
-      toast.success('Association supprimée');
+      toast.success(t("admin.associationDeleted", "Association supprimée"));
       await load();
     } catch (err) {
-      toast.error(err.message || 'Échec de la suppression');
+      toast.error(err.message || t("admin.deleteFailed", "Échec de la suppression"));
     }
   };
 
@@ -69,22 +69,22 @@ export default function AdminAssignments() {
       <div>
         <h1 className="text-2xl font-heading font-bold flex items-center gap-3">
           <Link2 className="w-6 h-6 text-primary" />
-          Associations Médecin ↔ Encadreur
+          {t("admin.assignmentsTitle", "Associations Médecin ↔ Encadreur")}
         </h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Le médecin pourra voir les enfants des encadreurs qui lui sont associés
+          {t("admin.assignmentsDesc", "Le médecin pourra voir les enfants des encadreurs qui lui sont associés")}
         </p>
       </div>
 
       <div className="bg-card rounded-xl border border-border p-4 space-y-3">
-        <p className="text-sm font-heading font-semibold">Créer une association</p>
+        <p className="text-sm font-heading font-semibold">{t("admin.createAssociation", "Créer une association")}</p>
         <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto] items-end gap-3">
           <div>
             <p className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1.5">
               <Stethoscope className="w-3.5 h-3.5" /> {t("dashboard.medecins")}
             </p>
             <Select value={doctor} onValueChange={setDoctor}>
-              <SelectTrigger><SelectValue placeholder="Sélectionner un médecin" /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={t("admin.selectDoctor", "Sélectionner un médecin")} /></SelectTrigger>
               <SelectContent>
                 {doctors.map((d) => (
                   <SelectItem key={d.id} value={d.id}>{d.full_name || d.email}</SelectItem>
@@ -98,7 +98,7 @@ export default function AdminAssignments() {
               <UserCog className="w-3.5 h-3.5" /> {t("dashboard.encadreurs")}
             </p>
             <Select value={encadreur} onValueChange={setEncadreur}>
-              <SelectTrigger><SelectValue placeholder="Sélectionner un encadreur" /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={t("admin.selectEncadreur", "Sélectionner un encadreur")} /></SelectTrigger>
               <SelectContent>
                 {encadreurs.map((e) => (
                   <SelectItem key={e.id} value={e.id}>{e.full_name || e.email}</SelectItem>
@@ -108,18 +108,18 @@ export default function AdminAssignments() {
           </div>
           <Button onClick={create} disabled={!doctor || !encadreur || submitting} className="gap-1.5">
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-            Associer
+            {t("admin.associate", "Associer")}
           </Button>
         </div>
       </div>
 
       <div className="space-y-2">
         <p className="text-xs font-heading font-semibold text-muted-foreground uppercase tracking-wider">
-          Associations existantes ({assignments.length})
+          {t("admin.existingAssociations", "Associations existantes (%s)").replace("%s", assignments.length)}
         </p>
         {assignments.length === 0 && (
           <div className="bg-card rounded-xl border border-border p-8 text-center text-sm text-muted-foreground">
-            Aucune association
+            {t("admin.noAssociations", "Aucune association")}
           </div>
         )}
         {assignments.map((a) => (
