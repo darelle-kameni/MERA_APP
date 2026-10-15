@@ -57,8 +57,6 @@ export default {
     treatments: "Peeje safaara", dialogue: "Haale", history: "Taariika",
     noSession: "Alaa sesso tawaama",
     selectPatient: "Suɓto ñawɗo ngam yi'ude sessooji muuɗum",
-    simulateRobot: "🤖 Kaaƴ robot", stopSimulation: "Dartin simulation",
-    robotConnected: "Robot heɓtii", robotOffline: "Robot alaa e laylaytol",
   },
 
   settings: {
@@ -195,7 +193,6 @@ export default {
     bloodPressure: "Tension artérielle",
     alert: "TIIƊƊO",
     waitingRobot: "Hedii kelle cellal e robot...",
-    activateSimulation: "Wurtu simulation ngam jibinde data",
   },
 
   eye: {

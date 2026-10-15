@@ -3,15 +3,6 @@ import { Eye, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/lib/useTranslation";
 
-// Mots-clés normalisés utilisés pour la simulation. Le rendu utilise t("eye.diseases.<key>") quand possible.
-const DIAG_KEYS = ["healthy", "cataract", "conjunctivite", "glaucoma", "diabetic_retinopathy", "pterygion", "trachoma", "uveitis"];
-
-function randomDiagnosis() {
-  const key = DIAG_KEYS[Math.floor(Math.random() * DIAG_KEYS.length)];
-  const conf = +((70 + Math.random() * 28) / 100).toFixed(4);
-  return { diagnosisKey: key, confidence: conf };
-}
-
 function getTopDiagnosis(contagious, nonContagious) {
   const diseases = [];
   if (contagious) {
@@ -41,7 +32,7 @@ const diagnosisLabel = (t, raw) => {
   return mapped;
 };
 
-export default function EyeAnalysisPanel({ isSimulating = false, sessionData }) {
+export default function EyeAnalysisPanel({ sessionData }) {
   const { t } = useTranslation();
   const [eyeLeft, setEyeLeft] = useState(null);
   const [eyeRight, setEyeRight] = useState(null);
@@ -66,17 +57,6 @@ export default function EyeAnalysisPanel({ isSimulating = false, sessionData }) 
     }
   }, [sessionData]);
 
-  useEffect(() => {
-    if (!isSimulating || sessionData?.eye_left || sessionData?.contagious) return;
-    setEyeLeft(randomDiagnosis());
-    setEyeRight(randomDiagnosis());
-    const interval = setInterval(() => {
-      setEyeLeft(randomDiagnosis());
-      setEyeRight(randomDiagnosis());
-    }, 4000);
-    return () => clearInterval(interval);
-  }, [isSimulating, sessionData]);
-
   const getLabel = (data) => {
     if (!data) return null;
     if (data.diagnosisKey) return diagnosisLabel(t, data.diagnosisKey);
@@ -99,7 +79,6 @@ export default function EyeAnalysisPanel({ isSimulating = false, sessionData }) 
       <div className="text-center py-12 text-muted-foreground">
         <Eye className="w-12 h-12 mx-auto text-muted-foreground/30 mb-3" />
         <p className="text-sm">{t("eye.waiting")}</p>
-        <p className="text-xs mt-1">{t("vitals.activateSimulation")}</p>
       </div>
     );
   }

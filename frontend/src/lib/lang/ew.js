@@ -57,8 +57,6 @@ export default {
     treatments: "Mbébé", dialogue: "Biá", history: "Minéngá",
     noSession: "Esáná á wô",
     selectPatient: "Tilá mbák ngula wóbó esáná",
-    simulateRobot: "🤖 Kaa robot", stopSimulation: "Kulá simulation",
-    robotConnected: "Robot á téléré", robotOffline: "Robot á wô",
   },
 
   settings: {
@@ -195,7 +193,6 @@ export default {
     bloodPressure: "Tension artérielle",
     alert: "TIIƊƊO",
     waitingRobot: "Yom kelle ngól á robot...",
-    activateSimulation: "Wú simulation ngula sá mam",
   },
 
   eye: {

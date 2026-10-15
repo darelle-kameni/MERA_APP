@@ -118,10 +118,6 @@ export default {
     "history": "Historique",
     "noSession": "Aucune session trouvée",
     "selectPatient": "Sélectionnez un patient pour voir ses sessions",
-    "simulateRobot": "🤖 Simuler robot",
-    "stopSimulation": "Arrêter simulation",
-    "robotConnected": "Robot connecté",
-    "robotOffline": "Robot hors ligne",
     "patient": "Patient",
     "patientId": "Patient #%s"
   },
@@ -449,8 +445,7 @@ export default {
     "weight": "Poids",
     "bloodPressure": "Tension artérielle",
     "alert": "ALERTE",
-    "waitingRobot": "En attente des signes vitaux du robot...",
-    "activateSimulation": "Activez la simulation pour générer des données"
+    "waitingRobot": "En attente des signes vitaux du robot..."
   },
   "prediction": {
     "fever": "Fièvre",

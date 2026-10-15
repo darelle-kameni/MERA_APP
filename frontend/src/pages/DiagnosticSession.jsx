@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { base44 } from "@/api/base44Client";
-import { Activity, Eye, Brain, Leaf, MessageSquare, Clock, Wifi, WifiOff } from "lucide-react";
+import { Activity, Eye, Brain, Leaf, MessageSquare, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "@/lib/useTranslation";
 import VitalSignsPanel from "../components/diagnostic/VitalSignsPanel";
@@ -24,15 +22,6 @@ export default function DiagnosticSession() {
   const [vitalsData, setVitalsData] = useState(null);
   const [eyeData, setEyeData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [isSimulating, setIsSimulating] = useState(
-    () => localStorage.getItem("mera_robot_connected") === "true"
-  );
-
-  const toggleSimulation = () => {
-    const next = !isSimulating;
-    setIsSimulating(next);
-    localStorage.setItem("mera_robot_connected", next.toString());
-  };
 
   useEffect(() => {
     if (!paramId && !patientId) return;
@@ -106,17 +95,6 @@ export default function DiagnosticSession() {
               : patientId ? t("diagnostic.patientId", "Patient #%s").replace("%s", patientId) : t("diagnostic.demo", "Session de démonstration")}
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Badge variant="outline" className={isSimulating
-            ? "bg-green-500/10 text-green-600 border-green-500/30 gap-1.5"
-            : "bg-red-500/10 text-red-600 border-red-500/30 gap-1.5"}>
-            {isSimulating ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
-            {isSimulating ? t("diagnostic.robotConnected", "Robot connecté") : t("diagnostic.robotOffline", "Robot hors ligne")}
-          </Badge>
-          <Button onClick={toggleSimulation} variant={isSimulating ? "destructive" : "default"} size="sm">
-            {isSimulating ? t("diagnostic.stopSimulation", "Arrêter simulation") : t("diagnostic.simulateRobot", "🤖 Simuler robot")}
-          </Button>
-        </div>
       </div>
 
       {/* History */}
@@ -169,11 +147,11 @@ export default function DiagnosticSession() {
         </TabsList>
 
         <TabsContent value="vitals" className="mt-4">
-          <VitalSignsPanel isSimulating={isSimulating} sessionData={isSimulating ? null : vitalsData} />
+          <VitalSignsPanel sessionData={vitalsData} />
         </TabsContent>
 
         <TabsContent value="eye" className="mt-4">
-          <EyeAnalysisPanel isSimulating={isSimulating} sessionData={isSimulating ? null : eyeData} />
+          <EyeAnalysisPanel sessionData={eyeData} />
         </TabsContent>
 
         <TabsContent value="prediction" className="mt-4">

@@ -1,9 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import { speak } from "../../hooks/useSpeech";
+import { useState, useEffect } from "react";
 import { LineChart, Line, ResponsiveContainer, Tooltip } from "recharts";
 import { Thermometer, Heart, Wind, Weight, Gauge } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { generateVitals } from "../../lib/simulatorData";
 import { useTranslation } from "@/lib/useTranslation";
 import { THRESHOLDS } from "@/lib/thresholds";
 
@@ -46,16 +44,13 @@ function VitalCard({ icon: Icon, label, value, unit, color, isAbnormal, history 
   );
 }
 
-export default function VitalSignsPanel({ isChild = false, isSimulating = false, sessionData }) {
+export default function VitalSignsPanel({ sessionData }) {
   const { t } = useTranslation();
   const [current, setCurrent] = useState(null);
   const [tempHistory, setTempHistory] = useState([]);
   const [spo2History, setSpo2History] = useState([]);
   const [hrHistory, setHrHistory] = useState([]);
   const [bpHistory, setBpHistory] = useState([]);
-  const intervalRef = useRef(null);
-  const isFirstTick = useRef(true);
-  const prevAlerts = useRef({ temp: false, spo2: false, hr: false, bp: false });
 
   useEffect(() => {
     if (sessionData?.temperature != null) {
@@ -74,52 +69,10 @@ export default function VitalSignsPanel({ isChild = false, isSimulating = false,
     }
   }, [sessionData]);
 
-  useEffect(() => {
-    if (isSimulating && !sessionData) {
-      isFirstTick.current = true;
-      const tick = () => {
-        const vitals = generateVitals(isChild);
-        setCurrent(vitals);
-        const highTemp = vitals.temperature > 38.5;
-        const lowSpo2 = vitals.spo2 < 94;
-        const abnormalHR = vitals.heart_rate > THRESHOLDS.HR_CRITICAL || vitals.heart_rate < THRESHOLDS.HR_LOW;
-        const abnormalBP = vitals.bp_systolic >= THRESHOLDS.BP_SYS_HIGH || vitals.bp_systolic < THRESHOLDS.BP_SYS_LOW
-          || vitals.bp_diastolic >= THRESHOLDS.BP_DIA_HIGH || vitals.bp_diastolic < THRESHOLDS.BP_DIA_LOW;
-
-        if (isFirstTick.current) {
-          isFirstTick.current = false;
-          speak(t("vitals.spokenMeasurements", `Mesures enregistrées. Température : ${vitals.temperature} degrés. Saturation oxygène : ${vitals.spo2} pourcent. Fréquence cardiaque : ${vitals.heart_rate} battements par minute. Poids : ${vitals.weight} kilogrammes.`));
-        }
-        if (highTemp && !prevAlerts.current.temp) {
-          setTimeout(() => speak(t("vitals.spokenTempAlert", `Alerte ! Température élevée détectée : ${vitals.temperature} degrés.`)), 4000);
-        }
-        if (lowSpo2 && !prevAlerts.current.spo2) {
-          setTimeout(() => speak(t("vitals.spokenSpo2Alert", `Alerte ! Saturation en oxygène faible : ${vitals.spo2} pourcent.`)), 5000);
-        }
-        if (abnormalHR && !prevAlerts.current.hr) {
-          setTimeout(() => speak(t("vitals.spokenHrAlert", `Alerte ! Fréquence cardiaque anormale : ${vitals.heart_rate} battements par minute.`)), 6000);
-        }
-        if (abnormalBP && !prevAlerts.current.bp) {
-          setTimeout(() => speak(t("vitals.spokenBpAlert", `Alerte ! Tension artérielle anormale : ${vitals.bp_systolic} sur ${vitals.bp_diastolic}.`)), 7000);
-        }
-        prevAlerts.current = { temp: highTemp, spo2: lowSpo2, hr: abnormalHR, bp: abnormalBP };
-
-        setTempHistory(p => [...p.slice(-15), { v: vitals.temperature }]);
-        setSpo2History(p => [...p.slice(-15), { v: vitals.spo2 }]);
-        setHrHistory(p => [...p.slice(-15), { v: vitals.heart_rate }]);
-        setBpHistory(p => [...p.slice(-15), { v: vitals.bp_systolic }]);
-      };
-      tick();
-      intervalRef.current = setInterval(tick, 2000);
-      return () => clearInterval(intervalRef.current);
-    }
-  }, [isSimulating, isChild, sessionData]);
-
   if (!current) {
     return (
       <div className="text-center py-12 text-muted-foreground">
         <p className="text-sm">{t("vitals.waitingRobot")}</p>
-        <p className="text-xs mt-1">{t("vitals.activateSimulation")}</p>
       </div>
     );
   }
