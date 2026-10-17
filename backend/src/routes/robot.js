@@ -26,6 +26,9 @@ const measurementsSchema = z.object({
   bmi: z.number().optional().nullable(),
   bp_systolic: z.number().int().optional().nullable(),
   bp_diastolic: z.number().int().optional().nullable(),
+  // Alias envoyés par le firmware ESP.ino (sys/dia) — pas de modification côté ESP32
+  sys: z.number().int().optional().nullable(),
+  dia: z.number().int().optional().nullable(),
   // Oculaire — diagnostic textuel + probabilités
   eye_left: z.object({
     diagnosis: z.string().optional(),
@@ -78,6 +81,10 @@ const computeUrgency = ({ temperature, spo2, heart_rate, bp_systolic, bp_diastol
 router.post('/measurements', async (req, res, next) => {
   try {
     const data = measurementsSchema.parse(req.body);
+
+    // Normaliser les alias ESP32 : sys/dia -> bp_systolic/bp_diastolic
+    if (data.sys != null) data.bp_systolic ??= data.sys;
+    if (data.dia != null) data.bp_diastolic ??= data.dia;
 
     if (!data.patient_id && !data.card_id) {
       return res.status(400).json({ success: false, message: 'patient_id or card_id is required' });
