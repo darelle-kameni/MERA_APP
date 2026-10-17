@@ -440,13 +440,13 @@ const main = async () => {
     },
   });
 
-  const generateDeviceToken = () => 'dev_' + Array.from({ length: 32 }, () =>
-    'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz0123456789'[Math.floor(Math.random() * 56)]).join('');
+  // Token fixe flashé dans le firmware ESP.ino (ligne 79 : API_MERA_TOKEN)
+  const ESP32_DEVICE_TOKEN = 'dev_XBKAZNXtx4fu6AD4zp5PPReHvrShzd8B';
   const existingDevice = await prisma.meraDevice.findUnique({ where: { serial_number: 'MERA-DEMO-001' } });
   const demoDevice = await prisma.meraDevice.upsert({
     where: { serial_number: 'MERA-DEMO-001' },
     update: {
-      api_token: existingDevice?.api_token || generateDeviceToken(),
+      api_token: ESP32_DEVICE_TOKEN,
       ip_address: existingDevice?.ip_address || '192.168.1.42',
       port: existingDevice?.port || 80,
     },
@@ -458,7 +458,7 @@ const main = async () => {
       battery_level: 87,
       firmware_version: '1.2.0',
       last_sync: null,
-      api_token: generateDeviceToken(),
+      api_token: ESP32_DEVICE_TOKEN,
       ip_address: '192.168.1.42',
       port: 80,
     },
